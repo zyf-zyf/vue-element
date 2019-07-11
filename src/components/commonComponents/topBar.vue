@@ -4,9 +4,12 @@
             <div class="left-icon" @click="handleClickFold">
                 <i :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
             </div>
+           
             <div class="right-icon">
                 <i class="el-icon-search"></i>
-                <i class="el-icon-bell"></i>
+                <el-badge :value="200" :max="99" class="item">
+                    <i class="el-icon-bell"></i>
+                </el-badge>
                 <el-dropdown>
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
@@ -24,6 +27,7 @@
                 </el-dropdown> 
             </div>
         </el-header>
+       
         <div class="title-box">
             <el-breadcrumb separator="/" style="height: 40px; line-height: 40px; margin-left: 20px">
                 
@@ -32,6 +36,7 @@
             </el-breadcrumb>
             <h2 class="title">{{$route.meta.title}}</h2>
         </div>
+     
     </div>
 </template>
 <script>
@@ -86,8 +91,13 @@
                 display: flex;
                 align-items: center;
             }
+           
+            // .item {
+            //     margin-top: 20px;
+            //     margin-right: 10px;
+            // }
             i, .el-avatar>img {
-                margin-right: 10px;
+                margin-right: 20px;
                 
             }
             .el-avatar {

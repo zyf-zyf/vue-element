@@ -3,10 +3,18 @@
    
     <el-container style="height: 100%; border: 1px solid #eee">
       <leftBar></leftBar>
-      <el-container style="flex-direction: column">
+      <el-container style="flex-direction: column;">
         <topBar></topBar>
         <el-main>
-           <router-view></router-view>
+           <router-view class="fixed"></router-view>
+           <div class="fotter-bg">
+             <div class="help">
+               <el-button type="text">帮助</el-button>
+               <el-button type="text">帮助</el-button>
+               <el-button type="text">帮助</el-button>
+             </div>
+             <h3>2019 叮当科技产品设计部出品</h3>
+           </div>
         </el-main>
    
       </el-container>
@@ -74,6 +82,29 @@
       
     .el-main {
        background: rgb(238, 241, 246);
+       position: relative;
+       .fixed {
+         position: absolute;
+         top: 20px;
+         bottom: 60px;
+         left: 10px;
+         right: 10px;
+         overflow: auto;
+       }
+       .fotter-bg {
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         .help {
+           display: flex;
+           justify-content: center;
+         }
+         h3 {
+           text-align: center
+         }
+
+       }
     }
   }
 </style>
