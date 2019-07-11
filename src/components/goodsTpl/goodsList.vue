@@ -1,6 +1,21 @@
 <template>
     <div>
         <el-card>
+            <div class="goods">
+                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form">
+                    <el-form-item v-for="(item, index) in labelItem" :key="index" :label="item.label">
+                        <el-input v-if="item.type == 'input'" size="small" v-model="item.value" placeholder="请填写" @input="handleChangeVal(Object.keys(formData)[index],item.value)"></el-input>
+                        <el-select size="small" v-if="item.type=='select'" v-model="item.value" placeholder="请选择" @change="handleChangeVal(Object.keys(formData)[index],item.value)">
+                            <el-option
+                            v-for="itemo in item.list"
+                            :key="itemo.value"
+                            :label="itemo.label"
+                            :value="itemo.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </div>
             <el-table :data="tableData"  highlight-current-row>
                 <el-table-column prop="goods_name" label="名称" width="140" show-overflow-tooltip>
                 </el-table-column>
@@ -24,7 +39,26 @@ export default {
             page: 1,
             size: 10,
             total: null,
-            tableData: []
+            tableData: [],
+            formData: {
+                spuNum: '',
+                skuNum: '',
+                goodsName: '',
+                brandName: '',
+                category1: '',
+                category2: '',
+                category3: '',
+            },
+            labelItem: [
+                {label: 'SPU编号:', value: '', type: 'input'},
+                {label: 'SKU编号:', value: '', type: 'input'},
+                {label: '商品名称:', value: '', type: 'input'},
+                {label: '品牌名称:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
+                {label: '一级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
+                {label: '二级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
+                {label: '三级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
+       
+            ]
         }
     },
     mounted() {
@@ -52,8 +86,23 @@ export default {
         handleSizeChange(size) {
             this.size= size
             this.getGoodsList()
+        },
+        handleChangeVal(label, val) {
+            console.log(label, 'label')
+            console.log(val)
+           return this.formData[label]= val
         }
     }
 }
 </script>
 
+<style lang="less" scoped>
+    .goos-form {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        .el-input--suffix .el-input__inner {
+            padding-right: 15px !important;
+        }
+    }
+</style>

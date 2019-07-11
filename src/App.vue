@@ -78,8 +78,6 @@
     left: 0;
     right: 0;
     bottom: 0;
- 
-      
     .el-main {
        background: rgb(238, 241, 246);
        position: relative;
@@ -90,6 +88,7 @@
          left: 10px;
          right: 10px;
          overflow: auto;
+         
        }
        .fotter-bg {
          position: absolute;
