@@ -13,7 +13,12 @@ export default new Router({
     {
       path: '/goodsManagement/goodsList',
       name: 'goodsList',
-      component: GoodsList
+      component: GoodsList,
+      meta: {
+        parentName: '商品管理',
+        title: '商品列表',
+        name: '商品资料'
+      }
     }
   ]
 })

@@ -11,11 +11,11 @@
                 <i class="el-icon-location"></i>
                 <span slot="title">商品管理</span>
                 </template>
-                <el-menu-item-group>
+                <!-- <el-menu-item-group> -->
               
                 <el-menu-item index="/goodsManagement/goodsList">商品列表</el-menu-item>
                 <el-menu-item index="1-2">选项2</el-menu-item>
-                </el-menu-item-group>
+                <!-- </el-menu-item-group> -->
                 <el-menu-item-group title="分组2">
                 <el-menu-item index="1-3">选项3</el-menu-item>
                 </el-menu-item-group>

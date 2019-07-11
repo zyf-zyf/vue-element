@@ -9,8 +9,8 @@
                 <i class="el-icon-bell"></i>
                 <el-dropdown>
                     <div class="userInfo el-dropdown-link">
-                        <div class="userInfo el-dropdown-link"  style="width: 30px; height: 30px;margin-right: 10px">
-                        <el-avatar style="width: 30px; height: 30px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
+                        <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
 
                         </div>
                         <span>叮当科技</span>
@@ -21,11 +21,17 @@
                     <el-dropdown-item>新增</el-dropdown-item>
                     <el-dropdown-item>删除</el-dropdown-item>
                     </el-dropdown-menu>
-                </el-dropdown>
-                
-                
+                </el-dropdown> 
             </div>
         </el-header>
+        <div class="title-box">
+            <el-breadcrumb separator="/" style="height: 40px; line-height: 40px; margin-left: 20px">
+                
+                <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
+            </el-breadcrumb>
+            <h2 class="title">{{$route.meta.title}}</h2>
+        </div>
     </div>
 </template>
 <script>
@@ -82,7 +88,17 @@
             }
             i, .el-avatar>img {
                 margin-right: 10px;
+                
             }
+            .el-avatar {
+                line-height: 20px;
+            }
+        }
+    }
+    .title-box {
+        .title {
+            margin-left: 20px;
+            line-height: 40px;
         }
     }
     @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
