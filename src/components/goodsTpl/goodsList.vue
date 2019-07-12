@@ -1,28 +1,87 @@
 <template>
-    <div>
+    <div id="goods">
         <el-card>
             <div class="goods">
-                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form">
+                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="75px">
                     <el-form-item v-for="(item, index) in labelItem" :key="index" :label="item.label">
                         <el-input v-if="item.type == 'input'" size="small" v-model="item.value" placeholder="请填写" @input="handleChangeVal(Object.keys(formData)[index],item.value)"></el-input>
                         <el-select size="small" v-if="item.type=='select'" v-model="item.value" placeholder="请选择" @change="handleChangeVal(Object.keys(formData)[index],item.value)">
-                            <el-option
-                            v-for="itemo in item.list"
-                            :key="itemo.value"
-                            :label="itemo.label"
-                            :value="itemo.value">
-                            </el-option>
+                            <el-option v-for="itemo in item.list" :key="itemo.value" :label="itemo.label" :value="itemo.value"></el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="采购价格:">
+                        <div class="qjbox">
+                            <el-input size="small" v-model="formData.buyPrice1" placeholder=""></el-input>
+                            <span> - </span>
+                            <el-input size="small" v-model="formData.buyPrice2" placeholder=""></el-input>
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="创建日期:">
+                        <el-date-picker
+                        size="small"
+                        v-model="formData.time"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        style="width: 465px">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="采购价格:">
+                        <div class="qjbox">
+                            <el-input size="small" v-model="formData.buyPrice1" placeholder=""></el-input>
+                            <span> - </span>
+                            <el-input size="small" v-model="formData.buyPrice2" placeholder=""></el-input>
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="显示字段:">
+                        <el-checkbox-group v-model="formData.checkList">
+                            <el-checkbox v-for="(item, index) in checkLabel" :key="index" :label="item"></el-checkbox>
+                        </el-checkbox-group>
                     </el-form-item>
                 </el-form>
             </div>
-            <el-table :data="tableData"  highlight-current-row>
-                <el-table-column prop="goods_name" label="名称" width="140" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="brandName" label="品牌" width="120">
-                </el-table-column>
-                <el-table-column prop="goods_color" label="颜色">
-                </el-table-column>
+            <div class="button-box">
+                <div class="btn-left">
+                    <el-button size="small" type="primary" icon="el-icon-plus">新建商品</el-button>
+                    <div class="warning-select">
+                        <el-select size="small" v-model="select1" placeholder="批量上传/下载">
+                            <el-option label="导入Excel" value="upload"></el-option>
+                            <el-option label="导出Excel" value="download"></el-option>
+                        </el-select>
+                        <el-tooltip class="item" effect="dark" placement="top">
+                            <span slot="content">
+                                上传前下载
+                                <a href="" style='color: red' download="模版文件">模版</a>
+                            </span>
+                            <i class="el-icon-warning-outline waring"></i>
+                        </el-tooltip>
+                    </div>
+                    <el-select size="small" v-model="select2" placeholder="批量启用/停用">
+                        <el-option label="启用" value="start"></el-option>
+                        <el-option label="停用" value="end"></el-option>
+                    </el-select>
+                    <el-button size="small" plain>批量删除</el-button>
+                </div>
+                <div class="btn-right">
+                    <el-button size="small" type="primary">查 询</el-button>
+                    <el-button size="small">重 置</el-button>
+                </div>
+                
+            </div>
+            <el-table :data="tableData"  highlight-current-row :cell-style="cellStyle" :header-cell-style="cellStyle"> 
+                <el-table-column type="selection" width="55" fixed></el-table-column>
+                <el-table-column prop="goods_name" label="名称" width="140" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column prop="brandName" label="品牌" width="120" fixed></el-table-column>
+                <el-table-column prop="goods_color" label="颜色" fixed></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
@@ -48,7 +107,14 @@ export default {
                 category1: '',
                 category2: '',
                 category3: '',
+                buyPrice1: '',
+                buyPrice2: '',
+                time: '',
+                checkList: []
             },
+            checkLabel: ['风格', '季节', '人群', '功能', '版型', '图案', '流行', '上市时间'],
+            select1: '',
+            select2: '',
             labelItem: [
                 {label: 'SPU编号:', value: '', type: 'input'},
                 {label: 'SKU编号:', value: '', type: 'input'},
@@ -67,6 +133,11 @@ export default {
         console.log(this.$server.goodsControlApi.getGoodsList)
         this.getGoodsList()
     },
+    render(createElement) {
+        return createElement('i', {
+            class: '123'
+        }, '123')
+    },
     methods: {
         // 获取商品数据
         getGoodsList() {
@@ -75,9 +146,9 @@ export default {
                 this.total= res.total
                 this.tableData= res.data
             })
-            // .catch(err => {
-            //     console.log(err)
-            // })
+            .catch(err => {
+                console.log(err)
+            })
         },
         handlePageChange(page) {
             this.page= page
@@ -91,6 +162,12 @@ export default {
             console.log(label, 'label')
             console.log(val)
            return this.formData[label]= val
+        },
+        cellStyle({row, column, rowIndex, columnIndex}) {
+            console.log(column, 'column')
+            if(columnIndex == 3) {
+                return 'border-right: 2px solid #999'
+            }
         }
     }
 }
@@ -98,11 +175,53 @@ export default {
 
 <style lang="less" scoped>
     .goos-form {
-        width: 100%;
+        width: 150%;
         display: flex;
         flex-wrap: wrap;
         .el-input--suffix .el-input__inner {
             padding-right: 15px !important;
         }
+        .qjbox {
+            width: 150%;
+            display: flex;
+            flex-wrap: nowrap;
+            span {
+                width: 20px;  
+                text-align: center;
+            }
+            .el-input {
+                width: 80px
+            }
+        }
+        .el-input , .el-select{
+            width: 180px;
+        }
+        .el-form-item {
+            margin-right: 30px
+        }
     }
+    
+    .button-box,.btn-left, .btn-right {
+        height: 32px;
+        display: flex;
+        align-items: center;
+       
+        .el-button, .el-select {
+            margin-right: 10px;
+        }
+        
+    }
+    .button-box {
+        justify-content: space-between;
+        margin: 10px 0;
+    }
+    .warning-select {
+        position: relative;
+        .waring {
+            position: absolute;
+            right: 20px;
+            top: 8px;
+        }
+    }
+ 
 </style>

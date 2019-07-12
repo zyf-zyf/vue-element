@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="min-width: 1200px">
    
     <el-container style="height: 100%; border: 1px solid #eee">
       <leftBar></leftBar>

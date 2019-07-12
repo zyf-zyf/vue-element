@@ -21,21 +21,6 @@ service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQ
 // post请求头
 service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
-// loading加载
-// function httpLoadingStr() {
-//     let loading= Loading.service({
-//         lock: true,
-//         text: 'Loading',
-//         spinner: 'el-icon-loading',
-//         background: 'rgba(0, 0, 0, 0.7)'
-//     });
-// }
-
-// // loading关闭
-// function httpLoadingEnd() {
-//     let loading= Loading.service({});
-//     loading.close()
-// }
 
 // 请求拦截器
 service.interceptors.request.use(
@@ -88,6 +73,11 @@ const errorHandle = (code, other) => {
         // 其他错误，直接抛出错误提示
         default:
             console.log(other, 'other')
+            Message({
+                message: other,
+                duration: 1500,
+                type: 'error'
+            });
     }
 }
 
