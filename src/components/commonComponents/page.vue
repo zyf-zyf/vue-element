@@ -2,13 +2,6 @@
     <div>
         <div class="footer" >
             <section class="pagination"  v-if="total >= 1">
-                <!-- <el-pagination 
-                    background 
-                    layout="total,prev, pager, next,jumper" 
-                    :page-count="Math.ceil(total/size)" 
-                    :total="total" 
-                    :current-page.sync="initpage" @current-change="handlePageChange(initpage)">
-                </el-pagination> -->
                 <el-pagination
                 background 
                 @size-change="handleSizeChange(initSize)"

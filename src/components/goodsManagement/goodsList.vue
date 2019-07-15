@@ -43,7 +43,7 @@
             </div>
             <div class="button-box">
                 <div class="btn-left">
-                    <el-button size="small" type="primary" icon="el-icon-plus">新建商品</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-plus" @click="addShow= true">新建商品</el-button>
                     <div class="warning-select">
                         <el-select size="small" v-model="select1" placeholder="批量上传/下载">
                             <el-option label="导入Excel" value="upload"></el-option>
@@ -85,13 +85,23 @@
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
+        <el-dialog
+        title="基本属性"
+        :visible.sync="addShow"
+        width="50%"
+        top="2vh"
+        >
+            <addNewGoods></addNewGoods>
+        </el-dialog>
     </div>
 </template>
 <script>
 import page from '../commonComponents/page'
+import addNewGoods from './addNewGoods'
 export default {
     components: {
-        page
+        page,
+        addNewGoods
     },
     data() {
         return {
@@ -124,7 +134,8 @@ export default {
                 {label: '二级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
                 {label: '三级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
        
-            ]
+            ],
+            addShow: false
         }
     },
     mounted() {
@@ -159,8 +170,6 @@ export default {
             this.getGoodsList()
         },
         handleChangeVal(label, val) {
-            console.log(label, 'label')
-            console.log(val)
            return this.formData[label]= val
         },
         cellStyle({row, column, rowIndex, columnIndex}) {
@@ -175,7 +184,7 @@ export default {
 
 <style lang="less" scoped>
     .goos-form {
-        width: 150%;
+        width: 100%;
         display: flex;
         flex-wrap: wrap;
         .el-input--suffix .el-input__inner {

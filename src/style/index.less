@@ -1,6 +1,12 @@
 @import url('./base.less') ;
 @import url('./common.less');
-
+.el-dialog {
+    margin-top: 2vh;
+    width: 50%;
+    min-width: 500px;
+    max-height: 90%;
+    overflow: auto;
+}
 .footer {
      margin-top: 20px;
      height: 60px;
@@ -31,5 +37,19 @@
             width: 50px !important;
             text-align: left;
         }
+    }
+}
+// 新建商品
+
+#add-new-goods {
+    .el-form {
+        margin-left: 20px;
+    }
+
+    .el-input, .el-select , .el-checkbox-group{
+        width: 80%;
+    }
+    .el-select .el-input {
+        width: 100%;
     }
 }
