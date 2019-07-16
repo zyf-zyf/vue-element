@@ -64,7 +64,7 @@
 
 <style lang="less" scoped>
     .el-header {
-        background-color: #fff;
+        background-color: #474747;
         color: #333;
         line-height: 60px;
         box-sizing: border-box;

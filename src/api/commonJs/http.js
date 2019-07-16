@@ -42,11 +42,13 @@ service.interceptors.request.use(
 
 // 请求成功信息
 const successHandle= (msg) => {
-    Message({
-        message: msg,
-        type: 'success',
-        duration: 1500
-    })
+    if(msg && msg != undefined) {
+        Message({
+            message: msg,
+            type: 'success',
+            duration: 1500
+        })
+    }
 }
 
 // 错误信息
@@ -87,7 +89,7 @@ service.interceptors.response.use(
     res => {
         let data= res.data
         console.log(data, 'res res')
-        if(data.code === '200' && data.status) {
+        if((data.code === '200' && (data.status == true || data.status == undefined)) || (data.code == undefined && data.status == undefined)) {
             successHandle(data.message)
             //httpLoadingEnd()
             hideLoading();
@@ -109,7 +111,7 @@ service.interceptors.response.use(
             console.log(response, 'response')
             // 请求已发出，但是不在2xx的范围
             errorHandle(response.status, response.data.message);
-            httpLoadingEnd()
+            hideLoading()
             return Promise.reject(response);
         } else {
             Message({
@@ -117,7 +119,7 @@ service.interceptors.response.use(
                 type: 'error',
                 duration: 1500
             })
-            httpLoadingEnd()
+            hideLoading()
         }
     });
 

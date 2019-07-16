@@ -83,7 +83,7 @@
        position: relative;
        .fixed {
          position: absolute;
-         top: 20px;
+         top: 10px;
          bottom: 60px;
          left: 10px;
          right: 10px;

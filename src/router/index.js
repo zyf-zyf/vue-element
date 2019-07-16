@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import GoodsList from '../components/goodsManagement/goodsList'
-import Upload from '../components/commonComponents/Upload'
+import Upload from '../components/commonComponents/upload'
 
 Vue.use(Router)
 

@@ -173,7 +173,7 @@ export default {
            return this.formData[label]= val
         },
         cellStyle({row, column, rowIndex, columnIndex}) {
-            console.log(column, 'column')
+     
             if(columnIndex == 3) {
                 return 'border-right: 2px solid #999'
             }

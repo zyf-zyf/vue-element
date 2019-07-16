@@ -6,37 +6,96 @@
                 <i class="el-icon-close" @click="handleDelImg(index)"></i>
             </div>   
         </div>
-        <template v-if="imgArr.length < 9">
+        <template v-if="imgArr.length < maxlength && uploadType== 'more'">
             <div class="upload-box">
-                <div class="upload" style="">
+                <div class="upload">
                     <div>
                         <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" multiple @change="upload($event)" />
                         <i class="el-icon-plus"></i>
                         <small>选择文件</small>
                     </div>
                 </div>
-                <span>文件大小不超过5M</span>
+                <span>文件大小不超过{{uploadimgsize}}</span>
             </div>
-                <!-- <br/> -->
+                <span>支持扩展名: .png/ .jpg ....</span>
+        </template>
+        <template v-if="uploadType== 'less'">
+            <div class="upload-box">
+                <div class="upload">
+                    <div>
+                        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg"  @change="upload($event)" />
+                        <i class="el-icon-plus"></i>
+                        <small>{{imgArr.length == 0 ? '选择文件' : '点击更换'}}</small>
+                    </div>
+                </div>
+                <span>文件大小不超过{{uploadimgsize}}</span>
+            </div>
                 <span>支持扩展名: .png/ .jpg ....</span>
         </template>
     </div>
 </template>
 <script>
     export default {
-        props: ['materialImg', ],
+        props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize'],
         data() {
             return {
-                imgArr: this.materialImg
+                imgArr: this.materialImg,
+                maxlength: this.maxLength,
+                uploadType: this.uploadtype,
+                uploadimgsize: this.imgsize,
             }
         },
+
         methods: {
             handleDelImg(idx) {
                 this.$emit('handleDelImg', idx)
             },
-            upload() {
-
+            upload(e) {  
+                console.log(this.$server, 'server')
+                console.log(this.uploadType, 'type')
+                if(this.uploadType == 'less') {
+                    console.log(e.target.files)
+                    var file= e.target.files[0]
+                    if(this.uploadimgsize && this.uploadimgsize !== '') {
+                        if(this.limtSize(file)) {
+                            this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                        }
+                    }else{
+                        this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                    }
+                }else{
+                    let files= e.target.files
+                    console.log(files, 'files')
+                    for(var i=0; i < files.length; i++) {
+                        if(this.uploadimgsize && this.uploadimgsize !== '') {
+                            if(this.limtSize(files[i])) {
+                                this.imgArr= this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType)
+                            }
+                        }else{
+                            this.imgArr= this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType)
+                        }
+                    }
+                }
+                this.changeMaterialImg()
+            },
+            limtSize(file) {
+                if(file.size/1024/1024 > this.uploadimgsize) {
+                    this.$message({
+                        message: '所选文件超出限制大小',
+                        type: 'error',
+                        duration: 1000
+                    })
+                    return false;
+                }else{
+                    return true;
+                }
+                
+            },
+            // 改变父组件
+            changeMaterialImg () {
+                this.$emit('changeMaterialImg', this.imgArr)
             }
+
         }
     }
 </script>
