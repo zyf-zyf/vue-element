@@ -1,51 +1,43 @@
 <template>
     <div id="custom-attribute">
-        <el-card class="elcard" v-for="(item, index) in tableList" :key="index">
-            <div>
-                <h3>{{item.title}}</h3>
-            </div>
-            <div class="table-search">
-                <el-input v-model="item.searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
-                <el-button size="small" type="primary" @click="handleItemValue(item, index)" >添加属性值</el-button>
-            </div>
-            <el-table :data="item.tableData" stripe style="width: 100%">
-                <el-table-column
-                prop="date"
-                label="ID"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="name"
-                label="属性值"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="address"
-                label="修改时间">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                </el-table-column>
-            </el-table>
-        </el-card>
+        <el-collapse v-model="activeNames" @change="handleChange" class="elcard">
+            <el-collapse-item :name="index" v-for="(item, index) in tableList" :key="index">
+                <template slot="title">
+                   
+                        <div>
+                            <h3 style="margin-left: 10px;">{{item.title}}</h3>
+                        </div>
+                        <div class="table-search">
+                            <el-input v-model="item.searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
+                            <el-button size="small" type="primary" @click="handleItemValue(item, index)" >添加属性值</el-button>
+                        </div>
+                  
+                </template>
+                <el-table :data="item.tableData" stripe style="width: 100%">
+                    <el-table-column
+                    prop="date"
+                    label="ID"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="属性值"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="修改时间">
+                    </el-table-column>
+                    <el-table-column
+                    label="操作">
+                    </el-table-column>
+                </el-table>
+    
+            </el-collapse-item>
+        </el-collapse>
         <div class="cus-btn">
             <el-button style="width: 100%;" icon="el-icon-plus" @click="handleClickTableItem">添加属性</el-button>
         </div>
-        <!-- <el-dialog
-        title="添加属性"
-        :visible.sync="dialogVisible"
-        width="30%"
-        >
-            <el-form >
-                <el-form-item label="属性名称:">
-                    <el-input type="text" size="small" v-model="title"></el-input>
-                </el-form-item>
-            </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleClcikAddItem">确 定</el-button>
-        </span>
-        </el-dialog> -->
         <attributeDialog :type="type" :isShow="isShow" :name="title" :labelName="labelName" @cancelShow="cancelShow" @handleClcikAddItem="handleClcikAddItem" @handleClcikAddItemValue="handleClcikAddItemValue"></attributeDialog>
     </div>
 </template>
@@ -57,6 +49,7 @@
         },
         data() {
             return {
+                activeNames: '',
                 searchName: '',
                 tableList: [
                     {
@@ -101,6 +94,10 @@
             },
             cancelShow(file) {
                 this.isShow= file
+            },
+            // 折叠面板
+            handleChange(val) {
+                console.log(val)
             }
         }
     }
@@ -110,12 +107,15 @@
         margin:0 0 10px 0;
     }
     .table-search {
-        display: flex;
-        justify-content: space-between;
         box-sizing: border-box;
         padding-left: 80px;
-        margin-top: -10px;
+        margin-top: 30px;
         margin-bottom: 10px;
+        flex: 10;
+        justify-content: space-between;
+        display: flex;
+        text-align: center;
+        align-items: center;
     }
     .cus-btn {
         margin: 20px 0;
@@ -126,4 +126,8 @@
             font-weight: 400
         }
     }
+    .el-collapse-item {
+        margin-bottom: 10px;
+    }
+ 
 </style>
