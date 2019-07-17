@@ -1,7 +1,9 @@
 <template>
     <div id="attribute">
     
-            <div v-if="activiyName == 'first'">123</div>
+            <div v-if="activiyName == 'first'">
+                <basicAttribute></basicAttribute>
+            </div>
             <div v-if="activiyName == 'second'">
                 <customAttribute></customAttribute>
             </div>
@@ -9,10 +11,12 @@
     </div>
 </template>
 <script>
-    import customAttribute from './customAttribute'
+    import customAttribute from './customAttribute/customAttribute'
+    import basicAttribute from './baseAttribute/basicAttributes'
     export default {
         components: {
-            customAttribute
+            customAttribute,
+            basicAttribute
         },
         computed: {
             activiyName () {

@@ -19,6 +19,7 @@ Vue.prototype.$server= server
 // md5
 Vue.prototype.$md5= md5
 console.log(store, 'store')
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

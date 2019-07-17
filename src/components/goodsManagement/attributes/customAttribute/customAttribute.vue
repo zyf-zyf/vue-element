@@ -31,21 +31,6 @@
         <div class="cus-btn">
             <el-button style="width: 100%;" icon="el-icon-plus" @click="handleClickTableItem">添加属性</el-button>
         </div>
-        <!-- <el-dialog
-        title="添加属性"
-        :visible.sync="dialogVisible"
-        width="30%"
-        >
-            <el-form >
-                <el-form-item label="属性名称:">
-                    <el-input type="text" size="small" v-model="title"></el-input>
-                </el-form-item>
-            </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleClcikAddItem">确 定</el-button>
-        </span>
-        </el-dialog> -->
         <attributeDialog :type="type" :isShow="isShow" :name="title" :labelName="labelName" @cancelShow="cancelShow" @handleClcikAddItem="handleClcikAddItem" @handleClcikAddItemValue="handleClcikAddItemValue"></attributeDialog>
     </div>
 </template>
@@ -54,6 +39,9 @@
     export default {
         components: {
             attributeDialog
+        },
+        mounted() {
+            
         },
         data() {
             return {
@@ -93,7 +81,6 @@
                 this.isShow= true
                 this.type= 'itemValue'
                 this.labelName= '属性值名称'
-
             },
             handleClcikAddItemValue(title) {
                 // 需接口创建属性值
@@ -106,17 +93,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .elcard {
-        margin:0 0 10px 0;
-    }
-    .table-search {
-        display: flex;
-        justify-content: space-between;
-        box-sizing: border-box;
-        padding-left: 80px;
-        margin-top: -10px;
-        margin-bottom: 10px;
-    }
+    
     .cus-btn {
         margin: 20px 0;
         .el-button {

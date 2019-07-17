@@ -15,7 +15,7 @@
                         <small>选择文件</small>
                     </div>
                 </div>
-                <span>文件大小不超过{{uploadimgsize}}</span>
+                <span v-if="uploadimgsize && uploadimgsize != ''">文件大小不超过{{uploadimgsize}}</span>
             </div>
                 <span>支持扩展名: .png/ .jpg ....</span>
         </template>
@@ -28,7 +28,7 @@
                         <small>{{imgArr.length == 0 ? '选择文件' : '点击更换'}}</small>
                     </div>
                 </div>
-                <span>文件大小不超过{{uploadimgsize}}</span>
+                <span v-if="uploadimgsize && uploadimgsize != ''">文件大小不超过{{uploadimgsize}}</span>
             </div>
                 <span>支持扩展名: .png/ .jpg ....</span>
         </template>
