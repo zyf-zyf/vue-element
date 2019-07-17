@@ -36,6 +36,13 @@
             </el-breadcrumb>
             <h2 class="title">{{$route.meta.title}}</h2>
         </div>
+        <div class="attributeMaintenance" v-if="$route.name == 'attributeMaintenance'"> 
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础属性" name="first"></el-tab-pane>
+                <el-tab-pane label="自定义属性" name="second"></el-tab-pane>
+                
+            </el-tabs>
+        </div>
      
     </div>
 </template>
@@ -49,7 +56,8 @@
 
         data() {
             return {
-                isOpenMenu: this.$store.state.isOpen || false
+                isOpenMenu: this.$store.state.isOpen || false,
+                activeName: 'first'
             }
         },
 
@@ -57,7 +65,14 @@
             handleClickFold() {
                 this.isOpenMenu= !this.isOpenMenu
                 this.$store.dispatch('openMenu', this.isOpenMenu)
+            },
+            handleClick() {
+                this.$store.dispatch('isActivite',this.activeName)
             }
+        },
+
+        mounted() {
+            console.log(this.$route, 'route')
         }
     }
 </script>
@@ -91,11 +106,6 @@
                 display: flex;
                 align-items: center;
             }
-           
-            // .item {
-            //     margin-top: 20px;
-            //     margin-right: 10px;
-            // }
             i, .el-avatar>img {
                 margin-right: 20px;
                 
@@ -111,6 +121,22 @@
             line-height: 40px;
         }
     }
+    .attributeMaintenance {
+        padding-left: 30px;
+        button {
+            border: none ;
+            height: 32px;
+            font-size: 16px;
+            box-sizing: border-box;
+            padding: 5px 10px;
+        }
+        .isactivite {
+            color: red;
+            border-bottom: 1px solid blue;
+        }
+    }
+        
+
     @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
         0%{
             transform: scale(1);  /*开始为原始大小*/

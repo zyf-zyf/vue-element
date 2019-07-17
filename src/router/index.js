@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import GoodsList from '../components/goodsManagement/goodsList'
-import Upload from '../components/commonComponents/upload'
+import GoodsList from '../components/goodsManagement/goods/goodsList'
+import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
 
 Vue.use(Router)
 
@@ -12,7 +12,7 @@ export default new Router({
     
     },
     {
-      path: '/goodsManagement/goodsList',
+      path: '/goodsManagement/goods/goodsList',
       name: 'goodsList',
       component: GoodsList,
       meta: {
@@ -22,14 +22,15 @@ export default new Router({
       }
     },
     {
-      path: '/upload',
-      name: 'upload',
-      component: Upload,
+      path: '/goodsManagement/attributes/attributeMaintenance',
+      name: 'attributeMaintenance',
+      component: AttributeMaintenance,
       meta: {
-        parentName: '组件',
-        title: '上传',
-        name: '上传'
+        parentName: '商品管理',
+        title: '属性列表',
+        name: '属性维护'
       }
-    }
+    },
+
   ]
 })

@@ -100,7 +100,7 @@
     </div>
 </template>
 <script>
-import upload from '../commonComponents/upload'
+import upload from '../../commonComponents/upload'
     export default {
         components: {
             upload

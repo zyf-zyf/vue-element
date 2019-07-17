@@ -96,7 +96,7 @@
     </div>
 </template>
 <script>
-import page from '../commonComponents/page'
+import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
 export default {
     components: {
