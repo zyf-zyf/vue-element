@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import GoodsList from '../components/goodsManagement/goods/goodsList'
 import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
+import CategoryList from '../components/goodsManagement/category/categoryList'
 
 Vue.use(Router)
 
@@ -29,6 +30,16 @@ export default new Router({
         parentName: '商品管理',
         title: '属性列表',
         name: '属性维护'
+      }
+    },
+    {
+      path: '/goodsManagement/category/categoryList',
+      name: 'categoryList',
+      component: CategoryList,
+      meta: {
+        parentName: '商品管理',
+        title: '类目列表',
+        name: '类目管理'
       }
     },
 

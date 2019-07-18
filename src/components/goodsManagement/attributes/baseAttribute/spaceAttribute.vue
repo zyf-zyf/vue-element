@@ -10,13 +10,25 @@
             <div class="table-box">
                 <div class="left">
                     <el-table
+                    class="render-table"
                     :data="lefttableData"
                     :header-cell-style="getRowClass"
                     style="width: 100%">
-                        <el-table-column prop="spaceName" label="全部尺码" width="100"></el-table-column>
-                        <el-table-column class="btn-header" label="+" width="80">
-                            <template></template>
-
+                        <el-table-column prop="spaceName" label="全部分类" width="100"></el-table-column>
+                        <el-table-column >
+                            <template slot="header" slot-scope="scope">
+                                <span @click="handleAdd(scope.row)">
+                                    <el-icon class="el-icon-plus" style="font-weight: 900" ></el-icon>
+                                </span>
+                            </template>
+                            <template slot-scope="scope">
+                                <span @click="handleEdit(scope.row)">
+                                    <el-icon class="el-icon-edit" ></el-icon>
+                                </span>
+                                <span @click="handleDel(scope.row)">
+                                    <el-icon class="el-icon-delete"></el-icon>
+                                </span>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -30,7 +42,14 @@
                         <el-table-column prop="spaceName" label="修改时间"></el-table-column>
                         
                         <el-table-column label="操作" width="80">
-                            <template></template>
+                            <template slot-scope="scope">
+                                <span @click="handleEdit(scope.row)">
+                                    <el-icon class="el-icon-edit" ></el-icon>
+                                </span>
+                                <span @click="handleDel(scope.row)">
+                                    <el-icon class="el-icon-delete"></el-icon>
+                                </span>
+                            </template>
 
                         </el-table-column>
                     </el-table>
@@ -63,6 +82,15 @@ export default {
                 return ''
             }
         },
+        handleEdit() {
+            alert('编辑')
+        },
+        handleDel() {
+            alert('删除')
+        },
+        handleAdd(scope) {
+            alert('添加')
+        }
     }
 }
 </script>
@@ -78,12 +106,20 @@ export default {
     }
     .table-box {
         display: flex;
-       // justify-content: space-between;
         .left {
             flex: 1;
+            margin-right: 10px;
         }
         .right{
             flex: 4
+        }
+        .el-icon-edit, .el-icon-delete {
+            font-weight: 600;
+            cursor: pointer;
+            padding-right: 10px;
+        }
+        .el-icon-edit:hover, .el-icon-delete:hover{
+            color: red
         }
     }
 </style>

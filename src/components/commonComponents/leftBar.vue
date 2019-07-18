@@ -12,7 +12,7 @@
                     <span slot="title">商品管理</span>
                 </template>
                 <el-menu-item index="/goodsManagement/goods/goodsList">商品资料</el-menu-item>
-                <el-menu-item index="1-2">类目管理</el-menu-item>
+                <el-menu-item index="/goodsManagement/category/categoryList">类目管理</el-menu-item>
                 <el-menu-item index="/goodsManagement/attributes/attributeMaintenance">属性维护</el-menu-item>
             </el-submenu>
         </el-menu>

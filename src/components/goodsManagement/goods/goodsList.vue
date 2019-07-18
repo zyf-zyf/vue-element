@@ -44,7 +44,7 @@
             <div class="button-box">
                 <div class="btn-left">
                     <el-button size="small" type="primary" icon="el-icon-plus" @click="addShow= true">新建商品</el-button>
-                    <div class="warning-select">
+                    <!-- <div class="warning-select">
                         <el-select size="small" v-model="select1" placeholder="批量上传/下载">
                             <el-option label="导入Excel" value="upload"></el-option>
                             <el-option label="导出Excel" value="download"></el-option>
@@ -56,11 +56,37 @@
                             </span>
                             <i class="el-icon-warning-outline waring"></i>
                         </el-tooltip>
-                    </div>
-                    <el-select size="small" v-model="select2" placeholder="批量启用/停用">
+                    </div> -->
+                    <!-- <el-select size="small" v-model="select2" placeholder="批量启用/停用">
                         <el-option label="启用" value="start"></el-option>
                         <el-option label="停用" value="end"></el-option>
-                    </el-select>
+                    </el-select> -->
+                    <el-dropdown trigger="click" @command="handleCommandExcel">
+                        <el-button plain size="small" >批量上传/下载
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                            <el-tooltip class="item" effect="dark" placement="top">
+                                <span slot="content">
+                                    上传前下载
+                                    <a href="" style='color: red' download="模版文件">模版</a>
+                                </span>
+                                <i class="el-icon-warning-outline waring" style="color: red"></i>
+                            </el-tooltip>
+                        </el-button>
+                        
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command= 'input'>导入Excel</el-dropdown-item>
+                            <el-dropdown-item command= 'out'>导出Excel</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-dropdown trigger="click" @command="handleCommandStatus">
+                        <el-button plain size="small" >批量启用/停用
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command= 'input'>启用</el-dropdown-item>
+                            <el-dropdown-item command= 'out'>停用</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                     <el-button size="small" plain>批量删除</el-button>
                 </div>
                 <div class="btn-right">
@@ -177,7 +203,11 @@ export default {
             if(columnIndex == 3) {
                 return 'border-right: 2px solid #999'
             }
-        }
+        },
+        // 批量上传/下载
+        handleCommandExcel() {},
+        // 批量停用/启用
+        handleCommandStatus() {}
     }
 }
 </script>
