@@ -3,6 +3,7 @@
         <el-aside style="background-color: rgb(238, 241, 246); width: 100%">
             
         <div class="logo">
+            
             <div class="block"><el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar></div>
         </div>
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router>

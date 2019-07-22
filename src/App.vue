@@ -50,7 +50,6 @@
         }
       }
     },
-
     mounted() {
       if(this.screenWidth < 760) {
         this.$store.dispatch('openMenu', true)
@@ -61,8 +60,8 @@
           window.screenWidth= document.body.clientWidth;
           that.screenWidth= window.screenWidth;
           
-        })();
-      });
+        })();
+      });
     },
     methods: {
   
@@ -102,8 +101,8 @@
          h3 {
            text-align: center
          }
-
        }
     }
   }
 </style>
+

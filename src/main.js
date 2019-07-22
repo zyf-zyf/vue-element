@@ -9,6 +9,7 @@ import md5 from 'md5'
 
 import promise from 'es6-promise';
 import store from './store/index'
+import './assets/font/iconfont.css'
 
 promise.polyfill();
 

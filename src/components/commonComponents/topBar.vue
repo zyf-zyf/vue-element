@@ -13,7 +13,8 @@
                 <el-dropdown>
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
-                        <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <!-- <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar> -->
+                        <span class="iconfont icon-icon_addperson"></span>
 
                         </div>
                         <span>叮当科技</span>
