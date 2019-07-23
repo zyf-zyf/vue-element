@@ -6,31 +6,33 @@ const getQiniuToken= '/ddaigo-platform/multiMedia/uploadImg'
 
 const uploadApi= {
     
-    getQiniuToken() {
-        httpRequest.get(getQiniuToken, {
+   async getQiniuToken() {
+    return await httpRequest.get(getQiniuToken, {
             params: {
                 wxUid: "",
                 wxSid: ""
             }
-        })
-        .then(res => {
-            console.log(res, 'res')
-            return res.uptoken
+        }).then(res => {
+            console.log(res, 'res-token')
+            return res;
         }).catch(err => {
-            console.log(err, 'err')
+            console.log(err, 'err-token')
+            return err
         })
     }, 
     imagesList: [],
 
+
     uploadImgToQiniu(filetext, type) {
+        //let token = await this.getQiniuToken()
         console.log(filetext, 'filetext')
         if(type == 'less') {
             this.imagesList= []
         }
-        let axiosd= axios.create({
-            baseURL: process.env.BASE_API,
-        })
-        axiosd.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
+        // let axiosd= axios.create({
+        //     baseURL: process.env.BASE_API,
+        // })
+        // axiosd.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
         httpRequest.get(getQiniuToken, {
             params: {
                 wxUid: "",

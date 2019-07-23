@@ -6,11 +6,11 @@ const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
     timeout: 30000, // 网络请求超时 30s
     onUploadProgress: function (progressEvent) {  // `onUploadProgress` 允许为上传处理进度事件
-        console.log(progressEvent, 'progressEvent')
+        //console.log(progressEvent, 'progressEvent')
         // Do whatever you want with the native progress event
     },
     onDownloadProgress: function (progressEvent) { // `onDownloadProgress` 允许为下载处理进度事件
-        console.log(progressEvent, 'progressEvent')
+       // console.log(progressEvent, 'progressEvent')
         // 对原生进度事件的处理
     },
 })
