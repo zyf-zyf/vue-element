@@ -6,15 +6,20 @@
       <el-container style="flex-direction: column;">
         <topBar></topBar>
         <el-main>
-           <router-view class="fixed"></router-view>
+          <div class="out-div">
+            <div class="routerview">
+
+            <router-view class="fixed"></router-view>
+            </div>
            <div class="fotter-bg">
              <div class="help">
                <el-button type="text">帮助</el-button>
-               <el-button type="text">帮助</el-button>
-               <el-button type="text">帮助</el-button>
+               <el-button type="text">隐私</el-button>
+               <el-button type="text">条款</el-button>
              </div>
              <h3>2019 叮当科技产品设计部出品</h3>
            </div>
+          </div>
         </el-main>
    
       </el-container>
@@ -80,26 +85,42 @@
     .el-main {
        background: rgb(238, 241, 246);
        position: relative;
-       .fixed {
+       .out-div {
+         overflow: auto;
          position: absolute;
          top: 10px;
-         bottom: 60px;
-         left: 10px;
-         right: 10px;
-         overflow: auto;
-         
-       }
-       .fotter-bg {
-         position: absolute;
-         bottom: 0;
          left: 0;
          right: 0;
+         bottom: 0;
+       }
+       .routerview {
+           min-height: calc(100% - 62px);
+       }
+       //.fixed {
+        //  position: absolute;
+        //  top: 10px;
+        //  bottom: 60px;
+        //  left: 10px;
+        //  right: 10px;
+        //  overflow: auto;
+      
+         
+       //}
+       .fotter-bg {
+         //position: absolute;
+        //  bottom: 0;
+        //  left: 0;
+        //  right: 0;
          .help {
            display: flex;
            justify-content: center;
+            .el-button {
+             color: #666;
+            }
          }
          h3 {
-           text-align: center
+           text-align: center;
+            color: #666;
          }
        }
     }

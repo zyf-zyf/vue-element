@@ -5,7 +5,7 @@
                 <h3>尺码</h3>
             </div>
             <div class="table-space-search">
-                <el-button size="small" type="primary" >添加尺码</el-button>
+                <el-button size="small" type="primary" icon="el-icon-plus">添加尺码</el-button>
             </div>
             <div class="table-box">
                 <div class="left">

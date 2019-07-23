@@ -51,6 +51,7 @@
                 </el-table-column>
                 <el-table-column
                 prop="address"
+                width="180"
                 label="修改时间">
                 </el-table-column>
             </el-table>
