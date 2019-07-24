@@ -6,7 +6,7 @@ const getQiniuToken= '/ddaigo-platform/multiMedia/uploadImg'
 
 const uploadApi= {
     
-   async getQiniuToken() {
+   /*async getQiniuToken() {
     return await httpRequest.get(getQiniuToken, {
             params: {
                 wxUid: "",
@@ -19,10 +19,8 @@ const uploadApi= {
             console.log(err, 'err-token')
             return err
         })
-    }, 
+    }, */
     imagesList: [],
-
-
     uploadImgToQiniu(filetext, type) {
         //let token = await this.getQiniuToken()
         console.log(filetext, 'filetext')
@@ -54,6 +52,8 @@ const uploadApi= {
                     Message.success("图片上传成功");
                     this.imagesList.push(qiniuBaseUrl + res2.key + "?imageMogr2/thumbnail/400000@")   
                 }
+            }).catch((err) => {
+                console.log(err)
             })
 
         })

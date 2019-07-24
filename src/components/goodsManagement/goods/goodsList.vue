@@ -44,23 +44,6 @@
             <div class="button-box">
                 <div class="btn-left">
                     <el-button size="small" type="primary" icon="el-icon-plus" @click="addShow= true">新建商品</el-button>
-                    <!-- <div class="warning-select">
-                        <el-select size="small" v-model="select1" placeholder="批量上传/下载">
-                            <el-option label="导入Excel" value="upload"></el-option>
-                            <el-option label="导出Excel" value="download"></el-option>
-                        </el-select>
-                        <el-tooltip class="item" effect="dark" placement="top">
-                            <span slot="content">
-                                上传前下载
-                                <a href="" style='color: red' download="模版文件">模版</a>
-                            </span>
-                            <i class="el-icon-warning-outline waring"></i>
-                        </el-tooltip>
-                    </div> -->
-                    <!-- <el-select size="small" v-model="select2" placeholder="批量启用/停用">
-                        <el-option label="启用" value="start"></el-option>
-                        <el-option label="停用" value="end"></el-option>
-                    </el-select> -->
                     <el-dropdown trigger="click" @command="handleCommandExcel">
                         <el-button plain size="small" >批量上传/下载
                             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -167,6 +150,7 @@ export default {
     mounted() {
         console.log(this.$server, 'hell')
         console.log(this.formate(1562653376639, 'yyyy/MM/dd hh:mm:ss'))
+        
         console.log(this.$server.goodsControlApi.getGoodsList)
         this.getGoodsList()
     },
@@ -178,18 +162,42 @@ export default {
     methods: {
         // 获取商品数据
         getGoodsList() {
-            var params= {"data":{"page":this.page,"size":this.size,"condition":"1","orderby":"1","soldout":"","storeNo":"S00000001","searchName":"","relationUnify":"1","barCode":"","isTemp":""}}
-            this.$server.goodsControlApi.getGoodsList(params).then(res => {
-                this.total= res.total
-                this.tableData= res.data
-            })
-            .catch(err => {
-                console.log(err)
-            })
+            try {
+                let params= {
+                    "data":{"page":thisds.page,
+                        "size":10,
+                        "condition":"1",
+                        "orderby":"1",
+                        "soldout":"",
+                        "storeNo":"S00000001",
+                        "searchName":"",
+                        "relationUnify":"1",
+                        "barCode":"",
+                        "isTemp":""
+                    }
+                }
+
+                this.$server.goodsControlApi.getGoodsList(params).then(res => {
+                    this.total= res.total
+                    this.tableData= res.data
+                }).catch(err => {
+                    console.log(err)
+                })
+            }catch(error) {
+
+                this.$paramsError(error.message)
+            }
+           
+      
         },
         handlePageChange(page) {
-            this.page= page
-            this.getGoodsList()
+            try {
+                this.page= page
+                this.getGoodsLists()
+            }
+            catch(err) {
+                this.$paramsError(err.message)
+            }
         },
         handleSizeChange(size) {
             this.size= size

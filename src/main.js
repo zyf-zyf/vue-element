@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import server from './api/index.js'
 import md5 from 'md5'
+import paramsError from './api/commonJs/paramsError'
 
 import promise from 'es6-promise';
 import store from './store/index'
@@ -17,6 +18,7 @@ promise.polyfill();
 Vue.config.productionTip = false
 // api
 Vue.prototype.$server= server
+Vue.prototype.$paramsError= paramsError
 // md5
 Vue.prototype.$md5= md5
 console.log(store, 'store')

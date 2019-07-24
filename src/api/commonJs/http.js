@@ -1,7 +1,10 @@
+/** 网络请求封装 包含请求成功失败拦截 loading加载关闭 */
+
 import axios from 'axios'
-import{Loading, Message} from 'element-ui'
+import{Message} from 'element-ui'
 import {showLoading, hideLoading} from './loading'
 
+/** axios 封装 */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
     timeout: 30000, // 网络请求超时 30s
@@ -34,6 +37,7 @@ service.interceptors.request.use(
         return config;
     },
     error => {
+        console.log(error, 'error-http')
         //httpLoadingEnd()
         hideLoading();
         return Promise.error(error);
@@ -46,7 +50,8 @@ const successHandle= (msg) => {
         Message({
             message: msg,
             type: 'success',
-            duration: 1500
+            duration: 2000,
+            showClose: true
         })
     }
 }
@@ -59,15 +64,17 @@ const errorHandle = (code, other) => {
             Message({
                 message: '请求资源不存在',
                 type: 'error',
-                duration: 1500
+                duration: 2000,
+                showClose: true
             })
             break;
         // 500 sessionID 认证错误
         case '500':
             Message({
                 message: '认证失败',
-                duration: 1500,
-                type: 'error'
+                duration: 2000,
+                type: 'error',
+                showClose: true
             });
             
             break;
@@ -77,8 +84,9 @@ const errorHandle = (code, other) => {
             console.log(other, 'other')
             Message({
                 message: other,
-                duration: 1500,
-                type: 'error'
+                duration: 2000,
+                type: 'error',
+                showClose: true
             });
     }
 }
@@ -117,7 +125,8 @@ service.interceptors.response.use(
             Message({
                 message: '请检查网络',
                 type: 'error',
-                duration: 1500
+                duration: 2000,
+                showClose: true
             })
             hideLoading()
         }
