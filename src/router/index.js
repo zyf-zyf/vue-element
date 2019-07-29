@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from '../components/commonComponents/home'
 import GoodsList from '../components/goodsManagement/goods/goodsList'
 import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
 import CategoryList from '../components/goodsManagement/category/categoryList'
@@ -10,7 +11,9 @@ export default new Router({
   routes: [
     {
       path: '/',
-    
+      name: 'home',
+      component: Home,
+      meta: {}
     },
     {
       path: '/goodsManagement/goods/goodsList',

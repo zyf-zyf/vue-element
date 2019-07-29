@@ -1,6 +1,6 @@
 <template>
     <div class="top-bar">
-        <el-header style="text-align: right; font-size: 16px">
+        <el-header style="text-align: right; font-size: 16px; height: 50px;">
             <div class="left-icon" @click="handleClickFold">
                 <i :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
             </div>
@@ -29,7 +29,7 @@
             </div>
         </el-header>
        
-        <div class="title-box">
+        <div class="title-box" v-if="$route.meta.title">
             <el-breadcrumb separator="/" style="height: 40px; line-height: 40px; margin-left: 20px">
                 
                 <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
@@ -82,7 +82,7 @@
     .el-header {
         background-color: #474747;
         color: #333;
-        line-height: 60px;
+        line-height: 50px;
         box-sizing: border-box;
         border-bottom: 1px solid #eee;
         display: flex;

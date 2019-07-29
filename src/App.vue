@@ -6,19 +6,19 @@
       <el-container style="flex-direction: column;">
         <topBar></topBar>
         <el-main>
-          <div class="out-div">
-            <div class="routerview">
 
-            <router-view class="fixed"></router-view>
+          <div :class="$route.name != 'home' ? 'out-div' : 'index-home'" >
+            <div class="routerview">
+              <router-view class="fixed"></router-view>
             </div>
-           <div class="fotter-bg">
-             <div class="help">
-               <el-button type="text">帮助</el-button>
-               <el-button type="text">隐私</el-button>
-               <el-button type="text">条款</el-button>
-             </div>
-             <h3>2019 叮当科技产品设计部出品</h3>
-           </div>
+            <div id="footer">
+              <p class="a-box">
+                <a href="/">条款</a>
+                <a href="/">帮助</a>
+                <a href="/">隐私</a>
+              </p>
+              <p class="text">copyright 2019叮当科技产品设计部出品</p>
+            </div>
           </div>
         </el-main>
    
@@ -93,34 +93,39 @@
          right: 0;
          bottom: 0;
        }
-       .routerview {
-           min-height: calc(100% - 62px);
+       .index-home {
+         overflow: auto;
+         position: absolute;
+         top: 0px;
+         left: 0;
+         right: 0;
+         bottom: 0;
        }
-       //.fixed {
-        //  position: absolute;
-        //  top: 10px;
-        //  bottom: 60px;
-        //  left: 10px;
-        //  right: 10px;
-        //  overflow: auto;
-      
-         
-       //}
-       .fotter-bg {
-         //position: absolute;
-        //  bottom: 0;
-        //  left: 0;
-        //  right: 0;
-         .help {
-           display: flex;
-           justify-content: center;
-            .el-button {
-             color: #666;
-            }
+       .routerview {
+           min-height: calc(100% - 65px);
+       }
+       #footer {
+         height: 60px;
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         text-align: center;
+         box-sizing: border-box;
+         padding: 10px 0;
+         p a {
+           font-size: 16px;
+           line-height: 16px;
+           width: 32px;
+           margin:0 20px;
+           font-weight: normal;
+           color: #999;
+    
          }
-         h3 {
-           text-align: center;
-            color: #666;
+         .text{
+ 
+           font-size: 12px;
+           color: #999;
          }
        }
     }

@@ -164,7 +164,7 @@ export default {
         getGoodsList() {
             try {
                 let params= {
-                    "data":{"page":thisds.page,
+                    "data":{"page":this.page,
                         "size":10,
                         "condition":"1",
                         "orderby":"1",
