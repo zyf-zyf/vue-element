@@ -1,100 +1,112 @@
 <template>
-    <div id="add-new-goods">
-        <div class="top">
-            <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
-                <el-form-item label="SPU编码:">
-                    <el-input type="text" v-model="baseForm.spuNum" size="small" placeholder="不填将自动生成"></el-input>
-                </el-form-item> 
-                <el-form-item label="SKU编码:">
-                    <el-input type="text" v-model="baseForm.skuNum" size="small" placeholder="不填将自动生成"></el-input>
-                </el-form-item> 
-                <el-form-item label="商品名称:">
-                    <el-input type="text" v-model="baseForm.goodsName" size="small" placeholder="填写商品名称"></el-input>
-                </el-form-item> 
-                <el-form-item label="商品名称:">
-                     <el-select v-model="baseForm.brandId" size="small" placeholder="请选择品牌">
-                        <el-option
-                        v-for="item in brandList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item> 
-                <el-form-item label="选择类目:">
-                    <el-cascader size="small" v-model="baseForm.catvalue" :options="options" @change="handleChange"></el-cascader>
-                </el-form-item>
-                <el-form-item label="颜色:">
-                    <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
-                        <el-option
-                        v-for="item in colorList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="尺码:">
-                    <el-select v-model="baseForm.sizes" size="small" multiple placeholder="请选择尺码（可多选）">
-                        <el-option
-                        v-for="item in sizeList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="采购价格:">
-                    <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写采购价格"></el-input>
-                </el-form-item>
-                <el-form-item label="吊牌价格:">
-                    <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写吊牌价格"></el-input>
-                </el-form-item>
-                <el-form-item label="会员价格:">
-                    <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写会员价格"></el-input>
-                </el-form-item>
-                <el-form-item label="材质:">
-                     <el-select v-model="baseForm.brandId" size="small" placeholder="请选择材质">
-                        <el-option
-                        v-for="item in brandList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item> 
+    <div id="add-new-goods" class="edit-goods-detail-box">
+
+        <div class="edit-goods-left">
+            <div class="top">
+                <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
+                    <el-form-item label="SPU编码:">
+                        <el-input type="text" v-model="baseForm.spuNum" size="small" placeholder="不填将自动生成"></el-input>
+                    </el-form-item> 
+                    <el-form-item label="SKU编码:">
+                        <el-input type="text" v-model="baseForm.skuNum" size="small" placeholder="不填将自动生成"></el-input>
+                    </el-form-item> 
+                    <el-form-item label="商品名称:">
+                        <el-input type="text" v-model="baseForm.goodsName" size="small" placeholder="填写商品名称"></el-input>
+                    </el-form-item> 
+                    <el-form-item label="商品名称:">
+                        <el-select v-model="baseForm.brandId" size="small" placeholder="请选择品牌">
+                            <el-option
+                            v-for="item in brandList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item> 
+                    <el-form-item label="选择类目:">
+                        <el-cascader size="small" v-model="baseForm.catvalue" :options="options" @change="handleChange"></el-cascader>
+                    </el-form-item>
+                    <el-form-item label="颜色:">
+                        <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
+                            <el-option
+                            v-for="item in colorList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="尺码:">
+                        <el-select v-model="baseForm.sizes" size="small" multiple placeholder="请选择尺码（可多选）">
+                            <el-option
+                            v-for="item in sizeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="采购价格:">
+                        <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写采购价格"></el-input>
+                    </el-form-item>
+                    <el-form-item label="吊牌价格:">
+                        <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写吊牌价格"></el-input>
+                    </el-form-item>
+                    <el-form-item label="会员价格:">
+                        <el-input type="text" size="small" v-model="baseForm.buyPrice" placeholder="请填写会员价格"></el-input>
+                    </el-form-item>
+                    <el-form-item label="材质:">
+                        <el-select v-model="baseForm.brandId" size="small" placeholder="请选择材质">
+                            <el-option
+                            v-for="item in brandList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item> 
+                    
+                </el-form>
+            </div>
+            <div class="bottom" style="margin: 30px 0;">
+                <span style="line-height: 24px; font-size: 18px; color: #303133;">自定义属性</span>
+                <el-form ref="form" :model="customForm" label-width="80px">
+                    <el-form-item label="选择属性:">
+                        <el-checkbox-group v-model="checkList">
+                            <el-checkbox label="风格"></el-checkbox>
+                            <el-checkbox label="季节"></el-checkbox>
+                            <el-checkbox label="人群"></el-checkbox>
+                            <el-checkbox label="功能"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item> 
+                    <el-form-item v-for="(item, index) in checkList" :key="index" :label="item">
+                        <el-select size="small" v-model='customForm.value1'>
+                            <el-option
+                            v-for="item in valueList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="上传图片: ">
+                        <upload :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="add-googs-btn">
                 
-            </el-form>
+                <el-button type="primary" size="medium">提交保存</el-button>
+            </div>
         </div>
-        <div class="bottom" style="margin: 30px 0;">
-            <span style="line-height: 24px; font-size: 18px; color: #303133;">自定义属性</span>
-            <el-form ref="form" :model="customForm" label-width="80px">
-                <el-form-item label="选择属性:">
-                    <el-checkbox-group v-model="checkList">
-                        <el-checkbox label="风格"></el-checkbox>
-                        <el-checkbox label="季节"></el-checkbox>
-                        <el-checkbox label="人群"></el-checkbox>
-                        <el-checkbox label="功能"></el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item> 
-                <el-form-item v-for="(item, index) in checkList" :key="index" :label="item">
-                    <el-select size="small" v-model='customForm.value1'>
-                        <el-option
-                        v-for="item in valueList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="上传图片: ">
-                    <upload :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
-                </el-form-item>
-            </el-form>
-        </div>
-        <div class="add-googs-btn">
-            <el-button  size="medium">生成编码</el-button>
-            <el-button type="primary" size="medium">提交保存</el-button>
+        <div class="edit-goods-right">
+            <el-button size="small">生成编码</el-button>
+            <el-table :data="tableData">
+                <el-table-column prop="id" label="SKU编号"></el-table-column>
+                <el-table-column prop="id" label="颜色"></el-table-column>
+                <el-table-column prop="id" label="尺码"></el-table-column>
+            </el-table>
+  
         </div>
 
     </div>
@@ -122,6 +134,7 @@ import upload from '../../commonComponents/upload'
                     value1: '',
                     value2: ''
                 },
+                tableData:[],
                 brandList: [],
                 colorList: [],
                 sizeList: [],
@@ -344,7 +357,26 @@ import upload from '../../commonComponents/upload'
     }
 </script>
 <style lang="less" scoped>
-
+    .edit-goods-detail-box {
+        display: flex;
+        flex-direction: row;
+       
+        .edit-goods-left {
+            width: 660px;
+        }
+        .edit-goods-right {
+            width: 367px;
+            box-sizing: border-box;
+            // border: 1px solid #eee;
+            margin:0 20px;
+            position: relative;
+            .el-button {
+                position: absolute;
+                top: -40px;
+                left: 0;
+            }
+        }
+    }
     .add-googs-btn {
         margin-top: 20px;
         text-align: right;

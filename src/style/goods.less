@@ -11,20 +11,29 @@
             text-align: left;
         }
     }
+    .el-table {
+        td{
+            .el-button--text {
+                width: 100%;
+                text-align: left;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: 0;
+            }
+        }
+    }
 }
 // 新建商品
 
 #add-new-goods {
-    .el-form {
-        margin-left: 20px;
-    }
-
     .el-input, .el-select , .el-checkbox-group{
-        width: 80%;
+        width: 100%;
     }
     .el-select .el-input , .el-cascader{
         width: 100%;
     }
+
 }
 
 // 属性

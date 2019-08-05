@@ -85,7 +85,11 @@
                          <el-image style="width: 40px; height: 40px;" :src="scope.row.goods_pic" fit="cover"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="brandName" label="SPU编号" width="120" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click="editShow=true">{{scope.row.brandName}}</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="brandName" label="SKU编号" width="120" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="brandName" label="品牌" width="120" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column v-for="(item, index) in tableLabel" :key="index" :prop="item.prop" :label="item.label" width="150" show-overflow-tooltip></el-table-column>
@@ -98,20 +102,33 @@
         <el-dialog
         title="基本属性"
         :visible.sync="addShow"
-        width="50%"
+        class='add-goods-dialog'
         top="2vh"
         >
             <addNewGoods></addNewGoods>
+        </el-dialog>
+        <el-dialog
+        title="基本属性"
+        :visible.sync="editShow"
+        class='edit-goods-dialog'
+        top="2vh"
+        >
+            <editGoodsDetails></editGoodsDetails>
+            <!-- <goodsBarcodesGroup></goodsBarcodesGroup> -->
         </el-dialog>
     </div>
 </template>
 <script>
 import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
+import editGoodsDetails from './editGoodsDetails'
+import goodsBarcodesGroup from './goodsBarcodesGroup'
 export default {
     components: {
         page,
-        addNewGoods
+        addNewGoods,
+        editGoodsDetails,
+        goodsBarcodesGroup
     },
     data() {
         return {
@@ -159,7 +176,8 @@ export default {
                 {label: '三级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
        
             ],
-            addShow: false
+            addShow: false,
+            editShow: false
         }
     },
     mounted() {
@@ -174,6 +192,7 @@ export default {
             class: '123'
         }, '123')
     },
+   
     methods: {
         // 获取商品数据
         getGoodsList() {
@@ -264,7 +283,7 @@ export default {
         handleReset() {
             this.formData.checkList= []
             this.handleChengeGroup()
-        }
+        },
     }
 }
 </script>
@@ -320,5 +339,6 @@ export default {
             top: 8px;
         }
     }
+
  
 </style>
