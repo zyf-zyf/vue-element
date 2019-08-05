@@ -18,7 +18,7 @@
                         <el-table-column >
                             <template slot="header" slot-scope="scope">
                                 <span @click="handleAdd(scope.row)">
-                                    <el-icon class="el-icon-plus" style="font-weight: 900" ></el-icon>
+                                    <el-icon class="el-icon-plus" style="font-weight: 900; color: #fff" ></el-icon>
                                 </span>
                             </template>
                             <template slot-scope="scope">
@@ -119,7 +119,7 @@ export default {
             padding-right: 10px;
         }
         .el-icon-edit:hover, .el-icon-delete:hover{
-            color: red
+            color: #ff7068;
         }
     }
 </style>

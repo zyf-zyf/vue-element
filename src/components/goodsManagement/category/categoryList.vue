@@ -22,31 +22,26 @@
                 <el-table-column
                 prop="name"
                 label="名称"
-                sortable
                 width="180">
                 </el-table-column>
                 <el-table-column
                 prop="date"
                 label="一级类目"
-                sortable
                 width="180">
                 </el-table-column>
                 <el-table-column
                 prop="children.date1"
                 label="二级类目"
-                sortable
                 width="180">
                 </el-table-column>
                 <el-table-column
                 prop="date2"
                 label="三级类目"
-                sortable
                 width="180">
                 </el-table-column>
                 <el-table-column
                 prop="name"
                 label="创建时间"
-                sortable
                 width="180">
                 </el-table-column>
                 <el-table-column

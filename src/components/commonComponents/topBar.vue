@@ -10,11 +10,11 @@
                 <el-badge :value="200" :max="99" class="item">
                     <i class="el-icon-bell"></i>
                 </el-badge>
-                <el-dropdown>
+                <el-dropdown trigger='click'>
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
-                        <!-- <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar> -->
-                        <span class="iconfont icon-icon_addperson"></span>
+                        <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <!-- <span class="iconfont icon-icon_addperson"></span> -->
 
                         </div>
                         <span>叮当科技</span>
@@ -140,7 +140,9 @@
             border-bottom: 1px solid blue;
         }
     }
-        
+    .el-dropdown-menu {
+        min-width: 80px;
+    }
 
     @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
         0%{

@@ -8,7 +8,7 @@
         <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router :default-active="$route.path" >
             <el-submenu index="1">
                 <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i class="el-icon-s-goods"></i>
                     <span slot="title">商品管理</span>
                 </template>
                 <el-menu-item index="/goodsManagement/goods/goodsList">商品资料</el-menu-item>
