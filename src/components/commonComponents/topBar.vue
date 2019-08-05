@@ -30,12 +30,12 @@
         </el-header>
        
         <div class="title-box" v-if="$route.meta.title">
-            <el-breadcrumb separator="/" style="height: 40px; line-height: 40px; margin-left: 20px">
+            <el-breadcrumb separator="/" style="line-height: 38px; margin-left: 20px">
                 
                 <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <h2 class="title">{{$route.meta.title}}</h2>
+            <h2 class="title" >{{$route.meta.title}}</h2>
         </div>
         <div class="attributeMaintenance" v-if="$route.name == 'attributeMaintenance'"> 
             <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -117,9 +117,13 @@
         }
     }
     .title-box {
+        height: 68px;
         .title {
+            font-size: 20px;
             margin-left: 20px;
-            line-height: 40px;
+            font-weight: normal;
+            color:#474747;
+         
         }
     }
     .attributeMaintenance {

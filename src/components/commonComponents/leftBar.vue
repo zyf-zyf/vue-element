@@ -5,7 +5,7 @@
         <div class="logo">
             <div class="block"><img :class="iss ? 'img-56' : 'img-200'" src="../../assets/logo.png"/></div>
         </div>
-        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router>
+        <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router :default-active="$route.path" >
             <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-location"></i>
@@ -24,6 +24,11 @@
         computed: {
             iss() {
                 return this.$store.state.isOpen
+            },
+            isActive() {
+                if(this.$route.path.split('/')[2] == 'goods') {
+                    return true
+                }
             }
         },
         data() {

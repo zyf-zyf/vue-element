@@ -83,12 +83,12 @@
     right: 0;
     bottom: 0;
     .el-main {
-       background: rgb(238, 241, 246);
+       background: #f4f4f4;
        position: relative;
        .out-div {
          overflow: auto;
          position: absolute;
-         top: 10px;
+         top: 20px;
          left: 0;
          right: 0;
          bottom: 0;
@@ -103,13 +103,11 @@
        }
        .routerview {
            min-height: calc(100% - 65px);
+           box-sizing: border-box;
+           padding:0 20px;
        }
        #footer {
          height: 60px;
-         position: absolute;
-         bottom: 0;
-         left: 0;
-         right: 0;
          text-align: center;
          box-sizing: border-box;
          padding: 10px 0;

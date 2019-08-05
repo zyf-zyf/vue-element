@@ -4,6 +4,7 @@ import Home from '../components/commonComponents/home'
 import GoodsList from '../components/goodsManagement/goods/goodsList'
 import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
 import CategoryList from '../components/goodsManagement/category/categoryList'
+import CheckBox from '../components/commonComponents/CheckBoxGroup'
 
 Vue.use(Router)
 
@@ -45,6 +46,7 @@ export default new Router({
         name: '类目管理'
       }
     },
+    
 
   ]
 })

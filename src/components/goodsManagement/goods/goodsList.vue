@@ -35,8 +35,8 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="显示字段:">
-                        <el-checkbox-group v-model="formData.checkList">
-                            <el-checkbox v-for="(item, index) in checkLabel" :key="index" :label="item"></el-checkbox>
+                        <el-checkbox-group v-model="formData.checkList"  @change="handleChengeGroup">
+                            <el-checkbox style="color: #666" v-for="(item, index) in checkLabel" :key="index" :label="item" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-form>
@@ -74,23 +74,24 @@
                 </div>
                 <div class="btn-right">
                     <el-button size="small" type="primary">查 询</el-button>
-                    <el-button size="small">重 置</el-button>
+                    <el-button size="small" @click="handleReset">重 置</el-button>
                 </div>
                 
             </div>
             <el-table :data="tableData"  highlight-current-row :cell-style="cellStyle" :header-cell-style="cellStyle"> 
                 <el-table-column type="selection" width="55" fixed></el-table-column>
-                <el-table-column prop="goods_name" label="名称" width="140" show-overflow-tooltip fixed></el-table-column>
-                <el-table-column prop="brandName" label="品牌" width="120" fixed></el-table-column>
-                <el-table-column prop="goods_color" label="颜色" fixed></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
-                <el-table-column prop="goods_color" label="一级类目" width="150"></el-table-column>
+                <el-table-column label="商品图"  fixed>
+                    <template slot-scope="scope">
+                         <el-image style="width: 40px; height: 40px;" :src="scope.row.goods_pic" fit="cover"></el-image>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="brandName" label="SPU编号" width="120" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column prop="brandName" label="SKU编号" width="120" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column prop="brandName" label="品牌" width="120" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column v-for="(item, index) in tableLabel" :key="index" :prop="item.prop" :label="item.label" width="150" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="brandName" label="状态" width="100" ></el-table-column>
+                <el-table-column prop="brandName" label="创建时间" width="150" show-overflow-tooltip ></el-table-column>
+                <el-table-column prop="brandName" label="修改时间" width="150" show-overflow-tooltip ></el-table-column>
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
@@ -118,6 +119,20 @@ export default {
             size: 10,
             total: null,
             tableData: [],
+            tableLabel: [
+                {prop: 'name', label: '一级类目'},
+                {prop: 'name', label: '二级类目'},
+                {prop: 'name', label: '三级类目'},
+                {prop: 'name', label: '商品名称'},
+                {prop: 'name', label: '颜色'},
+                {prop: 'name', label: '尺码'},
+                {prop: 'name', label: '采购价'},
+                {prop: 'name', label: '吊牌价'},
+                {prop: 'name', label: '会员价'},
+                {prop: 'name', label: '状态'},
+                {prop: 'name', label: '创建时间'},
+                {prop: 'name', label: '修改时间'},
+            ],
             formData: {
                 spuNum: '',
                 skuNum: '',
@@ -193,7 +208,7 @@ export default {
         handlePageChange(page) {
             try {
                 this.page= page
-                this.getGoodsLists()
+                this.getGoodsList()
             }
             catch(err) {
                 this.$paramsError(err.message)
@@ -208,14 +223,48 @@ export default {
         },
         cellStyle({row, column, rowIndex, columnIndex}) {
      
-            if(columnIndex == 3) {
+            if(columnIndex == 4) {
                 return 'border-right: 2px solid #999'
             }
         },
         // 批量上传/下载
         handleCommandExcel() {},
         // 批量停用/启用
-        handleCommandStatus() {}
+        handleCommandStatus() {},
+        handleCheckChange(val,index) {
+            console.log(index, val)
+
+        },
+        handleChengeGroup(val) {
+            this.tableLabel=[
+                {prop: 'name', label: '一级类目'},
+                {prop: 'name', label: '二级类目'},
+                {prop: 'name', label: '三级类目'},
+                {prop: 'name', label: '商品名称'},
+                {prop: 'name', label: '颜色'},
+                {prop: 'name', label: '尺码'},
+                {prop: 'name', label: '采购价'},
+                {prop: 'name', label: '吊牌价'},
+                {prop: 'name', label: '会员价'},
+               
+            ]
+            var arr=[], arr1=[];
+            console.log(val)
+            val.forEach(item => {
+               arr1.push({
+                   prop: 'brandName',
+                   label: item
+               })
+            })
+            console.log(val)
+            arr=this.tableLabel.concat(arr1)
+            this.tableLabel= arr
+        },
+        // 重置按钮
+        handleReset() {
+            this.formData.checkList= []
+            this.handleChengeGroup()
+        }
     }
 }
 </script>
@@ -244,7 +293,8 @@ export default {
             width: 180px;
         }
         .el-form-item {
-            margin-right: 30px
+            margin-right: 20px;
+            margin-bottom: 20px;
         }
     }
     
