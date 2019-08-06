@@ -5,46 +5,45 @@
         <div class="logo">
             <div class="block"><img :class="iss ? 'img-56' : 'img-200'" src="../../assets/logo.png"/></div>
         </div>
-        <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router :default-active="$route.path" >
-            <el-submenu index="1">
+        <el-menu :unique-opened	="true" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="iss" router :default-active="$route.path" v-if="Menu">
+            <el-submenu  v-for="(item) in Menu" :key="item.id" :index="item.path">
                 <template slot="title">
-                    <i class="el-icon-s-goods"></i>
-                    <span slot="title">商品管理</span>
+                    <i :class="item.icon"></i>
+                    <span slot="title">{{item.title}}</span>
                 </template>
-                <el-menu-item index="/goodsManagement/goods/goodsList">商品资料</el-menu-item>
-                <el-menu-item index="/goodsManagement/category/categoryList">类目管理</el-menu-item>
-                <el-menu-item index="/goodsManagement/attributes/attributeMaintenance">属性维护</el-menu-item>
+                <el-menu-item v-for="itemo in item.children" :key="itemo.id" :index="itemo.path">{{itemo.title}}</el-menu-item>
             </el-submenu>
         </el-menu>
       </el-aside>
     </div>
 </template>
 <script>
+    import Menu from '../../api/menu'
     export default {
         computed: {
             iss() {
                 return this.$store.state.isOpen
-            },
-            isActive() {
-                if(this.$route.path.split('/')[2] == 'goods') {
-                    return true
-                }
             }
+        },
+        created() {
+            this.Menu= Menu
         },
         data() {
             return {
-                isCollapse: this.$store.state.isOpen || false
+                isCollapse: this.$store.state.isOpen || false,
+                index: '',
+                Menu: []
             }
         },
 
         mounted() {
-       
+            console.log(Menu, 'menu')
            
         },
 
         methods: {
             handleOpen(key, keyPath) {
-                console.log(key, keyPath);
+                this.index= key
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
@@ -106,7 +105,11 @@
             box-shadow: 1px 10px 20px 0px 
             rgba(230, 0, 18, 0.15);
             border-radius: 10px;
+            i {
+                color: red !important;
+            }
         }
+      
 
     }
     .el-menu-vertical-demo:not(.el-menu--collapse) {
