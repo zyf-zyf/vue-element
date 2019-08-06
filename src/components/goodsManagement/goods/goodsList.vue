@@ -43,7 +43,7 @@
             </div>
             <div class="button-box">
                 <div class="btn-left">
-                    <el-button size="small" type="primary" icon="el-icon-plus" @click="addShow= true">新建商品</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-plus" @click="addGoods">新建商品</el-button>
                     <el-dropdown trigger="click" @command="handleCommandExcel">
                         <el-button plain size="small" >批量上传/下载
                             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -104,6 +104,7 @@
         :visible.sync="addShow"
         class='add-goods-dialog'
         top="2vh"
+        :close-on-click-modal="false"
         >
             <addNewGoods></addNewGoods>
         </el-dialog>
@@ -112,10 +113,12 @@
         :visible.sync="editShow"
         class='edit-goods-dialog'
         top="2vh"
+        :close-on-click-modal="false"	
         >
             <editGoodsDetails></editGoodsDetails>
-            <!-- <goodsBarcodesGroup></goodsBarcodesGroup> -->
+         
         </el-dialog>
+  
     </div>
 </template>
 <script>
@@ -123,15 +126,18 @@ import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
 import editGoodsDetails from './editGoodsDetails'
 import goodsBarcodesGroup from './goodsBarcodesGroup'
+
 export default {
     components: {
         page,
         addNewGoods,
         editGoodsDetails,
-        goodsBarcodesGroup
+        goodsBarcodesGroup,
+  
     },
     data() {
         return {
+       
             page: 1,
             size: 10,
             total: null,
@@ -187,13 +193,12 @@ export default {
         console.log(this.$server.goodsControlApi.getGoodsList)
         this.getGoodsList()
     },
-    render(createElement) {
-        return createElement('i', {
-            class: '123'
-        }, '123')
-    },
+
    
     methods: {
+        addGoods() {
+            this.addShow=true
+        },
         // 获取商品数据
         getGoodsList() {
             try {
@@ -265,11 +270,10 @@ export default {
                 {prop: 'name', label: '采购价'},
                 {prop: 'name', label: '吊牌价'},
                 {prop: 'name', label: '会员价'},
-               
             ]
             var arr=[], arr1=[];
             console.log(val)
-            val.forEach(item => {
+            val && val.forEach(item => {
                arr1.push({
                    prop: 'brandName',
                    label: item
@@ -338,7 +342,5 @@ export default {
             right: 20px;
             top: 8px;
         }
-    }
-
- 
+    } 
 </style>

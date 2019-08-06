@@ -1,6 +1,5 @@
 <template>
     <div id="add-new-goods" class="edit-goods-detail-box">
-
         <div class="edit-goods-left">
             <div class="top">
                 <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
@@ -99,6 +98,7 @@
                 <el-button type="primary" size="medium">提交保存</el-button>
             </div>
         </div>
+        <div class="middle"></div>
         <div class="edit-goods-right">
             <el-button size="small">生成编码</el-button>
             <el-table :data="tableData">
@@ -360,15 +360,24 @@ import upload from '../../commonComponents/upload'
     .edit-goods-detail-box {
         display: flex;
         flex-direction: row;
-       
+        position:relative;
         .edit-goods-left {
-            width: 660px;
+            min-width: 660px;
+            box-sizing: border-box;
+            margin-right:20px;
+           
+        }
+        .middle{
+            width: 2px;
+            background: #eee;
+            position: absolute;
+            top: -90px;
+            bottom: -60px;
+            left: 675px;
         }
         .edit-goods-right {
             width: 367px;
             box-sizing: border-box;
-            // border: 1px solid #eee;
-            margin:0 20px;
             position: relative;
             .el-button {
                 position: absolute;
