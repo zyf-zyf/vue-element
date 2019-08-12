@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: EditGoods,
+      component: Home,
       meta: {}
     },
     {

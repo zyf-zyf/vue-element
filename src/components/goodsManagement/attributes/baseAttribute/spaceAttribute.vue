@@ -5,7 +5,7 @@
                 <h3>尺码</h3>
             </div>
             <div class="table-space-search">
-                <el-button size="small" type="primary" icon="el-icon-plus">添加尺码</el-button>
+                <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
             </div>
             <div class="table-box">
                 <div class="left">
@@ -56,6 +56,51 @@
                 </div>
             </div>
         </el-card>
+        <!-- 添加尺码 -->
+        <el-dialog
+        title="尺码编辑"
+        :visible.sync="dialogVisible"
+        width="40%"
+        :before-close="handleClose">
+            <el-form v-model="spaceForm" label-width="100px" label-position="left">
+                <el-form-item label='颜色名称:'>
+                    <el-input size="small" type='text' v-model="spaceForm.spaceName" clearable></el-input>
+                    <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
+                </el-form-item>
+                <el-form-item label="选择类别:">
+                    <el-select size="small" v-model="spaceForm.categoryName" filterable placeholder="请选择类别" style="width: 100%">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="dialogVisible = false">提交保存</el-button>
+            </span>
+        </el-dialog>
+        <!-- 添加类别 -->
+        <el-dialog
+        title="分类编辑"
+        :visible.sync="dialogVisibleCategory"
+        width="40%"
+        :before-close="handleClose">
+            <el-form v-model="categoryForm" label-width="100px" label-position="left">
+                <el-form-item label='类别名称:'>
+                    <el-input size="small" type='text' v-model="categoryForm.categoryName" clearable></el-input>
+                    <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
+                </el-form-item> 
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="dialogVisibleCategory = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="dialogVisibleCategory = false">提交保存</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -69,7 +114,22 @@ export default {
                 {
                     spaceName: '裤子'
                 }
-            ]
+            ],
+            dialogVisible: false, // 尺码
+            spaceForm: {
+                spaceName: '',
+                categoryName: ''
+            },
+            options: [
+                {
+                    label: '类别一',
+                    value: '1'
+                }
+            ],
+            categoryForm: {
+
+            },
+            dialogVisibleCategory: false, // 类别
         }
     },
     methods: {
@@ -89,7 +149,15 @@ export default {
             alert('删除')
         },
         handleAdd(scope) {
-            alert('添加')
+            this.dialogVisibleCategory= true
+        },
+        handleClose() {
+            this.$confirm('确认关闭？').then(_ => {
+                this.dialogVisible= false
+            }).catch(_ => {});
+        },
+        handleClickCreateSpace() {
+            this.dialogVisible= true
         }
     }
 }
