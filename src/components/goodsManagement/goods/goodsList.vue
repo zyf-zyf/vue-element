@@ -2,10 +2,10 @@
     <div id="goods">
         <el-card>
             <div class="goods">
-                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="75px">
+                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="80px">
                     <el-form-item v-for="(item, index) in labelItem" :key="index" :label="item.label">
-                        <el-input v-if="item.type == 'input'" size="small" v-model="item.value" placeholder="请填写" @input="handleChangeVal(Object.keys(formData)[index],item.value)"></el-input>
-                        <el-select size="small" v-if="item.type=='select'" v-model="item.value" placeholder="请选择" @change="handleChangeVal(Object.keys(formData)[index],item.value)">
+                        <el-input  v-if="item.type == 'input'" size="small" v-model="item.value" placeholder="请填写" @input="handleChangeVal(Object.keys(formData)[index],item.value)"></el-input>
+                        <el-select  size="small" v-if="item.type=='select'" v-model="item.value" placeholder="请选择" @change="handleChangeVal(Object.keys(formData)[index],item.value)">
                             <el-option v-for="itemo in item.list" :key="itemo.value" :label="itemo.label" :value="itemo.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -24,7 +24,7 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        style="width: 465px">
+                       >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="采购价格:">

@@ -89,11 +89,7 @@
             .el-menu-item {
                 box-sizing: border-box;
                 width: 180px!important;
-                text-align: center;
-              //  padding: 0;
-                padding: 0 !important;
-                
-            
+                text-align: left;
             }
            
         }

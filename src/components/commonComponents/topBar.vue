@@ -125,6 +125,10 @@
             color:#474747;
          
         }
+        box-sizing: border-box;
+        border-bottom: 1px solid #eee;
+        // box-shadow:0px 5px 10px -15px #ccc;
+
     }
     .attributeMaintenance {
         padding-left: 30px;
@@ -139,6 +143,9 @@
             color: red;
             border-bottom: 1px solid blue;
         }
+        box-sizing: border-box;
+        border-bottom: 1px solid #eee;
+        
     }
     .el-dropdown-menu {
         min-width: 80px;

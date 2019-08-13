@@ -4,7 +4,7 @@ import Vue from 'vue'
 
 import App from './App'
 import router from './router'
-import server from './api/index.js'
+import server from './api/servers/index.js'
 import md5 from 'md5'
 import paramsError from './api/commonJs/paramsError'
 

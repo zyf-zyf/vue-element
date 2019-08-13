@@ -88,7 +88,7 @@
        .out-div {
          overflow: auto;
          position: absolute;
-         top: 20px;
+         top: 0px;
          left: 0;
          right: 0;
          bottom: 0;
@@ -104,7 +104,7 @@
        .routerview {
            min-height: calc(100% - 65px);
            box-sizing: border-box;
-           padding:0 20px;
+           padding: 20px;
        }
        #footer {
          height: 60px;

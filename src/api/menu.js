@@ -22,6 +22,24 @@ const Menu=[
                 path: '/goodsManagement/attributes/attributeMaintenance'
             }
         ]
+    },
+    {
+        id: '1-2',
+        title: '库存管理',
+        icon: 'iconfont icon-kucunguanli-weixuan',
+        path: '/stockManagement',
+        children: [
+            {
+                id: '1-2-1',
+                title: '唯一码管理',
+                path: '/stockManagement/uniqueCode/uniqueCodeList'
+            },
+            {
+                id: '1-2-2',
+                title: '库存管理',
+                path: '/stockManagement/stockManage/stockList'
+            },
+        ]
     }
 ]
 
