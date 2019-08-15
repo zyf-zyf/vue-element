@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // '/youbao':{
+      //     //target: "http://dev.dingdian.xin/youbao",
+      //     target: process.env.BASE_API,
+      //     changeOrigin:true,
+      //     pathRewrite:{
+      //         '^/youbao':''
+      //     }
+      // }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

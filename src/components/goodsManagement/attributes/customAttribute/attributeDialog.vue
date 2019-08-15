@@ -1,14 +1,14 @@
 <template>
     <div>
         <el-dialog
-        :title="type == 'item' ? '添加属性' : '添加属性值'"
+        :title="valueTitle"
         :visible.sync="dialogVisible"
         width="30%"
         :before-close="handleClose"
         >
             <el-form  label-width="100px">
                 <el-form-item :label="diaLabelName +':'">
-                    <el-input type="text" size="small" v-model="diaName"></el-input>
+                    <el-input type="text" size="small" v-model="diaName" @change="handleChange"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -20,7 +20,7 @@
 </template>
 <script>
     export default {
-        props: ['type', 'name', 'labelName', 'isShow'],
+        props: ['type','valueTitle', 'name', 'labelName', 'isShow'],
         computed: {
             dialogVisible: {
                 get() {
@@ -39,27 +39,34 @@
                 }
             }
         },
+       
         data() {
             return {
-               
-                diaName: this.name,
-             
+                diaName: this.name || '',
             }
+        },
+        mounted() {
+            console.log(this.name, 'name')
         },
         methods: {
             handleClcikAddItem() {
                 if(this.type == 'item') {
                     this.$emit('handleClcikAddItem', this.diaName)
                     this.$emit('cancelShow', false)
+                    this.diaName= ''
                 }else if(this.type == 'itemValue') {
                     this.$emit('handleClcikAddItemValue', this.diaName)
                     this.$emit('cancelShow', false)
+                    this.diaName= ''
                 }
             },
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
                 }).catch(_ => {});
+            },
+            handleChange() {
+                this.$emit('changeTitle', this.diaName)
             }
         }
     }

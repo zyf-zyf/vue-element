@@ -1,45 +1,40 @@
 <template>
     <div>
-        <el-card class="elcard">
-            <div>
-                <h3>颜色</h3>
-            </div>
-            <div class="table-search">
-                <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
-                <el-button size="small" type="primary"  @click="dialogVisible=true" icon="el-icon-plus">添加颜色</el-button>
-            </div>
-            <el-table :data="tableData" stripe style="width: 100%">
-                <el-table-column
-                prop="date"
-                label="ID"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="name"
-                label="LOGO"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="address"
-                label="颜色">
-                </el-table-column>
-                <el-table-column
-                prop="address"
-                label="修改时间">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                    <template slot-scope="scope">
-                        <span @click="handleEdit(scope.row)">
-                            <el-icon class="el-icon-edit" ></el-icon>
-                        </span>
-                        <span @click="handleDel(scope.row)">
-                            <el-icon class="el-icon-delete"></el-icon>
-                        </span>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-card>
+        <div class="table-search">
+            <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
+            <el-button size="small" type="primary"  @click="addColorBtn" icon="el-icon-plus">添加颜色</el-button>
+        </div>
+        <el-table :data="tableData" stripe style="width: 100%">
+            <el-table-column
+            prop="propertyGroupId"
+            label="ID"
+            >
+            </el-table-column>
+            <el-table-column
+            prop="groupName"
+            label="颜色">
+            </el-table-column>
+            <el-table-column
+            prop="gmtCreate"
+            label="创建时间">
+            </el-table-column>
+             <el-table-column
+            prop="gmtModified"
+            label="修改时间">
+            </el-table-column>
+            <el-table-column
+            label="操作" width="80">
+                <template slot-scope="scope">
+                    <span @click="handleEditColorVal(scope.row)">
+                        <el-icon class="el-icon-edit" ></el-icon>
+                    </span>
+                    <span @click="handleDelColorVal(scope.row)">
+                        <el-icon class="el-icon-delete"></el-icon>
+                    </span>
+                </template>
+            </el-table-column>
+        </el-table>
+ 
         <!-- 添加颜色属性 -->
         <el-dialog
         title="颜色编辑"
@@ -48,54 +43,106 @@
         :before-close="handleClose">
             <el-form label-width="100px">
                 <el-form-item label='颜色名称:'>
-                    <el-input size="small" type='text' v-model="form.colorName" ></el-input>
+                    <el-input size="small" type='text' v-model="form.groupName" ></el-input>
                     <small>创建多个颜色，请用逗号分隔不同颜色</small>
                 </el-form-item>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogVisible = false">提交保存</el-button>
+                <el-button size="small" type="primary" @click="handleColorValSubmit">提交保存</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 <script>
-    import upload from '../../../commonComponents/upload'
+
     export default {
-        components: {
-            upload
-        },
+        props: ['propertyId'],
         data() {
             return {
                 searchName: '',
                 tableData: [],
                 dialogVisible: false,
                 form: {
-                    colorName: ''
+                    groupName: ''
                
                 },
-                uploadtype: 'less',
+                type: ''
+                
 
             }
         },
+        mounted() {
+            this.getGroupListByPropertyId()
+        },
         methods: {
+            getGroupListByPropertyId() {
+                try{
+                    let params= {
+                        propertyId: this.propertyId
+                    }
+                    this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
+                        this.tableData= res.data
+                    })
+                }catch(error){this.$paramsError(error)}
+            },
+            addColorBtn() {
+                this.form= {}
+                this.dialogVisible= true
+                this.type="add"
+            },
+            handleColorValSubmit() {
+                try{
+                    if(this.type == 'add') {
+                        let params={
+                            propertyId: this.propertyId,
+                            groupName: this.form.groupName
+                        }
+                        this.$server.goodsControlApi.addGroupItem(params).then(res => {
+                            this.dialogVisible= false
+                            this.getGroupListByPropertyId(this.propertyId)
+                            this.form= {}
+                        }).catch()
+                    }else if(this.type == 'edit') {
+                        let params={
+                            propertyGroupId: this.form.propertyGroupId,
+                            groupName: this.form.groupName
+                        }
+                        this.$server.goodsControlApi.editGroupItem(params).then(res => {
+                            this.dialogVisible= false
+                          
+                            this.getGroupListByPropertyId(this.propertyId)
+                        }).catch()
+                    }
+                    
+                }catch(error) {this.$paramsError(error)}
+            },
             handleClose() {
                 this.$confirm('确认关闭？').then(_ => {
                     this.dialogVisible= false
                 }).catch(_ => {});
             },
-            changeMaterialImg(val) {
-                this.form.imageList= val
-            },
-            delImg(idx){
-                this.form.imageList.splice(idx, 1)
-            },
-            handleEdit(scope) {
+      
+            handleEditColorVal(scope) {
+                this.type= 'edit'
+                this.form= {}
                 this.dialogVisible= true
+                this.form= scope
             },
-            handleDel() {
-
+            handleDelColorVal(scope) { 
+                
+                try{
+                    let params= {
+                        propertyGroupId: scope.propertyGroupId
+                    }
+                    this.$confirm('确定删除该颜色？').then(_ => {
+                        this.$server.goodsControlApi.delGroupItem(params).then(res => {
+                            this.getGroupListByPropertyId()
+                        }).catch()
+                    }).catch()
+                }catch(error){this.$paramsError(error)}
+            
             }
         }
     }

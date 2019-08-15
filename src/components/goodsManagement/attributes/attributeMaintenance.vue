@@ -20,7 +20,7 @@
         },
         computed: {
             activiyName () {
-                return this.$store.state.isactivite
+                return this.$store.state.isactiviteAttribute
             }
         }
     }

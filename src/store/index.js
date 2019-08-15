@@ -5,14 +5,18 @@ import goods from './modules/goods'
 // 根目录初始值
 const state= {
     isOpen: false,
-    isactivite: 'first'
+    isactiviteAttribute: 'first',
+    isactiviteUniqueCode: 'first'
 }
 const mutations= {
     OPEN_MENU:(state, data) => {
 		state.isOpen = data
     },
-    ISACTIVITE:(state, data) => {
-		state.isactivite = data
+    ISACTIVITEATTRIBUTE:(state, data) => {
+		state.isactiviteAttribute = data
+    },
+    ISACTIVITEUNIQUECODE:(state, data) => {
+		state.isactiviteUniqueCode = data
     },
 }
 const actions= {
@@ -21,10 +25,15 @@ const actions= {
     }, data) {
         commit('OPEN_MENU', data)
     },
-    isActivite({
+    isActiviteAttribute({
         commit
     }, data) {
-        commit('ISACTIVITE', data)
+        commit('ISACTIVITEATTRIBUTE', data)
+    },
+    isActiviteUniqueCode({
+        commit
+    }, data) {
+        commit('ISACTIVITEUNIQUECODE', data)
     },
 }
 export default new Vuex.Store({

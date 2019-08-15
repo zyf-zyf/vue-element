@@ -1,37 +1,60 @@
 <template>
     <div id="custom-attribute">
         <el-card class="elcard" v-for="(item, index) in tableList" :key="index">
-            <div>
-                <h3>{{item.title}}</h3>
-            </div>
-            <div class="table-search">
-                <el-input v-model="item.searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
-                <el-button size="small" type="primary" @click="handleItemValue(item, index)" >添加属性值</el-button>
-            </div>
-            <el-table :data="item.tableData" stripe style="width: 100%">
-                <el-table-column
-                prop="date"
-                label="ID"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="name"
-                label="属性值"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="address"
-                label="修改时间">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                </el-table-column>
-            </el-table>
+            <el-collapse v-model="activeNames" @change="handleChange(item,index)" accordion>
+                <el-collapse-item :name=index>
+                    <template slot="title">
+                        <h3>{{item.propertyName}}</h3>
+                    </template>
+                    <div style="padding-top: 10px">
+
+               
+                    <div class="table-search">
+                        <el-input v-model="item.searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
+                        <el-button size="small" type="primary" @click="handleItemValue(item, index)" >添加属性值</el-button>
+                    </div>
+                    <el-table :data="tableData" stripe style="width: 100%">
+                        <el-table-column
+                        prop="propertyGroupId"
+                        label="ID"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                        prop="groupName"
+                        label="属性值"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                        prop="gmtCreate"
+                        label="创建时间">
+                        </el-table-column>
+                        <el-table-column
+                        prop="gmtModified"
+                        label="修改时间">
+                        </el-table-column>
+                        <el-table-column
+                        label="操作"
+                        width="80">
+                            <template slot-scope="scope">
+                                <span @click="handleEdit(item,scope.row,index)">
+                                    <el-icon class="el-icon-edit" ></el-icon>
+                                </span>
+                                <span @click="handleDel(scope.row, index)">
+                                    <el-icon class="el-icon-delete"></el-icon>
+                                </span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                         </div>
+                </el-collapse-item>
+  
+ 
+            </el-collapse>
         </el-card>
         <div class="cus-btn">
             <el-button style="width: 100%;" icon="el-icon-plus" @click="handleClickTableItem">添加属性</el-button>
         </div>
-        <attributeDialog :type="type" :isShow="isShow" :name="title" :labelName="labelName" @cancelShow="cancelShow" @handleClcikAddItem="handleClcikAddItem" @handleClcikAddItemValue="handleClcikAddItemValue"></attributeDialog>
+        <attributeDialog v-if="isShow" :valueTitle="valueTitle" :type="type" :isShow="isShow" :name="title" :labelName="labelName" @cancelShow="cancelShow" @handleClcikAddItem="handleClcikAddItem" @handleClcikAddItemValue="handleClcikAddItemValue" @changeTitle="changeTitle"></attributeDialog>
     </div>
 </template>
 <script>
@@ -41,7 +64,7 @@
             attributeDialog
         },
         mounted() {
-            
+            this.getCustomPropertyList()
         },
         data() {
             return {
@@ -50,44 +73,165 @@
                     {
                         title: '品牌',
                         searchName: '',
-                        tableData: []
+                        
                     }
                 ],
+                tableData: [],
                 title: '',
                 isShow: false,
                 labelName: '',
-                type: ''
+                type: '',
+                activeNames: '',
+                propertyId: '',
+                valueTitle: '',
+                typetype: '',
+                propertyGroupId: ''
             }
         },
         methods: {
-            // 添加属性
+            /**获取自定义属性列表 */
+            getCustomPropertyList() {
+                try{
+                    this.$server.goodsControlApi.getCustomPropertyList().then(res => {
+                        this.tableList= res.data
+                    }).catch(err => {
+
+                    })
+                }catch(error) {
+                    this.$paramsError(error.message)
+                }
+            },
+            /**获取属性值列表 */
+            getGroupListByPropertyId(id) {
+                try {
+                    let params= {
+                        propertyId: id
+                    }
+                    this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
+                        this.tableData= res.data
+                    })
+
+                }catch(error) {
+                    this.$paramsError(error)
+                }
+            },
+            handleChange (item, index) {
+                console.log(item)
+              
+                this.tableData= []
+                if(this.activeNames == index) {
+                    this.getGroupListByPropertyId(item.propertyId)
+                }
+            },
+            /**添加自定义属性按钮 */
             handleClickTableItem() {
                 this.isShow= true
                 this.type= 'item'
+                this.valueTitle= '添加属性'
                 this.labelName= '属性名称'
-                
             },
+            /**添加自定义属性 */
             handleClcikAddItem(title) {
-                this.tableList.push({
-                    title: title,
-                    searchName: '',
-                    tableData: []
-                })
-                this.isShow= false
-                this.title= ''
+                try{
+                    let params= {
+                        inputType: 'radio',
+                        isInput: 0,
+                        isMultiple: 0,
+                        isRequired: 0,
+                        isSku: 0,
+                        propertyDesc: '属性说明',
+                        propertyName: title,
+                        sortNo: 0
+                    }
+                    this.$server.goodsControlApi.addCustomProperty(params).then(res => {
+                        this.cancelShow()
+                        this.getCustomPropertyList()
+                        //this.title= ''
+                    }).catch(err => {})
+                }catch(error){
+                    this.$paramsError(error)
+                }
             },
             // 添加属性值
-            handleItemValue() {
+            handleItemValue(item, id) {
+                this.title= ''
                 this.isShow= true
                 this.type= 'itemValue'
+                this.valueTitle= item.propertyName
                 this.labelName= '属性值名称'
+                this.propertyId= item.propertyId
+                this.propertyGroupId= item.propertyGroupId
+                this.typetype= "add"
+
             },
+            /**属性分组添加属性值 */
             handleClcikAddItemValue(title) {
-                // 需接口创建属性值
-                console.log(title)
+                
+                try {
+                    if(this.typetype == 'add') {
+                        let params= {
+                            propertyId: this.propertyId,
+                            groupName: title
+                        }
+                        this.$server.goodsControlApi.addGroupItem(params).then(res => {
+                            this.cancelShow()
+                            this.getGroupListByPropertyId(this.propertyId)
+    
+                        }).catch(err => {
+    
+                        })
+                    }else if(this.typetype == 'edit') {
+                        let params= {
+                            propertyGroupId: this.propertyGroupId,
+                            groupName: title
+                        }
+                        this.$server.goodsControlApi.editGroupItem(params).then(res => {
+                            this.cancelShow()
+                            this.getGroupListByPropertyId(this.propertyId)
+    
+                        }).catch(err => {
+    
+                        })
+                    }
+                }catch(error){
+                    this.$paramsError(error)
+                }
             },
             cancelShow(file) {
                 this.isShow= file
+            },
+            changeTitle(title) {
+                console.log(title, 'change')
+                this.title= title
+            },
+            /**属性值编辑 */
+            handleEdit(item,scope, id) {
+                console.log(item, 'item')
+                this.title= scope.groupName
+                console.log(this.title)
+                this.isShow= true
+                this.type= 'itemValue'
+                this.valueTitle= item.propertyName
+                this.labelName= '属性值名称'
+                this.propertyId= scope.propertyId
+                this.propertyGroupId= scope.propertyGroupId
+                this.typetype= "edit"
+            },
+            /**属性值删除 */
+            handleDel(scope, id){
+                try{
+                    let params= {
+                        propertyGroupId:scope.propertyGroupId
+                    }
+                    this.$confirm('确定删除该属性值？').then(_ => {
+
+                        this.$server.goodsControlApi.delGroupItem(params).then(res => {
+                            this.getGroupListByPropertyId(scope.propertyId)
+                        }).catch(err => {
+    
+                        })
+                    }).catch()
+                }catch(error) {this.$paramsError(error)}
             }
         }
     }
@@ -102,5 +246,9 @@
             color: #999;
             font-weight: 400
         }
+    }
+    h3 {
+        font-size: 16px;
+        color: #474747;
     }
 </style>

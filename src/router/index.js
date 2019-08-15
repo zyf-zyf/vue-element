@@ -4,7 +4,7 @@ import Home from '../components/commonComponents/home'
 import GoodsList from '../components/goodsManagement/goods/goodsList'
 import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
 import CategoryList from '../components/goodsManagement/category/categoryList'
-import EditGoods from '../components/goodsManagement/goods/editGoodsDetails'
+import UniqueCodeList from '../components/stockManagement/uniqueCode/uniqueCodeList'
 
 Vue.use(Router)
 
@@ -33,7 +33,17 @@ export default new Router({
       meta: {
         parentName: '商品管理',
         title: '属性列表',
-        name: '属性维护'
+        name: '属性维护',
+        tabList: [
+          {
+            id: 'first',
+            label: '基础属性'
+          },
+          {
+            id: 'second',
+            label: '自定义属性'
+          }
+        ]
       }
     },
     {
@@ -46,6 +56,26 @@ export default new Router({
         name: '类目管理'
       }
     },
+    {
+      path: '/stockManagement/uniqueCode/uniqueCodeList',
+      name: 'uniqueCodeList',
+      component: UniqueCodeList,
+      meta: {
+        parentName: '库存管理',
+        title: '唯一码管理',
+        name: '唯一码管理',
+        tabList: [
+          {
+            id: 'first',
+            label: '入库单'
+          },
+          {
+            id: 'second',
+            label: '采购单'
+          }
+        ]
+      }
+    }
     
 
   ]

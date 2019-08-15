@@ -4,9 +4,14 @@ import axios from 'axios'
 import{Message} from 'element-ui'
 import {showLoading, hideLoading} from './loading'
 
+console.log(process.env.BASE_API, 'process.env.BASE_API')
 /** axios 封装 */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
+    //baseURL: '/youbao',
+    // headers: {
+    //     'Content-Type': 'application/json;charset=UTF-8'
+    // },
     timeout: 30000, // 网络请求超时 30s
     onUploadProgress: function (progressEvent) {  // `onUploadProgress` 允许为上传处理进度事件
         //console.log(progressEvent, 'progressEvent')
@@ -19,11 +24,10 @@ const service = axios.create({
 })
 
 // 设置请求头 sessionId
-service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
+// service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
 
 // post请求头
-service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-
+// service.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 // 请求拦截器
 service.interceptors.request.use(
@@ -96,8 +100,7 @@ service.interceptors.response.use(
     // 请求成功
     res => {
         let data= res.data
-        console.log(data, 'res res')
-        if((data.code === '200' && (data.status == true || data.status == undefined)) || (data.code == undefined && data.status == undefined)) {
+        if(data.code == 200) {
             successHandle(data.message)
             //httpLoadingEnd()
             hideLoading();
@@ -123,7 +126,7 @@ service.interceptors.response.use(
             return Promise.reject(response);
         } else {
             Message({
-                message: '请检查网络',
+                message: '请求服务失败',
                 type: 'error',
                 duration: 2000,
                 showClose: true
@@ -131,7 +134,6 @@ service.interceptors.response.use(
             hideLoading()
         }
     });
-
 export default service;
 
 

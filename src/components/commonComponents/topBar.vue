@@ -14,8 +14,7 @@
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
                         <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                        <!-- <span class="iconfont icon-icon_addperson"></span> -->
-
+                  
                         </div>
                         <span>叮当科技</span>
                     </div>
@@ -37,13 +36,12 @@
             </el-breadcrumb>
             <h2 class="title" >{{$route.meta.title}}</h2>
         </div>
-        <div class="attributeMaintenance" v-if="$route.name == 'attributeMaintenance'"> 
+        <div class="attributeMaintenance" v-if="$route.meta.tabList && $route.meta.tabList.length> 0 "> 
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="基础属性" name="first"></el-tab-pane>
-                <el-tab-pane label="自定义属性" name="second"></el-tab-pane>
-                
+                <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
             </el-tabs>
         </div>
+ 
      
     </div>
 </template>
@@ -68,7 +66,12 @@
                 this.$store.dispatch('openMenu', this.isOpenMenu)
             },
             handleClick() {
-                this.$store.dispatch('isActivite',this.activeName)
+                if(this.$route.name == 'attributeMaintenance') {
+                    this.$store.dispatch('isActiviteAttribute',this.activeName)
+                }else if(this.$route.name == 'uniqueCodeList'){
+                    this.$store.dispatch('isActiviteUniqueCode',this.activeName)
+                }
+               
             }
         },
 
@@ -125,23 +128,17 @@
             color:#474747;
          
         }
-        box-sizing: border-box;
-        border-bottom: 1px solid #eee;
-        // box-shadow:0px 5px 10px -15px #ccc;
+     
 
     }
     .attributeMaintenance {
+        height: 50px;
+        box-sizing: border-box;
+        padding-top:10px;
         padding-left: 30px;
-        button {
-            border: none ;
-            height: 32px;
-            font-size: 16px;
-            box-sizing: border-box;
-            padding: 5px 10px;
-        }
         .isactivite {
-            color: red;
-            border-bottom: 1px solid blue;
+            color: #e60012;
+            border-bottom: 1px solid #e60012;
         }
         box-sizing: border-box;
         border-bottom: 1px solid #eee;

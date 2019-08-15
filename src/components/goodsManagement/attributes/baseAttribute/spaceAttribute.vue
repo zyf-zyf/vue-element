@@ -1,61 +1,58 @@
 <template>
     <div id="space-attribute">
-        <el-card class="elcard">
-            <div>
-                <h3>尺码</h3>
+        <div class="table-space-search">
+            <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
+        </div>
+        <div class="table-box">
+            <div class="left">
+                <el-table
+                class="render-table"
+                :data="lefttableData"
+                :header-cell-style="getRowClass"
+                highlight-current-row
+                style="width: 100%">
+                    <el-table-column prop="groupName" label="全部分类" show-overflow-tooltip ></el-table-column>
+                    <el-table-column width="80" >
+                        <template slot="header" slot-scope="scope">
+                            <span @click="handleAddAttributeGroup(scope.row)">
+                                <el-icon class="el-icon-plus" style="font-weight: 900; color: #fff" ></el-icon>
+                            </span>
+                        </template>
+                        <template slot-scope="scope">
+                            <span @click="handleEditAttributeGroup(scope.row)">
+                                <el-icon class="el-icon-edit" ></el-icon>
+                            </span>
+                            <span @click="handleDelAttributeGroup(scope.row)">
+                                <el-icon class="el-icon-delete"></el-icon>
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
-            <div class="table-space-search">
-                <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
-            </div>
-            <div class="table-box">
-                <div class="left">
-                    <el-table
-                    class="render-table"
-                    :data="lefttableData"
-                    :header-cell-style="getRowClass"
-                    style="width: 100%">
-                        <el-table-column prop="spaceName" label="全部分类" width="100"></el-table-column>
-                        <el-table-column >
-                            <template slot="header" slot-scope="scope">
-                                <span @click="handleAdd(scope.row)">
-                                    <el-icon class="el-icon-plus" style="font-weight: 900; color: #fff" ></el-icon>
-                                </span>
-                            </template>
-                            <template slot-scope="scope">
-                                <span @click="handleEdit(scope.row)">
-                                    <el-icon class="el-icon-edit" ></el-icon>
-                                </span>
-                                <span @click="handleDel(scope.row)">
-                                    <el-icon class="el-icon-delete"></el-icon>
-                                </span>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <div class="right">
-                    <el-table
-                    :data="lefttableData"
-                    style="width: 100%">
-                        <el-table-column prop="spaceName" label="ID"></el-table-column>
-                        <el-table-column prop="spaceName" label="尺码名称"></el-table-column>
-                        <el-table-column prop="spaceName" label="分组"></el-table-column>
-                        <el-table-column prop="spaceName" label="修改时间"></el-table-column>
-                        
-                        <el-table-column label="操作" width="80">
-                            <template slot-scope="scope">
-                                <span @click="handleEdit(scope.row)">
-                                    <el-icon class="el-icon-edit" ></el-icon>
-                                </span>
-                                <span @click="handleDel(scope.row)">
-                                    <el-icon class="el-icon-delete"></el-icon>
-                                </span>
-                            </template>
+            <div class="right">
+                <el-table
+                :data="righttableData"
+                style="width: 100%">
+                    <el-table-column prop="propertyValueId" label="ID"></el-table-column>
+                    <el-table-column prop="propertyValue" label="尺码名称"></el-table-column>
+                    <el-table-column prop="groupName" label="分组"></el-table-column>
+                    <el-table-column prop="gmtCreate" label="创建时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="gmtModified" label="修改时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="操作" width="80">
+                        <template slot-scope="scope">
+                            <span @click="handleEditAttributeValBtn(scope.row)">
+                                <el-icon class="el-icon-edit" ></el-icon>
+                            </span>
+                            <span @click="handleDelAttributeVal(scope.row)">
+                                <el-icon class="el-icon-delete"></el-icon>
+                            </span>
+                        </template>
 
-                        </el-table-column>
-                    </el-table>
-                </div>
+                    </el-table-column>
+                </el-table>
             </div>
-        </el-card>
+        </div>
+       
         <!-- 添加尺码 -->
         <el-dialog
         title="尺码编辑"
@@ -63,17 +60,17 @@
         width="40%"
         :before-close="handleClose">
             <el-form v-model="spaceForm" label-width="100px" label-position="left">
-                <el-form-item label='颜色名称:'>
-                    <el-input size="small" type='text' v-model="spaceForm.spaceName" clearable></el-input>
+                <el-form-item label='尺码名称:'>
+                    <el-input size="small" type='text' v-model="spaceForm.propertyValue" clearable></el-input>
                     <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
                 </el-form-item>
-                <el-form-item label="选择类别:">
-                    <el-select size="small" v-model="spaceForm.categoryName" filterable placeholder="请选择类别" style="width: 100%">
+                <el-form-item label="选择类别:" v-if="type == 'add'">
+                    <el-select size="small" v-model="spaceForm.propertyGroupId" filterable placeholder="请选择类别" style="width: 100%">
                         <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in lefttableData"
+                        :key="item.propertyGroupId"
+                        :label="item.groupName"
+                        :value="item.propertyGroupId">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -81,7 +78,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogVisible = false">提交保存</el-button>
+                <el-button size="small" type="primary" @click="handleAddAttributeVal">提交保存</el-button>
             </span>
         </el-dialog>
         <!-- 添加类别 -->
@@ -92,48 +89,118 @@
         :before-close="handleClose">
             <el-form v-model="categoryForm" label-width="100px" label-position="left">
                 <el-form-item label='类别名称:'>
-                    <el-input size="small" type='text' v-model="categoryForm.categoryName" clearable></el-input>
+                    <el-input size="small" type='text' v-model="categoryForm.groupName" clearable></el-input>
                     <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
                 </el-form-item> 
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisibleCategory = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogVisibleCategory = false">提交保存</el-button>
+                <el-button size="small" type="primary" @click="handleAddAttributeGroupVal">提交保存</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 <script>
 export default {
+    props: ['propertyId'],
     data() {
         return {
-            lefttableData: [
-                {
-                    spaceName: '上衣'
-                },
-                {
-                    spaceName: '裤子'
-                }
-            ],
+            lefttableData: [],
+            righttableData: [],
             dialogVisible: false, // 尺码
             spaceForm: {
-                spaceName: '',
-                categoryName: ''
+                propertyValue: '',
+                propertyGroupId: ''
             },
-            options: [
-                {
-                    label: '类别一',
-                    value: '1'
-                }
-            ],
             categoryForm: {
-
+                groupName: ''
             },
             dialogVisibleCategory: false, // 类别
+            type: '', // 操作类型 add添加、edit编辑
+            propertyGroupId: '',
+            propertyValueId: ''
         }
     },
+    mounted() {
+        this.getGroupListByPropertyId(this.propertyId)
+        this.getAttributeVal()
+    },
     methods: {
-         getRowClass ({row, column, rowIndex, columnIndex}) {
+        getGroupListByPropertyId(id) {
+            try{
+                let params= {
+                    propertyId: id
+                }
+                this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
+                    this.lefttableData= res.data
+                })
+            }catch(error){this.$paramsError(error)}
+        },
+        getAttributeVal() {
+            try{
+                this.$server.goodsControlApi.getAttributeVal(this.propertyId).then(res => {
+                    this.righttableData= res.data
+                }).catch(err => {
+
+                })
+            }catch(error){this.$paramsError(error)}
+        },
+        handleClickCreateSpace() {
+            this.dialogVisible= true
+            this.type= 'add'
+            this.spaceForm= {}
+        },
+        /**编辑尺码 */
+        handleEditAttributeValBtn(scope) {
+            
+            this.propertyValueId= scope.propertyValueId
+            this.spaceForm=scope
+            this.dialogVisible= true
+            this.type= 'edit'
+           
+        },
+        /**删除尺码 */
+        handleDelAttributeVal(scope) {
+            try{
+                this.$confirm('确定删除该尺码？').then(_ => {
+                    this.$server.goodsControlApi.delAttributeVal(scope.propertyValueId).then(res => {
+                        this.getAttributeVal()
+                    }).catch()
+                }).catch()
+            }catch(error){this.$paramsError(error)}
+            
+        },
+        /**添加尺码 */
+        handleAddAttributeVal() {
+            
+            try{
+                 
+                if(this.type== 'add') {
+                    
+                    let params= {
+                        propertyGroupId: this.spaceForm.propertyGroupId,
+                        propertyValue: this.spaceForm.propertyValue,
+                        propertyId: this.propertyId
+                    }
+                    this.$server.goodsControlApi.addAttributeVal(params).then(res => {
+                        this.dialogVisible= false
+                        this.getAttributeVal()
+                       
+                    }).catch(err=> {})
+                }else  {
+                    let params= {
+                        propertyValue: this.spaceForm.propertyValue,
+                        propertyValueId: this.propertyValueId
+                    }
+                    console.log('编辑')
+                    this.$server.goodsControlApi.editAttributeVal(params).then(res => {
+                        this.dialogVisible= false
+                        this.getAttributeVal()
+                    }).catch(err=> {})
+                }
+            }catch(error){this.$paramsError(error)}
+        },
+        getRowClass ({row, column, rowIndex, columnIndex}) {
              console.log(rowIndex, 'rowIndex')
              console.log(columnIndex, 'columnIndex')
             if (rowIndex === 0 && columnIndex === 1) {
@@ -142,23 +209,66 @@ export default {
                 return ''
             }
         },
-        handleEdit() {
-            alert('编辑')
-        },
-        handleDel() {
-            alert('删除')
-        },
-        handleAdd(scope) {
+        
+        /**添加分类按钮 */
+        handleAddAttributeGroup() {
+            this.categoryForm= {}
+            this.type= 'add'
             this.dialogVisibleCategory= true
+           
+        },
+        /**添加分类 */
+        handleAddAttributeGroupVal() {
+            try{
+                if(this.type == 'add') {
+                    let params={
+                        propertyId: this.propertyId,
+                        groupName: this.categoryForm.groupName
+                    }
+                    this.$server.goodsControlApi.addGroupItem(params).then(res => {
+                        this.dialogVisibleCategory= false
+                        this.getGroupListByPropertyId(this.propertyId)
+                    }).catch()
+                }else if(this.type == 'edit') {
+                    let params= {
+                        groupName: this.categoryForm.groupName,
+                        propertyGroupId: this.propertyGroupId
+                    }
+                    this.$server.goodsControlApi.editGroupItem(params).then(res => {
+                        this.dialogVisibleCategory= false
+                        this.getGroupListByPropertyId(this.propertyId)
+                    }).catch()
+                }
+            }catch(error) {this.$paramsError(error)}
+        },
+        /**编辑分类 */
+        handleEditAttributeGroup(scope) {
+            
+            this.dialogVisibleCategory= true
+            this.categoryForm= scope
+            this.type= 'edit'
+            this.propertyGroupId= scope.propertyGroupId
+        },
+        /**删除分类 */
+        handleDelAttributeGroup(scope) {
+            try{
+                let params= {
+                    propertyGroupId: scope.propertyGroupId
+                }
+                this.$confirm('确定删除该类别？').then(_ => {
+                    this.$server.goodsControlApi.delGroupItem(params).then(res => {
+                        this.getGroupListByPropertyId(this.propertyId)
+                    })
+                }).catch()
+            }catch(error){this.$paramsError(error)}
         },
         handleClose() {
             this.$confirm('确认关闭？').then(_ => {
                 this.dialogVisible= false
+                this.dialogVisibleCategory= false
             }).catch(_ => {});
         },
-        handleClickCreateSpace() {
-            this.dialogVisible= true
-        }
+       
     }
 }
 </script>
