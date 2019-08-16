@@ -101,7 +101,7 @@ service.interceptors.response.use(
     res => {
         let data= res.data
         if(data.code == 200) {
-            successHandle(data.message)
+           // successHandle(data.message) 成功提示暂时关闭
             //httpLoadingEnd()
             hideLoading();
             return Promise.resolve(data)

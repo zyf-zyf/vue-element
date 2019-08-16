@@ -25,6 +25,12 @@ const addCustomProperty= 'product/api/goods/property' /**添加属性 */
 const getGroupListByPropertyId= 'product/api/goods/property/group/groups' /**属性分组列表 */
 const addGroupItem= 'product/api/goods/property/group' /**添加属性分组、 删除、编辑*/
 
+/**
+    商品类目管理
+ */
+
+const getCategoryList= 'product/api/goods/categories' /**类目列表 */
+const addCategory= 'product/api/goods/category' /**类目添加、编辑、删除、 */
 
 const goodsControlApi = {
     /** 商品列表api */
@@ -44,17 +50,26 @@ const goodsControlApi = {
     addBrandApi: async (params) => {
         let data= await httpRequest.post(addBrandApi,params)
         return data;
-    },
-    
+    },  
     /** 删除品牌 */
     delBrandApi: async (params) => {
         let data= await httpRequest.delete(addBrandApi+'/'+ params.goodsBrandId)
         return data;
     },
     /** 品牌详情 */
-
+    detailBrandApi: async (params) => {
+        let data= await httpRequest.get(addBrandApi + '/' +params)
+        return data;
+    },
     /** 品牌修改 */
+    editBrandApi: async (id, params) => {
+        let data= await httpRequest.put(addBrandApi+'/' + id, params)
+        return data;
+    },
 
+    /** 
+     * 商品属性维护
+    */
     /**基础属性列表 */
     getBasicAttribute: async (params) => {
         let data= await httpRequest.get(getBasicAttribute)
@@ -113,7 +128,31 @@ const goodsControlApi = {
     editGroupItem: async (params)=>{
         let data= await httpRequest.put(addGroupItem, params);
         return data;
-    } 
+    },
+    
+    /**
+        商品类目管理
+     */
+    getCategoryList: async (params) => {
+        let data= await httpRequest.get(getCategoryList)
+        return data;
+    },
+    addCategory: async (params) => {
+        let data= await httpRequest.post(addCategory, params)
+        return data;
+    },
+    detailCategory: async (params) => {
+        let data= await httpRequest.get(addCategory+ '/' + params)
+    },
+    editCategory: async (id, params) => {
+        let data= await httpRequest.put(addCategory+ '/' + id, params)
+        return data;
+    },
+    delCategory: async (params) => {
+        let data= await httpRequest.delete(addCategory+ '/' +params)
+        return data;
+    }
+
 
 }
 

@@ -1,8 +1,8 @@
 <template>
     <div id="basic-attribute">
         <el-card class="elcard">
-            <el-collapse accordion>
-                <el-collapse-item>
+            <el-collapse v-model="activeNames" >
+                <el-collapse-item name="1">
                     <template slot="title">
                         <h3>{{'品牌'}}</h3>
                     </template>
@@ -51,7 +51,8 @@
         data() {
             return{
                 tableList: [],
-                tableData: []
+                tableData: [],
+                activeNames: '1'
             }
         },
         mounted() {
