@@ -131,6 +131,7 @@ export default {
                 let params= {
                     propertyId: id
                 }
+               
                 this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
                     this.lefttableData= res.data
                 })
@@ -138,7 +139,10 @@ export default {
         },
         getAttributeVal() {
             try{
-                this.$server.goodsControlApi.getAttributeVal(this.propertyId).then(res => {
+                let query= {
+                    content: ''
+                }
+                this.$server.goodsControlApi.getAttributeVal(this.propertyId, query).then(res => {
                     this.righttableData= res.data
                 }).catch(err => {
 

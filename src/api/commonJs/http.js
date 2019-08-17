@@ -100,7 +100,7 @@ service.interceptors.response.use(
     // 请求成功
     res => {
         let data= res.data
-        if(data.code == 200) {
+        if(data.code == 200 ||(data.hash && data.key)) {
            // successHandle(data.message) 成功提示暂时关闭
             //httpLoadingEnd()
             hideLoading();

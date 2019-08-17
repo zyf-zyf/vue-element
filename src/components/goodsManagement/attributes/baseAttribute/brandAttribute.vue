@@ -54,7 +54,7 @@
      
         <!-- 添加品牌属性 -->
         <el-dialog
-        title="品牌编辑"
+        :title="type == 'add' ? '品牌新建' : '品牌编辑'"
         :visible.sync="dialogVisible"
         width="40%"
         :before-close="handleClose" v-model="form">
@@ -112,7 +112,6 @@
         methods: {
             /** 获取品牌列表 */
             getBrandList() {
-             
                 try {
                     let query= {
                         page: this.page,
@@ -151,7 +150,11 @@
                             "logoUrl": this.imageList[0]
                         }
                         this.$server.goodsControlApi.editBrandApi(this.brandId, params).then(res => {
-                           
+                            this.$message({
+                                messgae: res.messgae,
+                                type :'success',
+                                duration: 1000
+                            })
                             this.dialogVisible= false
                             this.getBrandList()
                         }).catch()

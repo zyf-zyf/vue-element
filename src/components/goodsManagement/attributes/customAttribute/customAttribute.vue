@@ -15,12 +15,12 @@
                     </div>
                     <el-table :data="tableData" stripe style="width: 100%">
                         <el-table-column
-                        prop="propertyGroupId"
+                        prop="propertyValueId"
                         label="ID"
                         >
                         </el-table-column>
                         <el-table-column
-                        prop="groupName"
+                        prop="propertyValue"
                         label="属性值"
                         >
                         </el-table-column>
@@ -82,10 +82,10 @@
                 labelName: '',
                 type: '',
                 activeNames: '',
-                propertyId: '',
+                propertyValueId: '',
                 valueTitle: '',
                 typetype: '',
-                propertyGroupId: ''
+                propertyValue: ''
             }
         },
         methods: {
@@ -104,10 +104,10 @@
             /**获取属性值列表 */
             getGroupListByPropertyId(id) {
                 try {
-                    let params= {
-                        propertyId: id
+                    let query= {
+                        content: ''
                     }
-                    this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
+                    this.$server.goodsControlApi.getAttributeVal(id, query).then(res => {
                         this.tableData= res.data
                     })
 
@@ -154,13 +154,14 @@
             },
             // 添加属性值
             handleItemValue(item, id) {
+                console.log(item, 'fjfjfjjf')
                 this.title= ''
                 this.isShow= true
                 this.type= 'itemValue'
                 this.valueTitle= item.propertyName
                 this.labelName= '属性值名称'
                 this.propertyId= item.propertyId
-                this.propertyGroupId= item.propertyGroupId
+                // this.propertyGroupId= item.propertyGroupId
                 this.typetype= "add"
 
             },
@@ -171,9 +172,9 @@
                     if(this.typetype == 'add') {
                         let params= {
                             propertyId: this.propertyId,
-                            groupName: title
+                            propertyValue: title
                         }
-                        this.$server.goodsControlApi.addGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.addAttributeVal(params).then(res => {
                             this.cancelShow()
                             this.getGroupListByPropertyId(this.propertyId)
     
@@ -182,10 +183,10 @@
                         })
                     }else if(this.typetype == 'edit') {
                         let params= {
-                            propertyGroupId: this.propertyGroupId,
-                            groupName: title
+                            propertyValueId: this.propertyValueId,
+                            propertyValue: title
                         }
-                        this.$server.goodsControlApi.editGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.editAttributeVal(params).then(res => {
                             this.cancelShow()
                             this.getGroupListByPropertyId(this.propertyId)
     
@@ -211,21 +212,21 @@
                 console.log(this.title)
                 this.isShow= true
                 this.type= 'itemValue'
-                this.valueTitle= item.propertyName
+                this.valueTitle= item.propertyValue
                 this.labelName= '属性值名称'
                 this.propertyId= scope.propertyId
-                this.propertyGroupId= scope.propertyGroupId
+                this.propertyValueId= scope.propertyValueId
                 this.typetype= "edit"
             },
             /**属性值删除 */
             handleDel(scope, id){
                 try{
                     let params= {
-                        propertyGroupId:scope.propertyGroupId
+                        propertyValueId:scope.propertyValueId
                     }
                     this.$confirm('确定删除该属性值？').then(_ => {
 
-                        this.$server.goodsControlApi.delGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.delAttributeVal(scope.propertyValueId).then(res => {
                             this.getGroupListByPropertyId(scope.propertyId)
                         }).catch(err => {
     

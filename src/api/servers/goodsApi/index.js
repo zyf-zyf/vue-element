@@ -1,6 +1,9 @@
 import httpRequest from '../../commonJs/http'
-/**商品 */
-const getGoodsList= 'ddaigo-platform/goods/getStockGoodsList' // 获取商品列表
+/**
+ * 商品管理 */
+const getGoodsList= 'product/api/goods/list' // 获取商品列表
+const goodsItemApi= 'product/api/goods' //
+
 
 /**
  * 基础属性 
@@ -34,8 +37,33 @@ const addCategory= 'product/api/goods/category' /**类目添加、编辑、删�
 
 const goodsControlApi = {
     /** 商品列表api */
-    getGoodsList: async (params) => { 
-        let data= await httpRequest.post(getGoodsList, params) 
+    getGoodsList: async (query, params) => { 
+        let data= await httpRequest.post(getGoodsList+ '?page='+query.page +'&size=' +query.size, params) 
+        return data;
+    },
+    /**添加商品 */
+    addGoodsApi: async (params) => {
+        let data= await httpRequest.post(goodsItemApi, params)
+        return data;
+    },
+    /**商品详情 */
+    detailGoodsApi: async (params) => {
+        let data= await httpRequest.get(goodsItemApi + '/' +params)
+        return data;
+    },
+    /**商品编辑 */
+    editGoodsApi: async (id, params) => {
+        let data= await httpRequest.put(goodsItemApi + '/' + id, params)
+        return data;
+    },
+    /**商品删除 */
+    delGoodsApi: async (params) => {
+        let data= await httpRequest.delete(goodsItemApi, params)
+        return data;
+    },
+    /**更改商品状态 */
+    changeGoodsStatisApi: async (isLocked, params) => {
+        let data= await httpRequest.patch(goodsItemApi+ '/' + isLocked, params)
         return data;
     },
 
@@ -77,8 +105,10 @@ const goodsControlApi = {
     },
     /**商品属性值管理 */
     /**属性值列表 */
-    getAttributeVal: async (params) => {
-        let data= await httpRequest.get(getAttributeVal+params)
+    getAttributeVal: async ( params,query) => {
+        console.log(params, query, '坑比')
+        console.log(getAttributeVal+params+ '?content='+query.content, '123')
+        let data= await httpRequest.get(getAttributeVal+params +'?content='+query.content)
         return data;
     },
     addAttributeVal: async (params) => {
@@ -112,7 +142,7 @@ const goodsControlApi = {
 
     /**自定义属性分组列表 */
     getGroupListByPropertyId: async (params) => {
-        let data= await httpRequest.get(getGroupListByPropertyId+'/'+ params.propertyId)
+        let data= await httpRequest.get(getGroupListByPropertyId +'/'+ params.propertyId)
         return data;
     },
     /**添加属性值 */
@@ -143,6 +173,7 @@ const goodsControlApi = {
     },
     detailCategory: async (params) => {
         let data= await httpRequest.get(addCategory+ '/' + params)
+        return data;
     },
     editCategory: async (id, params) => {
         let data= await httpRequest.put(addCategory+ '/' + id, params)

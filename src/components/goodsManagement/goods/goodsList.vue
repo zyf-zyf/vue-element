@@ -3,17 +3,41 @@
         <el-card>
             <div class="goods">
                 <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="80px">
-                    <el-form-item v-for="(item, index) in labelItem" :key="index" :label="item.label">
-                        <el-input  v-if="item.type == 'input'" size="small" v-model="item.value" placeholder="请填写" @input="handleChangeVal(Object.keys(formData)[index],item.value)"></el-input>
-                        <el-select  size="small" v-if="item.type=='select'" v-model="item.value" placeholder="请选择" @change="handleChangeVal(Object.keys(formData)[index],item.value)">
-                            <el-option v-for="itemo in item.list" :key="itemo.value" :label="itemo.label" :value="itemo.value"></el-option>
+                    <el-form-item label="SPU编号">
+                        <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode"></el-input>
+                    </el-form-item>
+                    <el-form-item label="SKU编号">
+                        <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品名称">
+                        <el-input size="small" placeholder="商品名称" v-model="formData.goodsName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="品牌名称">
+                        <el-select  size="small"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
+                            <el-option v-for="item in brandList" :key="item.brandId" :label="item.brandName" :value="item.brandId"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="一级类目">
+                        <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeVal">
+                            <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="二级类目">
+                        <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeVal">
+                            <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="三级类目">
+                        <el-select  size="small"  v-model="formData.categoryId3" placeholder="选择三级类目" @change="handleChangeVal">
+                            <el-option v-for="item in category3List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                        </el-select>
+                    </el-form-item>
+
                     <el-form-item label="采购价格:">
                         <div class="qjbox">
-                            <el-input size="small" v-model="formData.buyPrice1" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.purchasePriceFrom" placeholder=""></el-input>
                             <span> - </span>
-                            <el-input size="small" v-model="formData.buyPrice2" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.purchasePriceTo" placeholder=""></el-input>
                         </div>
                     </el-form-item>
                     <el-form-item label="创建日期:">
@@ -27,23 +51,24 @@
                        >
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="采购价格:">
+                    <el-form-item label="会员价格:">
                         <div class="qjbox">
-                            <el-input size="small" v-model="formData.buyPrice1" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.memberPriceFrom" placeholder=""></el-input>
                             <span> - </span>
-                            <el-input size="small" v-model="formData.buyPrice2" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.memberPriceTo" placeholder=""></el-input>
                         </div>
                     </el-form-item>
+                    <div style="width: 100%;"></div>
                     <el-form-item label="显示字段:">
                         <el-checkbox-group v-model="formData.checkList"  @change="handleChengeGroup">
-                            <el-checkbox style="color: #666" v-for="(item, index) in checkLabel" :key="index" :label="item" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
+                            <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item.propertyName" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="button-box">
                 <div class="btn-left">
-                    <el-button size="small" type="primary" icon="el-icon-plus" @click="addGoods">新建商品</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-plus" @click="addShow=true">新建商品</el-button>
                     <el-dropdown trigger="click" @command="handleCommandExcel">
                         <el-button plain size="small" >批量上传/下载
                             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -82,20 +107,39 @@
                 <el-table-column type="selection" width="55" fixed></el-table-column>
                 <el-table-column label="商品图"  fixed>
                     <template slot-scope="scope">
-                         <el-image style="width: 40px; height: 40px;" :src="scope.row.goods_pic" fit="cover"></el-image>
+                         <el-image style="width: 40px; height: 40px;" :src="scope.row.imageUrl" fit="cover"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
-                    <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="editShow=true">{{scope.row.brandName}}</el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="brandName" label="SKU编号" width="120" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column label="SPU编号" width="120" prop='spuCode'  show-overflow-tooltip fixed></el-table-column>
+                <el-table-column prop="skuCode" label="SKU编号" width="120" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="brandName" label="品牌" width="120" show-overflow-tooltip fixed></el-table-column>
-                <el-table-column v-for="(item, index) in tableLabel" :key="index" :prop="item.prop" :label="item.label" width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="brandName" label="状态" width="100" ></el-table-column>
-                <el-table-column prop="brandName" label="创建时间" width="150" show-overflow-tooltip ></el-table-column>
-                <el-table-column prop="brandName" label="修改时间" width="150" show-overflow-tooltip ></el-table-column>
+                <el-table-column prop="categoryName1" label="一级类目" width="120" ></el-table-column>
+                <el-table-column prop="categoryName2" label="二级类目" width="120" ></el-table-column>
+                <el-table-column prop="categoryName3" label="三级类目" width="120" ></el-table-column>
+                <el-table-column prop="goodsName" label="商品名称" width="150" ></el-table-column>
+                <el-table-column prop="goodsColor" label="颜色" width="100" ></el-table-column>
+                <el-table-column prop="goodsSize" label="尺码" width="100" ></el-table-column>
+                <el-table-column prop="purchasePrice" label="采购价" width="100" ></el-table-column>
+                <el-table-column prop="tagPrice" label="吊牌价" width="100" ></el-table-column>
+                <el-table-column prop="memberPrice" label="会员价" width="100" ></el-table-column>
+                <el-table-column prop="isLocked" label="状态" width="100" >
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.isLocked ===1 ? 'success' : 'danger'">
+                            {{scope.row.isLocked === 1 ? '启用' : '停用'}}
+                        </el-tag>
+                    </template>
+                    
+                </el-table-column>
+                <el-table-column label="创建时间" width="150" show-overflow-tooltip >
+                    <template slot-scope="scope">
+                        {{formate(scope.row.gmtCreate, 'yyyy/MM/dd hh:mm:ss')}}
+                    </template>
+                </el-table-column>
+                <el-table-column  label="修改时间" width="150" show-overflow-tooltip >
+                    <template slot-scope="scope">
+                        {{ scope.row.gmtModified ? formate(scope.row.gmtModified, 'yyyy/MM/dd hh:mm:ss') : '----'}}
+                    </template>
+                </el-table-column>
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
@@ -106,7 +150,7 @@
         top="2vh"
         :close-on-click-modal="false"
         >
-            <addNewGoods></addNewGoods>
+            <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
         </el-dialog>
         <el-dialog
         title="基本属性"
@@ -115,7 +159,7 @@
         top="2vh"
         :close-on-click-modal="false"	
         >
-            <editGoodsDetails></editGoodsDetails>
+            <editGoodsDetails v-if='editShow'></editGoodsDetails>
          
         </el-dialog>
   
@@ -142,86 +186,83 @@ export default {
             size: 10,
             total: null,
             tableData: [],
-            tableLabel: [
-                {prop: 'name', label: '一级类目'},
-                {prop: 'name', label: '二级类目'},
-                {prop: 'name', label: '三级类目'},
-                {prop: 'name', label: '商品名称'},
-                {prop: 'name', label: '颜色'},
-                {prop: 'name', label: '尺码'},
-                {prop: 'name', label: '采购价'},
-                {prop: 'name', label: '吊牌价'},
-                {prop: 'name', label: '会员价'},
-                {prop: 'name', label: '状态'},
-                {prop: 'name', label: '创建时间'},
-                {prop: 'name', label: '修改时间'},
-            ],
+            CustomerCateGoryList: [], /**自定义属性 */
             formData: {
-                spuNum: '',
-                skuNum: '',
+                spuCode: '',
+                skuCode: '',
                 goodsName: '',
-                brandName: '',
-                category1: '',
-                category2: '',
-                category3: '',
-                buyPrice1: '',
-                buyPrice2: '',
+                brandId: '',
+                categoryId1: '',
+                categoryId2: '',
+                categoryId3: '',
+                purchasePriceFrom: '',
+                purchasePriceTo: '',
+                memberPriceFrom: '',
+                memberPriceTo: '',
                 time: '',
                 checkList: []
             },
-            checkLabel: ['风格', '季节', '人群', '功能', '版型', '图案', '流行', '上市时间'],
+            category1List: [],
+            category2List: [],
+            category3List: [],
+            brandList: [],
             select1: '',
             select2: '',
-            labelItem: [
-                {label: 'SPU编号:', value: '', type: 'input'},
-                {label: 'SKU编号:', value: '', type: 'input'},
-                {label: '商品名称:', value: '', type: 'input'},
-                {label: '品牌名称:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
-                {label: '一级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
-                {label: '二级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
-                {label: '三级类目:', value: '', list: [{label: '品牌1', value: 'pin1'}], type: 'select'},
-       
-            ],
             addShow: false,
             editShow: false
         }
     },
     mounted() {
-        console.log(this.$server, 'hell')
-        console.log(this.formate(1562653376639, 'yyyy/MM/dd hh:mm:ss'))
-        
-        console.log(this.$server.goodsControlApi.getGoodsList)
+        this.getCustomPropertyList()
         this.getGoodsList()
     },
 
    
     methods: {
-        addGoods() {
-            this.addShow=true
+
+        cancelShow(title) {
+            console.log(title ,'title')
+            this.addShow= title
+        },
+        /**获取商品自定义属性 */
+         getCustomPropertyList() {
+            try{
+                this.$server.goodsControlApi.getCustomPropertyList().then(res => {
+                    this.CustomerCateGoryList= res.data
+                }).catch(err => {
+
+                })
+            }catch(error) {
+                this.$paramsError(error.message)
+            }
         },
         // 获取商品数据
         getGoodsList() {
             try {
                 let params= {
-                    "data":{"page":this.page,
-                        "size":10,
-                        "condition":"1",
-                        "orderby":"1",
-                        "soldout":"",
-                        "storeNo":"S00000001",
-                        "searchName":"",
-                        "relationUnify":"1",
-                        "barCode":"",
-                        "isTemp":""
-                    }
+                    brandId: '',
+                    categoryId1: '',
+                    categoryId2: '',
+                    categoryId3: '',
+                    gmtCreateBegin: '',
+                    gmtCreateEnd: '',
+                    goodsName: '',
+                    memberPriceFrom: '',
+                    memberPriceTo: '',
+                    purchasePriceFrom: '',
+                    purchasePriceTo: '',
+                    skuCode: '',
+                    spuCode: '',
+                    
                 }
-
-                this.$server.goodsControlApi.getGoodsList(params).then(res => {
-                    this.total= res.total
+                let query= {
+                    page: this.page,
+                    size: this.size
+                }
+                this.$server.goodsControlApi.getGoodsList( query,params).then(res => {
                     this.tableData= res.data
-                }).catch(err => {
-                    console.log(err)
-                })
+                    this.total= res.total
+                }).catch()
             }catch(error) {
 
                 this.$paramsError(error.message)
@@ -272,16 +313,17 @@ export default {
                 {prop: 'name', label: '会员价'},
             ]
             var arr=[], arr1=[];
-            console.log(val)
+           
             val && val.forEach(item => {
                arr1.push({
                    prop: 'brandName',
                    label: item
                })
             })
-            console.log(val)
+            console.log(arr1)
             arr=this.tableLabel.concat(arr1)
             this.tableLabel= arr
+            
         },
         // 重置按钮
         handleReset() {

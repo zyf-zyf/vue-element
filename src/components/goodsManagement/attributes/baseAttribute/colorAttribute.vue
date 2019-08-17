@@ -6,12 +6,12 @@
         </div>
         <el-table :data="tableData" stripe style="width: 100%">
             <el-table-column
-            prop="propertyGroupId"
+            prop="propertyValueId"
             label="ID"
             >
             </el-table-column>
             <el-table-column
-            prop="groupName"
+            prop="propertyValue"
             label="颜色">
             </el-table-column>
             <el-table-column
@@ -43,7 +43,7 @@
         :before-close="handleClose">
             <el-form label-width="100px">
                 <el-form-item label='颜色名称:'>
-                    <el-input size="small" type='text' v-model="form.groupName" ></el-input>
+                    <el-input size="small" type='text' v-model="form.propertyValue" ></el-input>
                     <small>创建多个颜色，请用逗号分隔不同颜色</small>
                 </el-form-item>
                 
@@ -65,7 +65,7 @@
                 tableData: [],
                 dialogVisible: false,
                 form: {
-                    groupName: ''
+                    propertyValue: ''
                
                 },
                 type: ''
@@ -79,10 +79,11 @@
         methods: {
             getGroupListByPropertyId() {
                 try{
-                    let params= {
-                        propertyId: this.propertyId
+           
+                    let query= {
+                        content: ''
                     }
-                    this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
+                    this.$server.goodsControlApi.getAttributeVal(this.propertyId, query).then(res => {
                         this.tableData= res.data
                     })
                 }catch(error){this.$paramsError(error)}
@@ -97,19 +98,19 @@
                     if(this.type == 'add') {
                         let params={
                             propertyId: this.propertyId,
-                            groupName: this.form.groupName
+                            propertyValue: this.form.propertyValue
                         }
-                        this.$server.goodsControlApi.addGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.addAttributeVal(params).then(res => {
                             this.dialogVisible= false
                             this.getGroupListByPropertyId(this.propertyId)
                             this.form= {}
                         }).catch()
                     }else if(this.type == 'edit') {
                         let params={
-                            propertyGroupId: this.form.propertyGroupId,
-                            groupName: this.form.groupName
+                            propertyValueId: this.form.propertyValueId,
+                            propertyValue: this.form.propertyValue
                         }
-                        this.$server.goodsControlApi.editGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.editAttributeVal(params).then(res => {
                             this.dialogVisible= false
                           
                             this.getGroupListByPropertyId(this.propertyId)
@@ -133,11 +134,9 @@
             handleDelColorVal(scope) { 
                 
                 try{
-                    let params= {
-                        propertyGroupId: scope.propertyGroupId
-                    }
+                    
                     this.$confirm('确定删除该颜色？').then(_ => {
-                        this.$server.goodsControlApi.delGroupItem(params).then(res => {
+                        this.$server.goodsControlApi.delAttributeVal(scope.propertyValueId).then(res => {
                             this.getGroupListByPropertyId()
                         }).catch()
                     }).catch()

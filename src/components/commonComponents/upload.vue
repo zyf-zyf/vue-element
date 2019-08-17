@@ -39,7 +39,7 @@
         props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize'],
         data() {
             return {
-                imgArr: this.materialImg,
+                imgArr: this.materialImg || [],
                 maxlength: this.maxLength,
                 uploadType: this.uploadtype,
                 uploadimgsize: this.imgsize,

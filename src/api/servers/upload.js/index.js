@@ -2,7 +2,7 @@ import httpRequest from '../../commonJs/http'
 import axios from 'axios'
 import {Message} from 'element-ui'
 const qiniuBaseUrl=  'https://goods.dingdian.xin/' 
-const getQiniuToken= '/ddaigo-platform/multiMedia/uploadImg'
+const getQiniuToken= '/product/api/qiniu/token/img' /**上传图片获取七牛token */
 
 const uploadApi= {
     
@@ -31,12 +31,7 @@ const uploadApi= {
         //     baseURL: process.env.BASE_API,
         // })
         // axiosd.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
-        httpRequest.get(getQiniuToken, {
-            params: {
-                wxUid: "",
-                wxSid: ""
-            }
-        }).then(res => {
+        httpRequest.get(getQiniuToken).then(res => {
             let config = {
                 headers: { "Content-Type": "multipart/form-data" }
             };
@@ -44,7 +39,7 @@ const uploadApi= {
             formdata.append("file", filetext, filetext.name);
             formdata.append("chunk", "0"); //断点传输
             formdata.append("chunks", "1");
-            formdata.append("token", res.uptoken );
+            formdata.append("token", res.data );
             //  let token = 
             httpRequest.post("http://up-z1.qiniup.com", formdata, config).then(res2 => {
                 console.log(res2, 'res2')
