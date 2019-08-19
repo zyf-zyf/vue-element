@@ -6,7 +6,8 @@ import goods from './modules/goods'
 const state= {
     isOpen: false,
     isactiviteAttribute: 'first',
-    isactiviteUniqueCode: 'first'
+    isactiviteUniqueCode: 'first',
+    imageArr: []
 }
 const mutations= {
     OPEN_MENU:(state, data) => {
@@ -18,6 +19,9 @@ const mutations= {
     ISACTIVITEUNIQUECODE:(state, data) => {
 		state.isactiviteUniqueCode = data
     },
+    UPLOADIMAGES: (state, data) => {
+        state.imageArr.push(data) 
+    }
 }
 const actions= {
     openMenu({
@@ -35,6 +39,9 @@ const actions= {
     }, data) {
         commit('ISACTIVITEUNIQUECODE', data)
     },
+    uploadImages({commit}, data) {
+        commit ('UPLOADIMAGES', data)
+    }
 }
 export default new Vuex.Store({
     modules: {

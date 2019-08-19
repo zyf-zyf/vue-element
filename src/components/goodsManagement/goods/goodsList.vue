@@ -18,13 +18,13 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="一级类目">
-                        <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeVal">
-                            <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                        <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeValTop">
+                            <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="二级类目">
-                        <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeVal">
-                            <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                        <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeValNext">
+                            <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="三级类目">
@@ -95,22 +95,27 @@
                             <el-dropdown-item command= 'out'>停用</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <el-button size="small" plain>批量删除</el-button>
+                    <el-button size="small" plain @click="handleGoodsById">批量删除</el-button>
                 </div>
                 <div class="btn-right">
-                    <el-button size="small" type="primary">查 询</el-button>
+                    <el-button size="small" type="success" @click="handleClickSearch">查 询</el-button>
                     <el-button size="small" @click="handleReset">重 置</el-button>
+                   
                 </div>
                 
             </div>
-            <el-table :data="tableData"  highlight-current-row :cell-style="cellStyle" :header-cell-style="cellStyle"> 
+            <el-table :data="tableData"  highlight-current-row :cell-style="cellStyle" :header-cell-style="cellStyle" @selection-change="handleSelectionChange"> 
                 <el-table-column type="selection" width="55" fixed></el-table-column>
                 <el-table-column label="商品图"  fixed>
                     <template slot-scope="scope">
                          <el-image style="width: 40px; height: 40px;" :src="scope.row.imageUrl" fit="cover"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column label="SPU编号" width="120" prop='spuCode'  show-overflow-tooltip fixed></el-table-column>
+                <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click="editGoods(scope.row)">{{scope.row.spuCode}}</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="skuCode" label="SKU编号" width="120" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="brandName" label="品牌" width="120" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="categoryName1" label="一级类目" width="120" ></el-table-column>
@@ -159,7 +164,7 @@
         top="2vh"
         :close-on-click-modal="false"	
         >
-            <editGoodsDetails v-if='editShow'></editGoodsDetails>
+            <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
          
         </el-dialog>
   
@@ -209,23 +214,59 @@ export default {
             select1: '',
             select2: '',
             addShow: false,
-            editShow: false
+            editShow: false,
+            deleteGoodsIds: []
         }
     },
     mounted() {
         this.getCustomPropertyList()
         this.getGoodsList()
+        this.getBrandList()
+        this.getTopCategoryList()
     },
 
    
     methods: {
+        /**获取商品品牌属性 */
+        getBrandList() {
+            try {
+                let query= {
+                    page: this.page,
+                    size: this.size
+                }
+                this.$server.goodsControlApi.getBrandList(query).then(res => {
+                    this.brandList= res.data
+                }).catch(err => {
+                    console.log(err)
+                })
+            }catch(error) {
+                this.$paramsError(error.message)
+            }
+        },
+        /**获取第一级类目 */
+        getTopCategoryList() {
+            this.$server.goodsControlApi.getTopCategoryList().then(res => {
+                this.category1List= res.data
+            })
+        },
+        handleChangeValTop() {
+            this.$server.goodsControlApi.getNextCategoryList(this.formData.categoryId1.split(',')[1]).then(res => {
+                this.category2List= res.data
+            }).catch()
+        },
+        handleChangeValNext() {
+            this.$server.goodsControlApi.getNextCategoryList(this.formData.categoryId2.split(',')[1]).then(res => {
+                this.category3List= res.data
+            }).catch()
+        },
 
         cancelShow(title) {
             console.log(title ,'title')
             this.addShow= title
+            this.editShow= title
         },
         /**获取商品自定义属性 */
-         getCustomPropertyList() {
+        getCustomPropertyList() {
             try{
                 this.$server.goodsControlApi.getCustomPropertyList().then(res => {
                     this.CustomerCateGoryList= res.data
@@ -239,20 +280,21 @@ export default {
         // 获取商品数据
         getGoodsList() {
             try {
+                
                 let params= {
-                    brandId: '',
-                    categoryId1: '',
-                    categoryId2: '',
-                    categoryId3: '',
-                    gmtCreateBegin: '',
-                    gmtCreateEnd: '',
-                    goodsName: '',
-                    memberPriceFrom: '',
-                    memberPriceTo: '',
-                    purchasePriceFrom: '',
-                    purchasePriceTo: '',
-                    skuCode: '',
-                    spuCode: '',
+                    brandId: this.formData.brandId !== '' ? +this.formData.brandId  :  '',
+                    categoryId1: this.formData.categoryId1.split(',')[0] !== '' ? +this.formData.categoryId1.split(',')[0] : '',
+                    categoryId2: this.formData.categoryId2.split(',')[0] !== '' ?  +this.formData.categoryId2.split(',')[0] : '',
+                    categoryId3: this.formData.categoryId3 !== '' ? +this.formData.categoryId3 : '',
+                    gmtCreateBegin:this.formData.time.length > 0 ? this.formate(new Date(this.formData.time[0]).getTime(), 'yyyy-MM-dd') :'',
+                    gmtCreateEnd: this.formData.time.length > 0 ? this.formate(new Date(this.formData.time[1]).getTime(), 'yyyy-MM-dd') : '',
+                    goodsName: this.formData.goodsName,
+                    memberPriceFrom: this.formData.memberPriceFrom !== '' ? +this.formData.memberPriceFrom : '',
+                    memberPriceTo: this.formData.memberPriceTo !== '' ? +this.formData.memberPriceTo : '',
+                    purchasePriceFrom: this.formData.purchasePriceFrom !== '' ?  +this.formData.purchasePriceFrom : '',
+                    purchasePriceTo: this.formData.purchasePriceTo !== '' ?  +this.formData.purchasePriceTo : '',
+                    skuCode: this.formData.skuCode,
+                    spuCode: this.formData.spuCode,
                     
                 }
                 let query= {
@@ -269,6 +311,10 @@ export default {
             }
            
       
+        },
+        handleClickSearch() {
+            alert(1)
+            this.getGoodsList()
         },
         handlePageChange(page) {
             try {
@@ -292,10 +338,53 @@ export default {
                 return 'border-right: 2px solid #999'
             }
         },
+        /**批量选择 */
+        handleSelectionChange(val) {
+            let arr= []
+            console.log(val)
+            val.forEach(item => {
+                if(arr.indexOf(item.gid) == -1) {
+                    arr.push(item.gid)
+                }
+            })
+            this.deleteGoodsIds= arr
+        },
+        /**批量删除商品 */
+        handleGoodsById() {
+            try {
+                console.log(this.deleteGoodsIds)
+                this.$server.goodsControlApi.delGoodsApi(this.deleteGoodsIds).then(res => {
+                    this.getGoodsList()
+                }).catch(err => {})
+            }catch(error) {this.$paramsError(error)}
+        },
+        /**商品批量启用/停用操作 */
+
         // 批量上传/下载
         handleCommandExcel() {},
         // 批量停用/启用
-        handleCommandStatus() {},
+        handleCommandStatus(val) {
+            if(this.deleteGoodsIds.length > 0) {
+                if(val =='input') {
+    
+                    this.$confirm('确定启用选中商品？').then(_ => {
+                        let isLocked = 1
+                        this.$server.goodsControlApi.changeGoodsStatisApi(isLocked, this.deleteGoodsIds).then(res => {
+                            this.getGoodsList()
+                        }).catch()
+                    }).catch()
+                }else{
+                    this.$confirm('确定停用用选中商品？').then(_ => {
+                        let isLocked = 0
+                        this.$server.goodsControlApi.changeGoodsStatisApi(isLocked, this.deleteGoodsIds).then(res => {
+                            this.getGoodsList()
+                        }).catch()
+                    }).catch()
+                }
+            }else{
+                this.$paramsError('未选择商品')
+            }
+        },
         handleCheckChange(val,index) {
             console.log(index, val)
 
@@ -327,9 +416,16 @@ export default {
         },
         // 重置按钮
         handleReset() {
+            alert('1')
             this.formData.checkList= []
             this.handleChengeGroup()
         },
+        /**商品编辑按钮 */
+        editGoods(scope) {
+            this.editShow= true
+            this.goodsId= scope.gid
+        },
+        /** */
     }
 }
 </script>

@@ -36,7 +36,15 @@
 </template>
 <script>
     export default {
-        props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize'],
+        props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize', 'isClear'],
+        computed: {
+            isCleared() {
+                if(this.isClear) {
+                    this.imgArr= []
+                }
+            },
+        },
+        
         data() {
             return {
                 imgArr: this.materialImg || [],
@@ -62,6 +70,9 @@
                         }
                     }else{
                         this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                        // this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType).then(res => {
+                        //         this.$store.dispatch('uploadImages', res)
+                        // })
                     }
                 }else{
                     let files= e.target.files

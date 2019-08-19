@@ -58,7 +58,7 @@ const goodsControlApi = {
     },
     /**商品删除 */
     delGoodsApi: async (params) => {
-        let data= await httpRequest.delete(goodsItemApi, params)
+        let data= await httpRequest.put(goodsItemApi +'/ids', params)
         return data;
     },
     /**更改商品状态 */
@@ -81,6 +81,7 @@ const goodsControlApi = {
     },  
     /** 删除品牌 */
     delBrandApi: async (params) => {
+        console.log(params, '商品delete')
         let data= await httpRequest.delete(addBrandApi+'/'+ params.goodsBrandId)
         return data;
     },
@@ -106,8 +107,7 @@ const goodsControlApi = {
     /**商品属性值管理 */
     /**属性值列表 */
     getAttributeVal: async ( params,query) => {
-        console.log(params, query, '坑比')
-        console.log(getAttributeVal+params+ '?content='+query.content, '123')
+      
         let data= await httpRequest.get(getAttributeVal+params +'?content='+query.content)
         return data;
     },
@@ -182,6 +182,15 @@ const goodsControlApi = {
     delCategory: async (params) => {
         let data= await httpRequest.delete(addCategory+ '/' +params)
         return data;
+    },
+    getTopCategoryList: async (params) => {
+        let data= await httpRequest.get(getCategoryList+ '/top')
+        return data;
+    },
+    getNextCategoryList: async (params) => {
+        let data= await httpRequest.get(getCategoryList+'/child'+ '?categoryCode=' +params)
+        return data;
+
     }
 
 

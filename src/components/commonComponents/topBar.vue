@@ -27,20 +27,21 @@
                 </el-dropdown> 
             </div>
         </el-header>
-       
-        <div class="title-box" v-if="$route.meta.title">
-            <el-breadcrumb separator="/" style="line-height: 38px; margin-left: 20px">
-                
-                <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
-            </el-breadcrumb>
-            <h2 class="title" >{{$route.meta.title}}</h2>
-        </div>
-        <div class="attributeMaintenance" v-if="$route.meta.tabList && $route.meta.tabList.length> 0 "> 
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
-            </el-tabs>
-        </div>
+        <!-- <el-card> -->
+            <div class="title-box" v-if="$route.meta.title">
+                <el-breadcrumb separator="/" style="line-height: 38px; margin-left: 20px">
+                    
+                    <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
+                </el-breadcrumb>
+                <h2 class="title" >{{$route.meta.title}}</h2>
+            </div>
+            <div class="attributeMaintenance" v-if="$route.meta.tabList && $route.meta.tabList.length> 0 "> 
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
+                </el-tabs>
+            </div>
+        <!-- </el-card> -->
  
      
     </div>

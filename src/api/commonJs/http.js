@@ -9,9 +9,10 @@ console.log(process.env.BASE_API, 'process.env.BASE_API')
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
     //baseURL: '/youbao',
-    // headers: {
-    //     'Content-Type': 'application/json;charset=UTF-8'
-    // },
+    headers: {
+        'Content-Type': 'application/json'
+    },
+   
     timeout: 30000, // 网络请求超时 30s
     onUploadProgress: function (progressEvent) {  // `onUploadProgress` 允许为上传处理进度事件
         //console.log(progressEvent, 'progressEvent')
@@ -24,10 +25,11 @@ const service = axios.create({
 })
 
 // 设置请求头 sessionId
-// service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
+service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
 
-// post请求头
+// post请求头 application/json
 // service.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+//  service.defaults.headers['Content-Type'] = 'application/json';
 
 // 请求拦截器
 service.interceptors.request.use(

@@ -84,7 +84,7 @@
                     </el-form-item>
                 </section>
                 <el-form-item label="上传图片: ">
-                    <upload v-if="isShow" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
+                    <upload v-if="isShow" :isClear="isClear" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
                 </el-form-item>
             </el-form>
         </div>
@@ -114,6 +114,7 @@ import upload from '../../commonComponents/upload'
                     categoryId: [],
                     colors: [],
                     sizes: [],
+                    caizhiId: [],
                     purchasePrice: '',
                     memberPrice: '',
                     tagPrice: ''
@@ -134,13 +135,13 @@ import upload from '../../commonComponents/upload'
                 caizhiList: [],
                 customerAttributeList: [],
                 checkList: [],
-                valueList: [],
                 imageList: [],
                 customerAttribute: [],
                 uploadtype: 'more', // less 仅一张、 more 多张
                 imgsize: '2M', // 上传图片限制大小
                 options: [],
-                isShow: true
+                isShow: true,
+                isClear: false
             }
         },
         
@@ -237,7 +238,7 @@ import upload from '../../commonComponents/upload'
                 console.log(arr)
                 setTimeout(() => {
                     this.customerAttribute= arr
-                },100)
+                },500)
              
             },
             handleAddGoodsSubmit() {
@@ -245,14 +246,15 @@ import upload from '../../commonComponents/upload'
                 try {
                     let colors= [],
                         sizes= [];
+                    let goodsPropertyVo= [];
                     if(this.baseForm.colors.length > 0) {
                         this.baseForm.colors.forEach(item => {
-                            colors.push(item.split('/')[0])
+                            colors.push(+item.split('/')[0])
                         })
                     }
                     if(this.baseForm.sizes.length > 0) {
                         this.baseForm.sizes.forEach(item => {
-                            sizes.push(item.split('/')[0])
+                            sizes.push(+item.split('/')[0])
                         })
                     }
                     let goodsCodeVo= {
@@ -261,17 +263,44 @@ import upload from '../../commonComponents/upload'
                         colorIds: colors,
                         sizeIds: sizes
                     }
-                    let goodsPropertyVo= [];
+                    
                     if(this.customerAttribute.length > 0) {
+                        console.log(this.customerAttribute, 'customerAttribute')
                         this.customerAttribute.forEach(item => {
-                            if(item.propertyGroupId && item.propertyValueId !== '') {
+                            if(item.propertyValueId && item.propertyValueId !== '') {
                                 goodsPropertyVo.push({
                                     propertyId: item.propertyId,
                                     propertyValueIds: [item.propertyValueId]
                                 })
                             }
                         })
+                         console.log(goodsPropertyVo, 'goodsPropertyVo123')
                     }
+                    if(this.baseForm.colors.length > 0) {
+                       this.baseForm.colors.forEach(item => {
+                            goodsPropertyVo.push({
+                                propertyId: item.split('/')[1],
+                                propertyValueIds: [item.split('/')[0],]
+                            })
+                       }) 
+                    }
+                    if(this.baseForm.sizes.length > 0) {
+                       this.baseForm.sizes.forEach(item => {
+                            goodsPropertyVo.push({
+                                propertyId: item.split('/')[1],
+                                propertyValueIds: [item.split('/')[0],]
+                            })
+                       }) 
+                    }
+                    if(this.baseForm.caizhiId !== '') {
+                     
+                            goodsPropertyVo.push({
+                                propertyId: this.baseForm.caizhiId.split('/')[1],
+                                propertyValueIds: [this.baseForm.caizhiId.split('/')[0],]
+                            })
+                  
+                    }
+                    console.log(goodsPropertyVo, 'goodsPropertyVo')
                     let goodsImageVo=[]
                     if(this.imageList.length > 0) {
                         this.imageList.forEach((item, index) => {
@@ -313,6 +342,7 @@ import upload from '../../commonComponents/upload'
                         this.$emit('cancelShow', false)
                         this.$emit('getGoodsList')
                         this.isShow= false
+                        this.isClear= true
                     }).catch(err => {})
                 }catch(error) {this.$paramsError(error)}
 
