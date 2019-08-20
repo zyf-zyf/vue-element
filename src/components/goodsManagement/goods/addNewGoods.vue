@@ -1,5 +1,13 @@
 <template>
-    <div id="add-new-goods" v-if="addShow">
+    <div id="add-new-goods" >
+        <el-dialog
+        title="新建商品"
+        :visible.sync="dialogVisible"
+        class='add-goods-dialog'
+        top="2vh"
+        :close-on-click-modal="false"
+        :before-close="handleClose"
+        >
         <div class="top">
             <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
                 <el-form-item label="商品名称:">
@@ -84,7 +92,7 @@
                     </el-form-item>
                 </section>
                 <el-form-item label="上传图片: ">
-                    <upload v-if="isShow" :isClear="isClear" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
+                    <upload v-if="addShow" :isClear="addShow" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
                 </el-form-item>
             </el-form>
         </div>
@@ -92,7 +100,7 @@
             <el-button  size="medium">生成编码</el-button>
             <el-button type="primary" size="medium" @click="handleAddGoodsSubmit">提交保存</el-button>
         </div>
-
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -101,9 +109,20 @@ import upload from '../../commonComponents/upload'
         components: {
             upload
         },
+        computed: {
+             dialogVisible: {
+                get() {
+                    return this.addShow
+                },
+                set() {
+
+                }
+            },
+        },
         props: ['addShow'],
         data() {
             return {
+               
                 page: 1,
                 size: 10,
                 baseForm: {
@@ -152,6 +171,14 @@ import upload from '../../commonComponents/upload'
             this.getCustomPropertyList()
         },
         methods: {
+            handleClose(done) {
+                this.$confirm('确认关闭？').then(_ => {
+                    this.$emit('cancelShow', false)
+                    this.imageList= []
+                    this.$store.dispatch('uploadImages', null)
+                    console.log(this.$store.state.imageArr, 'guan')
+                }).catch(_ => {});
+            },
             /**获取商品品牌属性 */
             getBrandList() {
                 try {
@@ -218,28 +245,71 @@ import upload from '../../commonComponents/upload'
                     this.$paramsError(error.message)
                 }
             },
-             handleCheckedCuctomerAttribute() {
-                this.customerAttribute= []
-                var arr=[]
-                this.checkList.forEach(item => {
-                    arr.push(JSON.parse(item))
-                })
-                arr.forEach( async(item) => {
-                    let params= {
-                        propertyId: item.propertyId
+            handleCheckedCuctomerAttribute() {
+               // console.log(this.checkList, 'lll')
+                if(this.checkList.length == 0) {
+                    this.customerAttribute= []
+                }else{
+                    var isAdd= false
+                    if(this.checkList.length >= this.customerAttribute.length) {
+
+                        this.checkList.forEach(async item => {
+                            if(this.customerAttribute.length > 0) {
+                                for(var i =0;  i < this.customerAttribute.length; i ++ ) {
+                                    if(this.customerAttribute[i].propertyId != JSON.parse(item).propertyId) {
+                                        isAdd= true  
+                                    }else{
+                                        isAdd= false
+                                        break;
+                                    }
+                                }
+                                console.log(isAdd, 'isAdd')
+                                if(isAdd) {
+                                    let query={
+                                         content: ''
+                                    }
+                                    let data= await this.$server.goodsControlApi.getAttributeVal(JSON.parse(item).propertyId,query).then( res => {
+                                            return  res.data
+                                    })
+                                    this.customerAttribute.push({
+                                        propertyId: JSON.parse(item).propertyId,
+                                        propertyName: JSON.parse(item).propertyName,
+                                        valueList:  data
+                                    })
+                                }
+                            }else{
+                                isAdd= true
+                                let query={
+                                    content: ''
+                                }
+                                let data= await this.$server.goodsControlApi.getAttributeVal(JSON.parse(item).propertyId,query).then(res => {
+                                    return res.data
+                                })
+                                this.customerAttribute.push({
+                                    propertyId: JSON.parse(item).propertyId,
+                                    propertyName: JSON.parse(item).propertyName,
+                                    valueList: data
+                                })
+                            }
+                        })
+                    }else {  
+                        var delArr= []
+                        let isDel= false
+                        this.checkList.forEach(item => {
+                            console.log(item, 'item')
+                            for(var i=0; i < this.customerAttribute.length; i++) {
+                                if(JSON.parse(item).propertyId != this.customerAttribute[i].propertyId) {
+ 
+                                }else{
+                                    delArr.push(this.customerAttribute[i])
+                                }
+                            }
+                        })
+                      
+                        this.customerAttribute= delArr
                     }
-                    let query={
-                        content: ''
-                    }
-                    item.valueList = await this.$server.goodsControlApi.getAttributeVal(item.propertyId,query).then( res => {
-                        return res.data
-                    })
-                })
-                console.log(arr)
-                setTimeout(() => {
-                    this.customerAttribute= arr
-                },500)
-             
+                }
+                    
             },
             handleAddGoodsSubmit() {
                 //this.$emit('cancelShow', false)

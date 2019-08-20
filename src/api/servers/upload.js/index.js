@@ -1,37 +1,18 @@
 import httpRequest from '../../commonJs/http'
-import axios from 'axios'
 import {Message} from 'element-ui'
 const qiniuBaseUrl=  'https://goods.dingdian.xin/' 
 const getQiniuToken= '/product/api/qiniu/token/img' /**上传图片获取七牛token */
+import store from '../../../store/index'
 
 const uploadApi= {
-    
-   /*async getQiniuToken() {
-    return await httpRequest.get(getQiniuToken, {
-            params: {
-                wxUid: "",
-                wxSid: ""
-            }
-        }).then(res => {
-            console.log(res, 'res-token')
-            return res;
-        }).catch(err => {
-            console.log(err, 'err-token')
-            return err
-        })
-    }, */
     imagesList: [],
-    uploadImgToQiniu(filetext, type) {
-        //let token = await this.getQiniuToken()
-        console.log(filetext, 'filetext')
+    async uploadImgToQiniu(filetext, type) {
+        var that= this
         if(type == 'less') {
             this.imagesList= []
         }
-        // let axiosd= axios.create({
-        //     baseURL: process.env.BASE_API,
-        // })
-        // axiosd.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
-        httpRequest.get(getQiniuToken).then(res => {
+        
+        await httpRequest.get(getQiniuToken).then(async res => {
             let config = {
                 headers: { "Content-Type": "multipart/form-data" }
             };
@@ -41,19 +22,21 @@ const uploadApi= {
             formdata.append("chunks", "1");
             formdata.append("token", res.data );
             //  let token = 
-            httpRequest.post("http://up-z1.qiniup.com", formdata, config).then(res2 => {
-                console.log(res2, 'res2')
+        // this.imagesList= []
+            await httpRequest.post("http://up-z1.qiniup.com", formdata, config).then( res2 => {
+                that.imagesList= []
                 if (res2.key != "") {
                     Message.success("图片上传成功");
-                    this.imagesList.push(qiniuBaseUrl + res2.key + "?imageMogr2/thumbnail/400000@")   
+                    that.imagesList.push(qiniuBaseUrl + res2.key + "?imageMogr2/thumbnail/400000@")   
+                    console.log(that.imagesList, '[[[[[')
                 }
             }).catch((err) => {
                 console.log(err)
             })
-
+            console.log(this.imagesList, '上传图片')
         })
-        
-        return this.imagesList;
+            console.log(this.imagesList, '上传')
+        return  this.imagesList;
 
     }
 }

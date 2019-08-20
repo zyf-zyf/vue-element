@@ -66,7 +66,11 @@ const goodsControlApi = {
         let data= await httpRequest.patch(goodsItemApi+ '/' + isLocked, params)
         return data;
     },
-
+    /**生成商品编码 */
+    generatingCommodityCode: async (params) => {
+        let data= await httpRequest.post(goodsItemApi + '/code', params)
+        return data;
+    },
     /* 商品属性 Api 接口集合*/
     /**基础属性 品牌属性 */
     /**品牌列表 */

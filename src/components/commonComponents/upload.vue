@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isClear">
         <div class="img-box" v-if="imgArr.length > 0">
             <div class="img" v-for="(item, index) in imgArr" :key="index">
                 <el-avatar shape="square" :size="150" fit="cover" :src="item"></el-avatar>
@@ -39,7 +39,7 @@
         props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize', 'isClear'],
         computed: {
             isCleared() {
-                if(this.isClear) {
+                if(!this.isClear) {
                     this.imgArr= []
                 }
             },
@@ -47,7 +47,7 @@
         
         data() {
             return {
-                imgArr: this.materialImg || [],
+                imgArr: this.materialImg,
                 maxlength: this.maxLength,
                 uploadType: this.uploadtype,
                 uploadimgsize: this.imgsize,
@@ -59,10 +59,7 @@
                 this.$emit('handleDelImg', idx)
             },
             upload(e) {  
-                console.log(this.$server, 'server')
-                console.log(this.uploadType, 'type')
-                if(this.uploadType == 'less') {
-                    console.log(e.target.files)
+                if(this.uploadtype == 'less') {
                     var file= e.target.files[0]
                     if(this.uploadimgsize && this.uploadimgsize !== '') {
                         if(this.limtSize(file)) {
@@ -70,23 +67,27 @@
                         }
                     }else{
                         this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
-                        // this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType).then(res => {
-                        //         this.$store.dispatch('uploadImages', res)
-                        // })
+                        
                     }
                 }else{
                     let files= e.target.files
-                    console.log(files, 'files')
                     for(var i=0; i < files.length; i++) {
                         if(this.uploadimgsize && this.uploadimgsize !== '') {
                             if(this.limtSize(files[i])) {
-                                this.imgArr= this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType)
+                                this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType).then(res => {
+                                    this.imgArr.push(res[0])
+                                })
                             }
                         }else{
-                            this.imgArr= this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType)
+                            this.$server.uploadApi.uploadImgToQiniu(files[i], this.uploadType).then(res => {
+                                console.log(res, 'data')
+                                this.imgArr.push(res[0])
+                            })
+                            
                         }
                     }
                 }
+                console.log(this.imgArr, 'await')
                 this.changeMaterialImg()
             },
             limtSize(file) {
@@ -104,6 +105,7 @@
             },
             // 改变父组件
             changeMaterialImg () {
+                console.log(this.imgArr, 'imgArr')
                 this.$emit('changeMaterialImg', this.imgArr)
             }
 

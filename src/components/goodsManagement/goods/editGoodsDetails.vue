@@ -1,5 +1,13 @@
 <template>
-    <div id="add-new-goods" class="edit-goods-detail-box" v-if="editShow">
+    <div id="add-new-goods" class="edit-goods-detail-box" >
+        <!-- <el-dialog
+        title="编辑商品"
+        :visible.sync="dialogVisible"
+        class='edit-goods-dialog'
+        top="2vh"
+        :close-on-click-modal="false"
+        :before-close="handleClose"
+        > -->
         <div class="edit-goods-left">
             <div class="top">
                 <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
@@ -31,7 +39,7 @@
                             v-for="item in colorList"
                             :key="item.propertyValueId"
                             :label="item.propertyValue"
-                            :value="item.propertyValueId+ '/' +item.propertyId">
+                            :value="item.propertyValueId+ ',' +item.propertyId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -41,7 +49,7 @@
                             v-for="item in sizeList"
                             :key="item.propertyValueId"
                             :label="item.propertyValue"
-                            :value="item.propertyValueId+ '/' +item.propertyId">
+                            :value="item.propertyValueId+ ',' +item.propertyId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -60,7 +68,7 @@
                             v-for="item in caizhiList"
                             :key="item.propertyValueId"
                             :label="item.propertyValue"
-                            :value="item.propertyValueId+ '/' +item.propertyId">
+                            :value="item.propertyValueId+ ',' +item.propertyId">
                             </el-option>
                         </el-select>
                     </el-form-item> 
@@ -88,7 +96,7 @@
                         </el-form-item>
                     </section>
                     <el-form-item label="上传图片: ">
-                        <upload :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
+                        <upload :isClear="editShow" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
                     </el-form-item>
                 </el-form>
             </div>
@@ -99,7 +107,7 @@
         </div>
         <div class="middle"></div>
         <div class="edit-goods-right">
-            <el-button size="small">生成编码</el-button>
+            <el-button size="small" @click="handleCreateGoodsCode">生成编码</el-button>
             <el-table :data="tableData">
                 <el-table-column prop="skuCode" label="SKU编号" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="specName" label="颜色/尺码" width="120" show-overflow-tooltip></el-table-column>
@@ -107,6 +115,7 @@
             </el-table>
   
         </div>
+        <!-- </el-dialog> -->
 
     </div>
 </template>
@@ -116,6 +125,7 @@ import upload from '../../commonComponents/upload'
         components: {
             upload
         },
+      //  created() { this.getGoodsDetailByGoodsId()},
         props: ['goodsId' , 'editShow'],
         data() {
             return {
@@ -171,10 +181,15 @@ import upload from '../../commonComponents/upload'
             this.getCustomPropertyList()
         },
         methods: {
+            handleClose(done) {
+                this.$confirm('确认关闭？').then(_ => {
+                    this.$emit('cancelShow', false)
+                    
+                }).catch(_ => {});
+            },
             /**获取商品详情 */
             getGoodsDetailByGoodsId() {
-                this.$server.goodsControlApi.detailGoodsApi(this.goodsId).then(res => {
-                    console.log(res)
+                this.$server.goodsControlApi.detailGoodsApi(this.goodsId).then( async res => {
                     this.baseForm.spuCode= res.data.spuCode
                     this.baseForm.goodsName= res.data.goodsName
                     this.baseForm.goodsCode= res.data.goodsCode
@@ -182,15 +197,15 @@ import upload from '../../commonComponents/upload'
                     this.baseForm.purchasePrice= res.data.purchasePrice
                     this.baseForm.memberPrice= res.data.memberPrice
                     this.baseForm.tagPrice= res.data.tagPrice
-                    this.baseForm.categoryId= [res.data.categoryId,res.data.categoryId2,res.data.categoryId3]
-                    this.tableData= res.data.goodsSkus
+                    this.baseForm.categoryId= await [res.data.categoryId,res.data.categoryId2,res.data.categoryId3]
                     this.baseForm.purchasePrice= res.data.purchasePrice
                     this.baseForm.memberPrice= res.data.memberPrice
                     this.baseForm.tagPrice= res.data.tagPrice
                     this.goodsId= res.data.goodsId
+                    this.tableData= res.data.goodsSkus
 
                     if(res.data.goodsImages.length > 0) {
-                        res.data.goodsImages.forEach(item => {
+                        res.data.goodsImages.forEach((item, index) => {
                             this.imageList.push(item.imageUrl)
                         })
                     }else{
@@ -198,30 +213,26 @@ import upload from '../../commonComponents/upload'
                     }
 
                     if(res.data.goodsSpecValues.length > 0) {
-                        res.data.goodsSpecValues.forEach(item => {
-                            console.log(item, 'item')
+                        res.data.goodsSpecValues.forEach( async (item, index) => {
+                          
                             if(item.propertyId == this.colorId) {
-                                
                                 if(item.valueIds.indexOf(',') == -1) {
-                                    this.baseForm.colors.push(item.valueIds + '/' + item.propertyId)
+                                    await this.baseForm.colors.push(item.valueIds + ',' + item.propertyId)
                                 }else{
-                                    item.valueIds.split(',').forEach(itemo => {
-                                        this.baseForm.colors.push(itemo+ '/' + item.propertyId)
+                                    item.valueIds.split(',').forEach( async (itemo, indexo) => {
+                                        await this.baseForm.colors.push(itemo+ ',' + item.propertyId)
                                     })
                                 }
-                               // this.baseForm.colors.push(item.propertyValueId+'/'+item.propertyId)
                             }else if(item.propertyId == this.sizeId) {
                                 if(item.valueIds.indexOf(',') == -1) {
-                                    this.baseForm.sizes.push(item.valueIds + '/' + item.propertyId)
+                                   await this.baseForm.sizes.push(item.valueIds + ',' + item.propertyId)
                                 }else{
-                                    item.valueIds.split(',').forEach(itemo => {
-                                        this.baseForm.sizes.push(itemo+ '/' + item.propertyId)
+                                    item.valueIds.split(',').forEach(async (itemo, indexo) => {
+                                        await this.baseForm.sizes.push(itemo+ ',' + item.propertyId)
                                     })
                                 }
-                                //this.baseForm.sizes.push(item.propertyValueId+'/'+item.propertyId)
                             }else if(item.propertyId == this.caizhiId) {
-                                
-                                this.baseForm.caizhiId=(item.valueIds + '/' + item.propertyId)
+                                 this.baseForm.caizhiId = await (item.valueIds + ',' + item.propertyId)
                             }
                             let arr= []
                             /**循环查询匹配自定义属性 */
@@ -241,10 +252,8 @@ import upload from '../../commonComponents/upload'
                                         content: ''
                                     }
                                     
-                                    this.$server.goodsControlApi.getAttributeVal(item.propertyId,query).then(res => {
-                                       
-                                        console.log(this.customerAttributeList, 'list')
-                                        this.customerAttribute.push({
+                                    this.$server.goodsControlApi.getAttributeVal(item.propertyId,query).then(async res => { 
+                                        await this.customerAttribute.push({
                                             propertyId: item.propertyId,
                                             propertyName: names,
                                             valueList: res.data,
@@ -266,8 +275,8 @@ import upload from '../../commonComponents/upload'
                         page: this.page,
                         size: this.size
                     }
-                    this.$server.goodsControlApi.getBrandList(query).then(res => {
-                        this.brandList= res.data
+                    this.$server.goodsControlApi.getBrandList(query).then(async res => {
+                        this.brandList= await res.data
                     }).catch(err => {
                         console.log(err)
                     })
@@ -277,15 +286,15 @@ import upload from '../../commonComponents/upload'
             },
             /**获取商品类目 */
             getCategoryList() {
-                this.$server.goodsControlApi.getCategoryList().then(res => {
-                    this.categoryList= res.data
+                this.$server.goodsControlApi.getCategoryList().then(async res => {
+                    this.categoryList=await res.data
                 }).catch()
             },
             /**获取商品属性值 */
             getBasicAttribute() {
-                this.$server.goodsControlApi.getBasicAttribute().then(res => {
+                this.$server.goodsControlApi.getBasicAttribute().then(async res => {
                     console.log(res.data)
-                    res.data.forEach(item => {
+                    await res.data.forEach(item => {
                         if(item.propertyName == '颜色') {
                             this.colorId= item.propertyId
                             let query= {
@@ -328,26 +337,68 @@ import upload from '../../commonComponents/upload'
                 }
             },
             handleCheckedCuctomerAttribute() {
-                this.customerAttribute= []
-                var arr=[]
-                this.checkList.forEach(item => {
-                    arr.push(JSON.parse(item))
-                })
-                arr.forEach( async(item) => {
-                    let params= {
-                        propertyId: item.propertyId
+                if(this.checkList.length == 0) {
+                    this.customerAttribute= []
+                }else{
+                    var isAdd= false
+                    if(this.checkList.length >= this.customerAttribute.length) {
+
+                        this.checkList.forEach(async item => {
+                            if(this.customerAttribute.length > 0) {
+                                for(var i =0;  i < this.customerAttribute.length; i ++ ) {
+                                    if(this.customerAttribute[i].propertyId != JSON.parse(item).propertyId) {
+                                        isAdd= true  
+                                    }else{
+                                        isAdd= false
+                                        break;
+                                    }
+                                }
+                                console.log(isAdd, 'isAdd')
+                                if(isAdd) {
+                                    let query={
+                                         content: ''
+                                    }
+                                    let data= await this.$server.goodsControlApi.getAttributeVal(JSON.parse(item).propertyId,query).then( res => {
+                                            return  res.data
+                                    })
+                                    this.customerAttribute.push({
+                                        propertyId: JSON.parse(item).propertyId,
+                                        propertyName: JSON.parse(item).propertyName,
+                                        valueList:  data
+                                    })
+                                }
+                            }else{
+                                isAdd= true
+                                let query={
+                                    content: ''
+                                }
+                                let data= await this.$server.goodsControlApi.getAttributeVal(JSON.parse(item).propertyId,query).then(res => {
+                                    return res.data
+                                })
+                                this.customerAttribute.push({
+                                    propertyId: JSON.parse(item).propertyId,
+                                    propertyName: JSON.parse(item).propertyName,
+                                    valueList: data
+                                })
+                            }
+                        })
+                    }else {  
+                        var delArr= []
+                        let isDel= false
+                        this.checkList.forEach(item => {
+                            console.log(item, 'item')
+                            for(var i=0; i < this.customerAttribute.length; i++) {
+                                if(JSON.parse(item).propertyId != this.customerAttribute[i].propertyId) {
+ 
+                                }else{
+                                    delArr.push(this.customerAttribute[i])
+                                }
+                            }
+                        })
+                      
+                        this.customerAttribute= delArr
                     }
-                    let query={
-                        content: ''
-                    }
-                    item.valueList = await this.$server.goodsControlApi.getAttributeVal(item.propertyId,query).then( res => {
-                        return res.data
-                    })
-                })
-                console.log(arr)
-                setTimeout(() => {
-                    this.customerAttribute= arr
-                },500)
+                }
              
             },
             delImg(idx) {
@@ -367,12 +418,12 @@ import upload from '../../commonComponents/upload'
                     let goodsPropertyVo= [];
                     if(this.baseForm.colors.length > 0) {
                         this.baseForm.colors.forEach(item => {
-                            colors.push(+item.split('/')[0])
+                            colors.push(+item.split(',')[0])
                         })
                     }
                     if(this.baseForm.sizes.length > 0) {
                         this.baseForm.sizes.forEach(item => {
-                            sizes.push(+item.split('/')[0])
+                            sizes.push(+item.split(',')[0])
                         })
                     }
                     let goodsCodeVo= {
@@ -397,30 +448,30 @@ import upload from '../../commonComponents/upload'
                     if(this.baseForm.colors.length > 0) {
                        this.baseForm.colors.forEach(item => {
                             goodsPropertyVo.push({
-                                propertyId: +item.split('/')[1],
-                                propertyValueIds: [item.split('/')[0],]
+                                propertyId: +item.split(',')[1],
+                                propertyValueIds: [+item.split(',')[0],]
                             })
                        }) 
                     }
                     if(this.baseForm.sizes.length > 0) {
                        this.baseForm.sizes.forEach(item => {
                             goodsPropertyVo.push({
-                                propertyId: +item.split('/')[1],
-                                propertyValueIds: [item.split('/')[0],]
+                                propertyId: +item.split(',')[1],
+                                propertyValueIds: [+item.split(',')[0],]
                             })
                        }) 
                     }
                     if(this.baseForm.caizhiId !== '') {
-                     
-                            goodsPropertyVo.push({
-                                propertyId: +this.baseForm.caizhiId.split('/')[1],
-                                propertyValueIds: [this.baseForm.caizhiId.split('/')[0],]
-                            })
+                        goodsPropertyVo.push({
+                            propertyId: +this.baseForm.caizhiId.split(',')[1],
+                            propertyValueIds: [+this.baseForm.caizhiId.split(',')[0],]
+                        })
                   
                     }
                     console.log(goodsPropertyVo, 'goodsPropertyVo')
                     let goodsImageVo=[]
                     if(this.imageList.length > 0) {
+                        console.log(this.imageList, 'imagelidt')
                         this.imageList.forEach((item, index) => {
                             if(index == 0) {
                                 goodsImageVo.push({
@@ -435,8 +486,6 @@ import upload from '../../commonComponents/upload'
                             }
                         }) 
                     }
-                    
-
                     
                     var params= {
                         brandId: this.baseForm.brandId,
@@ -463,7 +512,38 @@ import upload from '../../commonComponents/upload'
                         this.isClear= true
                     }).catch(err => {})
                 }catch(error) {this.$paramsError(error)}
+            },
+            /**生成商品编码 */
+            handleCreateGoodsCode() {
+                try{
+                    let colors= [],
+                        sizes= [];
+                    if(this.baseForm.colors.length > 0) {
+                        this.baseForm.colors.forEach(item => {
+                            colors.push(+item.split(',')[0])
+                        })
+                    }
+                    if(this.baseForm.sizes.length > 0) {
+
+                        this.baseForm.sizes.forEach(item => {
+                            sizes.push(+item.split(',')[0])
+                        })
+                    }
+                    let params= {
+                        brandId: this.baseForm.brandId,
+                        categoryId: this.baseForm.categoryId.length > 0 ? +this.baseForm.categoryId[2]  : '',
+                        colorIds: colors,
+                        sizeIds: sizes
+                    }
+                    this.$server.goodsControlApi.generatingCommodityCode(params).then(res => {
+                        res.data.skuCodes.forEach(item => {
+                            item.specName= item.colorName+ ',' +item.sizeName
+                        })
+                        this.tableData= res.data.skuCodes
+                    }).catch()
+                }catch(error) {this.$paramsError(error)}
             }
+
 
         }
     }

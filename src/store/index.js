@@ -20,7 +20,7 @@ const mutations= {
 		state.isactiviteUniqueCode = data
     },
     UPLOADIMAGES: (state, data) => {
-        state.imageArr.push(data) 
+        state.imageArr=data 
     }
 }
 const actions= {

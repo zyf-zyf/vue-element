@@ -60,7 +60,7 @@
                     </el-form-item>
                     <div style="width: 100%;"></div>
                     <el-form-item label="显示字段:">
-                        <el-checkbox-group v-model="formData.checkList"  @change="handleChengeGroup">
+                        <el-checkbox-group v-model="formData.checkList">
                             <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item.propertyName" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
@@ -148,17 +148,11 @@
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
+  
+        <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
+    
         <el-dialog
-        title="基本属性"
-        :visible.sync="addShow"
-        class='add-goods-dialog'
-        top="2vh"
-        :close-on-click-modal="false"
-        >
-            <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
-        </el-dialog>
-        <el-dialog
-        title="基本属性"
+        title="编辑商品"
         :visible.sync="editShow"
         class='edit-goods-dialog'
         top="2vh"
@@ -312,10 +306,11 @@ export default {
            
       
         },
+        /**查询按钮 */
         handleClickSearch() {
-            alert(1)
             this.getGoodsList()
         },
+        /**分页按钮 */
         handlePageChange(page) {
             try {
                 this.page= page
@@ -325,6 +320,7 @@ export default {
                 this.$paramsError(err.message)
             }
         },
+        /**选择每页展示数量 */
         handleSizeChange(size) {
             this.size= size
             this.getGoodsList()
@@ -332,6 +328,7 @@ export default {
         handleChangeVal(label, val) {
            return this.formData[label]= val
         },
+        /**表格样式 */
         cellStyle({row, column, rowIndex, columnIndex}) {
      
             if(columnIndex == 4) {
@@ -389,36 +386,26 @@ export default {
             console.log(index, val)
 
         },
-        handleChengeGroup(val) {
-            this.tableLabel=[
-                {prop: 'name', label: '一级类目'},
-                {prop: 'name', label: '二级类目'},
-                {prop: 'name', label: '三级类目'},
-                {prop: 'name', label: '商品名称'},
-                {prop: 'name', label: '颜色'},
-                {prop: 'name', label: '尺码'},
-                {prop: 'name', label: '采购价'},
-                {prop: 'name', label: '吊牌价'},
-                {prop: 'name', label: '会员价'},
-            ]
-            var arr=[], arr1=[];
-           
-            val && val.forEach(item => {
-               arr1.push({
-                   prop: 'brandName',
-                   label: item
-               })
-            })
-            console.log(arr1)
-            arr=this.tableLabel.concat(arr1)
-            this.tableLabel= arr
-            
-        },
+  
         // 重置按钮
         handleReset() {
-            alert('1')
-            this.formData.checkList= []
-            this.handleChengeGroup()
+            
+            this.formData = {
+                spuCode: '',
+                skuCode: '',
+                goodsName: '',
+                brandId: '',
+                categoryId1: '',
+                categoryId2: '',
+                categoryId3: '',
+                purchasePriceFrom: '',
+                purchasePriceTo: '',
+                memberPriceFrom: '',
+                memberPriceTo: '',
+                time: '',
+                checkList: []
+            },
+            this.getGoodsList()
         },
         /**商品编辑按钮 */
         editGoods(scope) {
