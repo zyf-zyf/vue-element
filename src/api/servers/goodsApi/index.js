@@ -18,6 +18,7 @@ const getBasicAttribute= 'product/api/goods/property/base/list' /**基础属性�
 /**商品属性值管理 */
 const getAttributeVal= 'product/api/goods/property/value/list/' /**获取属性值列表 */
 const addAttributeVal= 'product/api/goods/property/value' /**属性值添加、删除 、编辑*/
+const getAtttributeValueGroupList= 'product/api/goods/property/value/list/group/'
 
 
 /**自定义属性 */
@@ -125,6 +126,11 @@ const goodsControlApi = {
     },
     editAttributeVal: async (params) => {
         let data= await httpRequest.put(addAttributeVal, params)
+        return data;
+    },
+    /**获取属性值分组列表 */
+    getAtttributeValueGroupList: async (params, query) => {
+        let data= await httpRequest.get(getAtttributeValueGroupList+ params + '?content='+query.content)
         return data;
     },
     /*

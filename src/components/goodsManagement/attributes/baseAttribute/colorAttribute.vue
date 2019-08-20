@@ -10,6 +10,7 @@
             label="ID"
             >
             </el-table-column>
+            <el-table-column prop="valueCode" label="编码"></el-table-column>
             <el-table-column
             prop="propertyValue"
             label="颜色">
@@ -46,6 +47,16 @@
                     <el-input size="small" type='text' v-model="form.propertyValue" ></el-input>
                     <small>创建多个颜色，请用逗号分隔不同颜色</small>
                 </el-form-item>
+                <el-form-item label="选择类别:" v-if="type == 'add'">
+                    <el-select size="small" v-model="form.propertyGroupId" filterable placeholder="请选择类别" style="width: 100%">
+                        <el-option
+                        v-for="item in category1List"
+                        :key="item.categoryId"
+                        :label="item.categoryName"
+                        :value="item.categoryId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -65,18 +76,27 @@
                 tableData: [],
                 dialogVisible: false,
                 form: {
-                    propertyValue: ''
+                    propertyValue: '',
+                    propertyGroupId: ''
                
                 },
-                type: ''
+                type: '',
+                category1List: []
                 
 
             }
         },
         mounted() {
             this.getGroupListByPropertyId()
+            this.getTopCategoryList()
         },
         methods: {
+            /**获取类目第一级 */
+            getTopCategoryList() {
+                this.$server.goodsControlApi.getTopCategoryList().then(res => {
+                    this.category1List= res.data
+                })
+            },
             getGroupListByPropertyId() {
                 try{
            
@@ -98,7 +118,8 @@
                     if(this.type == 'add') {
                         let params={
                             propertyId: this.propertyId,
-                            propertyValue: this.form.propertyValue
+                            propertyValue: this.form.propertyValue,
+                            propertyGroupId: this.form.propertyGroupId
                         }
                         this.$server.goodsControlApi.addAttributeVal(params).then(res => {
                             this.dialogVisible= false

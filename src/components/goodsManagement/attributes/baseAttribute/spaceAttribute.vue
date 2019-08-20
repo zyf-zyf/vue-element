@@ -4,7 +4,7 @@
             <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
         </div>
         <div class="table-box">
-            <div class="left">
+            <!-- <div class="left">
                 <el-table
                 class="render-table"
                 :data="lefttableData"
@@ -28,12 +28,13 @@
                         </template>
                     </el-table-column>
                 </el-table>
-            </div>
+            </div> -->
             <div class="right">
                 <el-table
                 :data="righttableData"
                 style="width: 100%">
                     <el-table-column prop="propertyValueId" label="ID"></el-table-column>
+                    <el-table-column prop="valueCode" label="编码"></el-table-column>
                     <el-table-column prop="propertyValue" label="尺码名称"></el-table-column>
                     <el-table-column prop="groupName" label="分组"></el-table-column>
                     <el-table-column prop="gmtCreate" label="创建时间" show-overflow-tooltip></el-table-column>
@@ -67,10 +68,10 @@
                 <el-form-item label="选择类别:" v-if="type == 'add'">
                     <el-select size="small" v-model="spaceForm.propertyGroupId" filterable placeholder="请选择类别" style="width: 100%">
                         <el-option
-                        v-for="item in lefttableData"
-                        :key="item.propertyGroupId"
-                        :label="item.groupName"
-                        :value="item.propertyGroupId">
+                        v-for="item in category1List"
+                        :key="item.categoryId"
+                        :label="item.categoryName"
+                        :value="item.categoryId">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -82,7 +83,7 @@
             </span>
         </el-dialog>
         <!-- 添加类别 -->
-        <el-dialog
+        <!-- <el-dialog
         title="分类编辑"
         :visible.sync="dialogVisibleCategory"
         width="40%"
@@ -90,14 +91,14 @@
             <el-form v-model="categoryForm" label-width="100px" label-position="left">
                 <el-form-item label='类别名称:'>
                     <el-input size="small" type='text' v-model="categoryForm.groupName" clearable></el-input>
-                    <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
+                
                 </el-form-item> 
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisibleCategory = false">取 消</el-button>
                 <el-button size="small" type="primary" @click="handleAddAttributeGroupVal">提交保存</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -105,7 +106,7 @@ export default {
     props: ['propertyId'],
     data() {
         return {
-            lefttableData: [],
+  
             righttableData: [],
             dialogVisible: false, // 尺码
             spaceForm: {
@@ -115,6 +116,7 @@ export default {
             categoryForm: {
                 groupName: ''
             },
+            category1List: [],
             dialogVisibleCategory: false, // 类别
             type: '', // 操作类型 add添加、edit编辑
             propertyGroupId: '',
@@ -122,20 +124,16 @@ export default {
         }
     },
     mounted() {
-        this.getGroupListByPropertyId(this.propertyId)
+        //this.getGroupListByPropertyId(this.propertyId)
         this.getAttributeVal()
+        this.getTopCategoryList()
     },
     methods: {
-        getGroupListByPropertyId(id) {
-            try{
-                let params= {
-                    propertyId: id
-                }
-               
-                this.$server.goodsControlApi.getGroupListByPropertyId(params).then(res => {
-                    this.lefttableData= res.data
-                })
-            }catch(error){this.$paramsError(error)}
+        /**获取类目第一级 */
+        getTopCategoryList() {
+            this.$server.goodsControlApi.getTopCategoryList().then(res => {
+                this.category1List= res.data
+            })
         },
         getAttributeVal() {
             try{
@@ -215,57 +213,57 @@ export default {
         },
         
         /**添加分类按钮 */
-        handleAddAttributeGroup() {
-            this.categoryForm= {}
-            this.type= 'add'
-            this.dialogVisibleCategory= true
+        // handleAddAttributeGroup() {
+        //     this.categoryForm= {}
+        //     this.type= 'add'
+        //     this.dialogVisibleCategory= true
            
-        },
+        // },
         /**添加分类 */
-        handleAddAttributeGroupVal() {
-            try{
-                if(this.type == 'add') {
-                    let params={
-                        propertyId: this.propertyId,
-                        groupName: this.categoryForm.groupName
-                    }
-                    this.$server.goodsControlApi.addGroupItem(params).then(res => {
-                        this.dialogVisibleCategory= false
-                        this.getGroupListByPropertyId(this.propertyId)
-                    }).catch()
-                }else if(this.type == 'edit') {
-                    let params= {
-                        groupName: this.categoryForm.groupName,
-                        propertyGroupId: this.propertyGroupId
-                    }
-                    this.$server.goodsControlApi.editGroupItem(params).then(res => {
-                        this.dialogVisibleCategory= false
-                        this.getGroupListByPropertyId(this.propertyId)
-                    }).catch()
-                }
-            }catch(error) {this.$paramsError(error)}
-        },
+        // handleAddAttributeGroupVal() {
+        //     try{
+        //         if(this.type == 'add') {
+        //             let params={
+        //                 propertyId: this.propertyId,
+        //                 groupName: this.categoryForm.groupName
+        //             }
+        //             this.$server.goodsControlApi.addGroupItem(params).then(res => {
+        //                 this.dialogVisibleCategory= false
+        //                 this.getGroupListByPropertyId(this.propertyId)
+        //             }).catch()
+        //         }else if(this.type == 'edit') {
+        //             let params= {
+        //                 groupName: this.categoryForm.groupName,
+        //                 propertyGroupId: this.propertyGroupId
+        //             }
+        //             this.$server.goodsControlApi.editGroupItem(params).then(res => {
+        //                 this.dialogVisibleCategory= false
+        //                 this.getGroupListByPropertyId(this.propertyId)
+        //             }).catch()
+        //         }
+        //     }catch(error) {this.$paramsError(error)}
+        // },
         /**编辑分类 */
-        handleEditAttributeGroup(scope) {
+        // handleEditAttributeGroup(scope) {
             
-            this.dialogVisibleCategory= true
-            this.categoryForm= scope
-            this.type= 'edit'
-            this.propertyGroupId= scope.propertyGroupId
-        },
+        //     this.dialogVisibleCategory= true
+        //     this.categoryForm= scope
+        //     this.type= 'edit'
+        //     this.propertyGroupId= scope.propertyGroupId
+        // },
         /**删除分类 */
-        handleDelAttributeGroup(scope) {
-            try{
-                let params= {
-                    propertyGroupId: scope.propertyGroupId
-                }
-                this.$confirm('确定删除该类别？').then(_ => {
-                    this.$server.goodsControlApi.delGroupItem(params).then(res => {
-                        this.getGroupListByPropertyId(this.propertyId)
-                    })
-                }).catch()
-            }catch(error){this.$paramsError(error)}
-        },
+        // handleDelAttributeGroup(scope) {
+        //     try{
+        //         let params= {
+        //             propertyGroupId: scope.propertyGroupId
+        //         }
+        //         this.$confirm('确定删除该类别？').then(_ => {
+        //             this.$server.goodsControlApi.delGroupItem(params).then(res => {
+        //                 this.getGroupListByPropertyId(this.propertyId)
+        //             })
+        //         }).catch()
+        //     }catch(error){this.$paramsError(error)}
+        // },
         handleClose() {
             this.$confirm('确认关闭？').then(_ => {
                 this.dialogVisible= false

@@ -9,15 +9,14 @@
                 <el-button size="small" type="primary" icon="el-icon-download" @click="handleClcikDownLoad">下载</el-button>
             </div>
             <el-table :data="tableData" style="width:100%">
-                <el-table-column  label="品牌"></el-table-column>
-                <el-table-column  label="商品名称"></el-table-column>
-                <el-table-column  label="颜色"></el-table-column>
-                <el-table-column  label="尺码"></el-table-column>
-                <el-table-column  label="款号"></el-table-column>
-                <el-table-column  label="吊牌价"></el-table-column>
-                <el-table-column  label="商品条码"></el-table-column>
-                <el-table-column  label="产品等级"></el-table-column>
-                <el-table-column  label="检验员"></el-table-column>
+                <el-table-column prop="brandName"  label="品牌"></el-table-column>
+                <el-table-column prop="goodsName"  label="商品名称"></el-table-column>
+                <el-table-column prop="specName" label="规格"></el-table-column>
+                <el-table-column prop="goodsPrice" label="吊牌价"></el-table-column>
+                <el-table-column prop="barCode" label="商品条码" show-overflow-tooltip></el-table-column>
+                <!-- <el-table-column prop="productCode" label="产品编码"></el-table-column> -->
+                <el-table-column prop="skuCode" label="SKU编码" show-overflow-tooltip></el-table-column>
+                <el-table-column prop='goodsQty' label="商品数量" width="100"></el-table-column>
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-dialog>
@@ -29,7 +28,7 @@
         components: {
             page
         },
-        props: ['isShow'],
+        props: ['isShow', 'stockinId'],
         computed: {
             dialogVisible: {
                 get() {
@@ -45,11 +44,21 @@
                 page: 1,
                 size: 10,
                 total: null,
-                tableData: [],
-                
+                tableData: [],  
             }
         },
+        mounted() {
+            this.getStockInDetail()
+        },
         methods: {
+            /**获取入库单详情 */
+            getStockInDetail() {
+                this.$server.stockControlApi.getStockInDeatil(this.stockinId).then(async res => {
+                    console.log(res, 'res')
+                    this.total= res.total
+                    this.tableData= res.data
+                })
+            },
             handlePageChange(page) {
                 this.page= page
             },
@@ -61,6 +70,8 @@
                     this.$emit('cancelShow', false)
                 }).catch(_ => {});
             },
+            /**下载 */
+            handleClcikDownLoad() {}
         }
     }
 </script>

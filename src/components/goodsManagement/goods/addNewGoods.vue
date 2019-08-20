@@ -30,23 +30,47 @@
                     <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange"></el-cascader>
                 </el-form-item>
                 <el-form-item label="选择颜色:">
-                    <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
+                    <!-- <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
                         <el-option
                         v-for="item in colorList"
                         :key="item.propertyValueId"
                         :label="item.propertyValue"
                         :value="item.propertyValueId+ '/' +item.propertyId">
                         </el-option>
+                    </el-select>  -->
+                    <el-select v-model="baseForm.colors" size="small"  multiple placeholder="请选择颜色（可多选）">
+                        <el-option-group
+                        v-for="group in colorList"
+                        :key="group.label"
+                        :label="group.label">
+                        <el-option
+                            v-for="item in group.child"
+                            :key="item.propertyValueId"
+                            :label="item.propertyValue"
+                            :value="item.propertyValueId+ '/' +item.propertyId">
+                        </el-option>
+                        </el-option-group>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择尺码:">
-                    <el-select v-model="baseForm.sizes" size="small" multiple placeholder="请选择尺码（可多选）">
-                        <el-option
+                    <el-select v-model="baseForm.sizes" value-key="propertyValueId" size="small" multiple placeholder="请选择尺码（可多选）">
+                        <!-- <el-option
                         v-for="item in sizeList"
                         :key="item.propertyValueId"
                         :label="item.propertyValue"
                         :value="item.propertyValueId+ '/' +item.propertyId">
-                        </el-option>
+                        </el-option> -->
+                        <el-option-group
+                        v-for="group in sizeList"
+                        :key="group.label"
+                        :label="group.label">
+                            <el-option
+                                v-for="item in group.child"
+                                :key="item.propertyValueId"
+                                :label="item.propertyValue"
+                                :value="item.propertyValueId+ '/' +item.propertyId">
+                            </el-option>
+                        </el-option-group>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="采购价格:">
@@ -60,12 +84,23 @@
                 </el-form-item>
                 <el-form-item label="选择材质:">
                      <el-select v-model="baseForm.caizhiId" size="small" placeholder="请选择材质">
-                        <el-option
+                        <!-- <el-option
                         v-for="item in caizhiList"
                         :key="item.propertyValueId"
                         :label="item.propertyValue"
                         :value="item.propertyValueId+ '/' +item.propertyId">
-                        </el-option>
+                        </el-option> -->
+                        <el-option-group
+                        v-for="group in caizhiList"
+                        :key="group.label"
+                        :label="group.label">
+                            <el-option
+                                v-for="item in group.child"
+                                :key="item.propertyValueId"
+                                :label="item.propertyValue"
+                                :value="item.propertyValueId+ '/' +item.propertyId">
+                            </el-option>
+                        </el-option-group>
                     </el-select>
                 </el-form-item> 
                 
@@ -171,6 +206,20 @@ import upload from '../../commonComponents/upload'
             this.getCustomPropertyList()
         },
         methods: {
+            /**获取商品属性分组列表 */
+            getAtttributeValueGroupList(id, obj) {
+                let query= {
+                    content: ''
+                }
+                this.$server.goodsControlApi.getAtttributeValueGroupList(id, query).then(async res => {
+                    res.data.forEach(item => {
+                       obj.push({
+                           label: item[0].groupName ? item[0].groupName : '无分组',
+                           child: item
+                       })
+                    })
+                })
+            },
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
@@ -207,28 +256,25 @@ import upload from '../../commonComponents/upload'
                     console.log(res.data)
                     res.data.forEach(item => {
                         if(item.propertyName == '颜色') {
-                            let query= {
-                                content: ''
-                            }
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.colorList= res.data
-                            })
+                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
+                            //     this.colorList= res.data
+                            // })
+                            this.getAtttributeValueGroupList(item.propertyId, this.colorList)
+                            // this.$server.goodsControlApi.getAtttributeValueGroupList(item.propertyId).then(res => {
+
+                            // })
                         }else if(item.propertyName == '尺码') {
-                       
-                            let query= {
-                                content: ''
-                            }
-                            console.log(item.propertyId)
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.sizeList= res.data
-                            })
+                           // this.getAtttributeValueGroupList(item.propertyId)
+                            this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
+                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
+                            //     this.sizeList= res.data
+                            // })
                         }else if(item.propertyName == '材料') {
-                            let query= {
-                                content: ''
-                            }
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.caizhiList= res.data
-                            })
+                   
+                            this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
+                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
+                            //     this.caizhiList= res.data
+                            // })
                         }
                     })
                 }).catch(err => {})

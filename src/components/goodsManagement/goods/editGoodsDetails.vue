@@ -1,13 +1,5 @@
 <template>
     <div id="add-new-goods" class="edit-goods-detail-box" >
-        <!-- <el-dialog
-        title="编辑商品"
-        :visible.sync="dialogVisible"
-        class='edit-goods-dialog'
-        top="2vh"
-        :close-on-click-modal="false"
-        :before-close="handleClose"
-        > -->
         <div class="edit-goods-left">
             <div class="top">
                 <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
@@ -34,23 +26,33 @@
                         <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item label="选择颜色:">
-                        <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
-                            <el-option
-                            v-for="item in colorList"
-                            :key="item.propertyValueId"
-                            :label="item.propertyValue"
-                            :value="item.propertyValueId+ ',' +item.propertyId">
-                            </el-option>
+                        <el-select v-model="baseForm.colors" size="small"  multiple placeholder="请选择颜色（可多选）">
+                            <el-option-group
+                            v-for="group in colorList"
+                            :key="group.label"
+                            :label="group.label">
+                                <el-option
+                                    v-for="item in group.child"
+                                    :key="item.propertyValueId"
+                                    :label="item.propertyValue"
+                                    :value="item.propertyValueId+ ',' +item.propertyId">
+                                </el-option>
+                            </el-option-group>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="选择尺码:">
                         <el-select v-model="baseForm.sizes" size="small" multiple placeholder="请选择尺码（可多选）">
-                            <el-option
-                            v-for="item in sizeList"
-                            :key="item.propertyValueId"
-                            :label="item.propertyValue"
-                            :value="item.propertyValueId+ ',' +item.propertyId">
-                            </el-option>
+                            <el-option-group
+                            v-for="group in sizeList"
+                            :key="group.label"
+                            :label="group.label">
+                                <el-option
+                                    v-for="item in group.child"
+                                    :key="item.propertyValueId"
+                                    :label="item.propertyValue"
+                                    :value="item.propertyValueId+ ',' +item.propertyId">
+                                </el-option>
+                            </el-option-group>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="采购价格:">
@@ -64,12 +66,17 @@
                     </el-form-item>
                     <el-form-item label="选择材质:">
                         <el-select v-model="baseForm.caizhiId" size="small" placeholder="请选择材质">
-                            <el-option
-                            v-for="item in caizhiList"
-                            :key="item.propertyValueId"
-                            :label="item.propertyValue"
-                            :value="item.propertyValueId+ ',' +item.propertyId">
-                            </el-option>
+                            <el-option-group
+                            v-for="group in caizhiList"
+                            :key="group.label"
+                            :label="group.label">
+                                <el-option
+                                    v-for="item in group.child"
+                                    :key="item.propertyValueId"
+                                    :label="item.propertyValue"
+                                    :value="item.propertyValueId+ ',' +item.propertyId">
+                                </el-option>
+                            </el-option-group>
                         </el-select>
                     </el-form-item> 
                     
@@ -181,6 +188,20 @@ import upload from '../../commonComponents/upload'
             this.getCustomPropertyList()
         },
         methods: {
+            /**获取商品属性分组列表 */
+            getAtttributeValueGroupList(id, obj) {
+                let query= {
+                    content: ''
+                }
+                this.$server.goodsControlApi.getAtttributeValueGroupList(id, query).then(async res => {
+                    res.data.forEach(item => {
+                       obj.push({
+                           label: item[0].groupName ? item[0].groupName : '无分组',
+                           child: item
+                       })
+                    })
+                })
+            },
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
@@ -190,23 +211,23 @@ import upload from '../../commonComponents/upload'
             /**获取商品详情 */
             getGoodsDetailByGoodsId() {
                 this.$server.goodsControlApi.detailGoodsApi(this.goodsId).then( async res => {
-                    this.baseForm.spuCode= res.data.spuCode
-                    this.baseForm.goodsName= res.data.goodsName
-                    this.baseForm.goodsCode= res.data.goodsCode
-                    this.baseForm.brandId= res.data.brandId
-                    this.baseForm.purchasePrice= res.data.purchasePrice
-                    this.baseForm.memberPrice= res.data.memberPrice
-                    this.baseForm.tagPrice= res.data.tagPrice
+                    this.baseForm.spuCode= await res.data.spuCode
+                    this.baseForm.goodsName= await res.data.goodsName
+                    this.baseForm.goodsCode= await res.data.goodsCode
+                    this.baseForm.brandId= await res.data.brandId
+                    this.baseForm.purchasePrice= await res.data.purchasePrice
+                    this.baseForm.memberPrice= await res.data.memberPrice
+                    this.baseForm.tagPrice= await res.data.tagPrice
                     this.baseForm.categoryId= await [res.data.categoryId,res.data.categoryId2,res.data.categoryId3]
-                    this.baseForm.purchasePrice= res.data.purchasePrice
-                    this.baseForm.memberPrice= res.data.memberPrice
-                    this.baseForm.tagPrice= res.data.tagPrice
-                    this.goodsId= res.data.goodsId
-                    this.tableData= res.data.goodsSkus
+                    this.baseForm.purchasePrice= await res.data.purchasePrice
+                    this.baseForm.memberPrice= await res.data.memberPrice
+                    this.baseForm.tagPrice= await res.data.tagPrice
+                    this.goodsId= await res.data.goodsId
+                    this.tableData= await res.data.goodsSkus
 
                     if(res.data.goodsImages.length > 0) {
-                        res.data.goodsImages.forEach((item, index) => {
-                            this.imageList.push(item.imageUrl)
+                        res.data.goodsImages.forEach(async (item, index) => {
+                            await this.imageList.push(item.imageUrl)
                         })
                     }else{
                         this.imageList= []
@@ -240,7 +261,7 @@ import upload from '../../commonComponents/upload'
 
                                 if(this.customerAttributeList[i].propertyId == item.propertyId ) {
                                     console.log(i, 'i')
-                                    let names= this.customerAttributeList[i].propertyName;
+                                    let names= await this.customerAttributeList[i].propertyName;
                                    // let propertyValueId= 
                                     let params= {
                                             propertyName: this.customerAttributeList[i].propertyName,
@@ -297,29 +318,16 @@ import upload from '../../commonComponents/upload'
                     await res.data.forEach(item => {
                         if(item.propertyName == '颜色') {
                             this.colorId= item.propertyId
-                            let query= {
-                                content: ''
-                            }
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.colorList= res.data
-                            })
+
+                            this.getAtttributeValueGroupList(item.propertyId, this.colorList)
                         }else if(item.propertyName == '尺码') {
                             this.sizeId= item.propertyId
-                            let query= {
-                                content: ''
-                            }
-                            console.log(item.propertyId)
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.sizeList= res.data
-                            })
+             
+                            this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
                         }else if(item.propertyName == '材料') {
                             this.caizhiId= item.propertyId
-                            let query= {
-                                content: ''
-                            }
-                            this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                                this.caizhiList= res.data
-                            })
+          
+                            this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
                         }
                     })
                 }).catch(err => {})
@@ -417,13 +425,13 @@ import upload from '../../commonComponents/upload'
                         sizes= [];
                     let goodsPropertyVo= [];
                     if(this.baseForm.colors.length > 0) {
-                        this.baseForm.colors.forEach(item => {
-                            colors.push(+item.split(',')[0])
+                        this.baseForm.colors.forEach(async item => {
+                           await colors.push(+item.split(',')[0])
                         })
                     }
                     if(this.baseForm.sizes.length > 0) {
-                        this.baseForm.sizes.forEach(item => {
-                            sizes.push(+item.split(',')[0])
+                        this.baseForm.sizes.forEach(async item => {
+                           await sizes.push(+item.split(',')[0])
                         })
                     }
                     let goodsCodeVo= {
@@ -435,9 +443,9 @@ import upload from '../../commonComponents/upload'
                     
                     if(this.customerAttribute.length > 0) {
                         console.log(this.customerAttribute, 'customerAttribute')
-                        this.customerAttribute.forEach(item => {
+                        this.customerAttribute.forEach(async item => {
                             if(item.propertyValueId && item.propertyValueId !== '') {
-                                goodsPropertyVo.push({
+                                await goodsPropertyVo.push({
                                     propertyId: +item.propertyId,
                                     propertyValueIds: [item.propertyValueId]
                                 })
@@ -446,16 +454,16 @@ import upload from '../../commonComponents/upload'
                          console.log(goodsPropertyVo, 'goodsPropertyVo123')
                     }
                     if(this.baseForm.colors.length > 0) {
-                       this.baseForm.colors.forEach(item => {
-                            goodsPropertyVo.push({
+                       this.baseForm.colors.forEach(async item => {
+                            await goodsPropertyVo.push({
                                 propertyId: +item.split(',')[1],
                                 propertyValueIds: [+item.split(',')[0],]
                             })
                        }) 
                     }
                     if(this.baseForm.sizes.length > 0) {
-                       this.baseForm.sizes.forEach(item => {
-                            goodsPropertyVo.push({
+                       this.baseForm.sizes.forEach(async item => {
+                           await goodsPropertyVo.push({
                                 propertyId: +item.split(',')[1],
                                 propertyValueIds: [+item.split(',')[0],]
                             })
