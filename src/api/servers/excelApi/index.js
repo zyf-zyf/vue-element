@@ -1,31 +1,31 @@
 //excel表格下载封装
 
 import axios from 'axios'
-import {showLoading, hideLoading} from '../../commonJs/loading'
-import{Message} from 'element-ui'
+import{Message, Loading} from 'element-ui'
+import store from '../../../store'
 
 const downLoadExcelApi= {
 
-    downLoadExcel: (url,params, name) =>{
+    downLoadExcel: (obj) =>{
+        console.log(obj, 'obj')
+        let progress= 0
         let instance = axios.create({ 
             responseType: 'blob', //返回数据的格式，可选值为arraybuffer,blob,document,json,text,stream，默认值为json
-            onDownloadProgress: function (progressEvent) {
-            // 对原生进度事件的处理         
-                //    progress = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
-                //    store.dispatch('checkProgress', progress)
-                //    if(progress == 100) {
-                //        store.dispatch('checkProgress', 0)
-                //        store.dispatch('isProgress', false)
-                //    }else {
-                //        store.dispatch('checkProgress', progress)
-                //        store.dispatch('isProgress', true)
-                //    }
-        
-            },
+            // onDownloadProgress: function (progressEvent) {
+            // // 对原生进度事件的处理         
+            //     progress = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
+            //     console.log(progress, 'progress')
+            //     store.dispatch('changeProgress', progress)
+            // },
         })
-        showLoading()
-        instance.post(url, params).then(res=>{
-           
+       // instance.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
+        const loading = Loading.service({
+            lock: true,
+            text: '123',
+            spinner: '',
+            background: 'rgba(0, 0, 0, 0.7)'
+        });
+        instance.post(obj.url, obj.query).then(res=>{
             if(res.data.size <=0 ) {
                Message({
                     message: '没有符合条件的数据，以供下载！！！！！',
@@ -33,24 +33,24 @@ const downLoadExcelApi= {
                     duration: 2000,
                     showClose: true
                 })
-
             } else {
                 var blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'}); //application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8这里表示xlsx类型　
                 if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(blob, name +'.xlsx');
-                    hideLoading()
+                    window.navigator.msSaveOrOpenBlob(blob, obj.fileName +'.xlsx');
+             
                 } else {
                     var downloadElement = document.createElement('a');
                 　　 var href = window.URL.createObjectURL(blob); //创建下载的链接
                 　　 downloadElement.href = href;
-                    downloadElement.download = name ; //下载后文件名application/ms-excel
+                    downloadElement.download= obj.fileName ; //下载后文件名application/ms-excel
+
                 　　 document.body.appendChild(downloadElement);
                 　　 downloadElement.click(); //点击下载
                 　　 document.body.removeChild(downloadElement); //下载完成移除元素
                 　　 window.URL.revokeObjectURL(href); //释放掉blo 
-                    hideLoading()
                 }
             }
+            loading.close()
         }).catch(err => {
             console.log(err, 'err')
             Message({
@@ -59,7 +59,7 @@ const downLoadExcelApi= {
                 duration: 2000,
                 showClose: true
             })
-            hideLoading()
+            loading.close()
         })
     }
 }

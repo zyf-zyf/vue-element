@@ -25,7 +25,7 @@ const service = axios.create({
 })
 
 // 设置请求头 sessionId
-service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
+// service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
 
 // post请求头 application/json
 // service.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';

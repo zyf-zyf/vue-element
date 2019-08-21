@@ -204,8 +204,6 @@ import upload from '../../commonComponents/upload'
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
                     this.imageList= []
-                    this.$store.dispatch('uploadImages', null)
-                    console.log(this.$store.state.imageArr, 'guan')
                 }).catch(_ => {});
             },
             /**获取商品品牌属性 */

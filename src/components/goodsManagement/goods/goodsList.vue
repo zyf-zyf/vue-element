@@ -121,7 +121,7 @@
                 <el-table-column prop="categoryName1" label="一级类目" width="120" ></el-table-column>
                 <el-table-column prop="categoryName2" label="二级类目" width="120" ></el-table-column>
                 <el-table-column prop="categoryName3" label="三级类目" width="120" ></el-table-column>
-                <el-table-column prop="goodsName" label="商品名称" width="150" ></el-table-column>
+                <el-table-column prop="goodsName" label="商品名称" width="150" show-overflow-tooltip ></el-table-column>
                 <el-table-column prop="goodsColor" label="颜色" width="100" ></el-table-column>
                 <el-table-column prop="goodsSize" label="尺码" width="100" ></el-table-column>
                 <el-table-column prop="purchasePrice" label="采购价" width="100" ></el-table-column>

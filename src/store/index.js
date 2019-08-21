@@ -7,7 +7,8 @@ const state= {
     isOpen: false,
     isactiviteAttribute: 'first',
     isactiviteUniqueCode: 'first',
-    imageArr: []
+    imageArr: [],
+    progress: 0,
 }
 const mutations= {
     OPEN_MENU:(state, data) => {
@@ -21,6 +22,10 @@ const mutations= {
     },
     UPLOADIMAGES: (state, data) => {
         state.imageArr=data 
+    },
+    // excel下载进度
+    CHANGE_PROGRESS: (state, data) => {
+        state.progress= data
     }
 }
 const actions= {
@@ -41,6 +46,9 @@ const actions= {
     },
     uploadImages({commit}, data) {
         commit ('UPLOADIMAGES', data)
+    },
+    changeProgress({commit}, data) {
+        commit('CHANGE_PROGRESS', data)
     }
 }
 export default new Vuex.Store({
