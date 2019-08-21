@@ -37,11 +37,13 @@
                 <el-table-column
                 prop="gmtCreate"
                 label="创建时间"
+                show-overflow-tooltip
                 >
                 </el-table-column>
                 <el-table-column
                 prop="gmtModified"
                 label="修改时间"
+                show-overflow-tooltip
                 >
                 </el-table-column>
                
@@ -60,7 +62,6 @@
                <el-form-item label="上级类目:" v-if="form.level > 1">
                     <el-cascader style="width: 100%" size="small"  v-model="form.parentCode" :options="categoryList" :props="{ checkStrictly: true ,label:'categoryName',value:'categoryCode' }" ></el-cascader>
                 </el-form-item> 
-                <!-- <el-cascader  v-model="form.parentCode" :props="props"   ></el-cascader> -->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -108,7 +109,6 @@ export default {
     },
     methods: {
         handleCommand(val) {
-            console.log(val)
             val == 'input' ? this.importExcel() : val == 'out' ? this.downLoadExcel() : ''
         },
         importExcel() {
@@ -122,9 +122,7 @@ export default {
             let that = this
             this.$server.goodsControlApi.getCategoryList().then(res => {
                 that.tableData= res.data
-            }).catch(err => {
-
-            })
+            }).catch(err => {})
         },
         /* 配置*/
          getCategoryList() {

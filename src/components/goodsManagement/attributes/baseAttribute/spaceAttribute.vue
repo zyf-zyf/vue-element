@@ -63,7 +63,6 @@
             <el-form v-model="spaceForm" label-width="100px" label-position="left">
                 <el-form-item label='尺码名称:'>
                     <el-input size="small" type='text' v-model="spaceForm.propertyValue" clearable></el-input>
-                    <!-- <small>创建多个颜色，请用逗号分隔不同颜色</small> -->
                 </el-form-item>
                 <el-form-item label="选择类别:" v-if="type == 'add'">
                     <el-select size="small" v-model="spaceForm.propertyGroupId" filterable placeholder="请选择类别" style="width: 100%">
@@ -75,7 +74,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -106,7 +104,6 @@ export default {
     props: ['propertyId'],
     data() {
         return {
-  
             righttableData: [],
             dialogVisible: false, // 尺码
             spaceForm: {
@@ -142,9 +139,7 @@ export default {
                 }
                 this.$server.goodsControlApi.getAttributeVal(this.propertyId, query).then(res => {
                     this.righttableData= res.data
-                }).catch(err => {
-
-                })
+                }).catch(err => {})
             }catch(error){this.$paramsError(error)}
         },
         handleClickCreateSpace() {
@@ -154,12 +149,10 @@ export default {
         },
         /**编辑尺码 */
         handleEditAttributeValBtn(scope) {
-            
             this.propertyValueId= scope.propertyValueId
             this.spaceForm=scope
             this.dialogVisible= true
             this.type= 'edit'
-           
         },
         /**删除尺码 */
         handleDelAttributeVal(scope) {
@@ -170,15 +163,11 @@ export default {
                     }).catch()
                 }).catch()
             }catch(error){this.$paramsError(error)}
-            
         },
         /**添加尺码 */
         handleAddAttributeVal() {
-            
-            try{
-                 
+            try{    
                 if(this.type== 'add') {
-                    
                     let params= {
                         propertyGroupId: this.spaceForm.propertyGroupId,
                         propertyValue: this.spaceForm.propertyValue,
@@ -194,7 +183,6 @@ export default {
                         propertyValue: this.spaceForm.propertyValue,
                         propertyValueId: this.propertyValueId
                     }
-                    console.log('编辑')
                     this.$server.goodsControlApi.editAttributeVal(params).then(res => {
                         this.dialogVisible= false
                         this.getAttributeVal()
@@ -203,67 +191,12 @@ export default {
             }catch(error){this.$paramsError(error)}
         },
         getRowClass ({row, column, rowIndex, columnIndex}) {
-             console.log(rowIndex, 'rowIndex')
-             console.log(columnIndex, 'columnIndex')
             if (rowIndex === 0 && columnIndex === 1) {
                 return 'color: red; cursor: pointer; '
             } else {
                 return ''
             }
         },
-        
-        /**添加分类按钮 */
-        // handleAddAttributeGroup() {
-        //     this.categoryForm= {}
-        //     this.type= 'add'
-        //     this.dialogVisibleCategory= true
-           
-        // },
-        /**添加分类 */
-        // handleAddAttributeGroupVal() {
-        //     try{
-        //         if(this.type == 'add') {
-        //             let params={
-        //                 propertyId: this.propertyId,
-        //                 groupName: this.categoryForm.groupName
-        //             }
-        //             this.$server.goodsControlApi.addGroupItem(params).then(res => {
-        //                 this.dialogVisibleCategory= false
-        //                 this.getGroupListByPropertyId(this.propertyId)
-        //             }).catch()
-        //         }else if(this.type == 'edit') {
-        //             let params= {
-        //                 groupName: this.categoryForm.groupName,
-        //                 propertyGroupId: this.propertyGroupId
-        //             }
-        //             this.$server.goodsControlApi.editGroupItem(params).then(res => {
-        //                 this.dialogVisibleCategory= false
-        //                 this.getGroupListByPropertyId(this.propertyId)
-        //             }).catch()
-        //         }
-        //     }catch(error) {this.$paramsError(error)}
-        // },
-        /**编辑分类 */
-        // handleEditAttributeGroup(scope) {
-            
-        //     this.dialogVisibleCategory= true
-        //     this.categoryForm= scope
-        //     this.type= 'edit'
-        //     this.propertyGroupId= scope.propertyGroupId
-        // },
-        /**删除分类 */
-        // handleDelAttributeGroup(scope) {
-        //     try{
-        //         let params= {
-        //             propertyGroupId: scope.propertyGroupId
-        //         }
-        //         this.$confirm('确定删除该类别？').then(_ => {
-        //             this.$server.goodsControlApi.delGroupItem(params).then(res => {
-        //                 this.getGroupListByPropertyId(this.propertyId)
-        //             })
-        //         }).catch()
-        //     }catch(error){this.$paramsError(error)}
-        // },
         handleClose() {
             this.$confirm('确认关闭？').then(_ => {
                 this.dialogVisible= false

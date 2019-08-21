@@ -34,7 +34,8 @@
                 </el-table-column>
                 <el-table-column
                 prop="gmtCreate"
-                label="修改时间">
+                show-overflow-tooltip
+                label="创建时间">
                 </el-table-column>
                 <el-table-column
                 label="操作"
@@ -58,13 +59,13 @@
         :visible.sync="dialogVisible"
         width="40%"
         :before-close="handleClose" v-model="form">
-            <el-form label-width="100px">
+            <el-form label-width="100px" label-position="left">
                 <el-form-item label='品牌名称:'>
-                    <el-input size="small" type='text' v-model="form.brandName" ></el-input>
-                    <small>创建多个类目，请用逗号分隔不同类目</small>
+                    <el-input size="small" type='text' v-model="form.brandName" placeholder="请填写品牌名称"></el-input>
+                    <small>创建多个品牌，请用逗号分隔不同品牌</small>
                 </el-form-item>
-                <el-form-item label="描述:">
-                    <el-input type="textarea" :rows="4" v-model="form.brandDesc"></el-input>
+                <el-form-item label="品牌描述:">
+                    <el-input type="textarea" :rows="4" v-model="form.brandDesc" placeholder="请填写品牌描述"></el-input>
                 </el-form-item>
                 <el-form-item label="上传LOGO:">
                     <upload :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" maxLength= "1" uploadtype="less" ></upload>

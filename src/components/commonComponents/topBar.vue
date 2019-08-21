@@ -28,7 +28,7 @@
             </div>
         </el-header>
         <!-- <el-card> -->
-            <div class="title-box" v-if="$route.meta.title">
+            <div :class="!$route.meta.tabList ? 'istitle-box' : 'title-box'" v-if="$route.meta.title">
                 <el-breadcrumb separator="/" style="line-height: 38px; margin-left: 20px">
                     
                     <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
@@ -120,17 +120,20 @@
             }
         }
     }
-    .title-box {
+    .title-box, .istitle-box {
         height: 68px;
         .title {
             font-size: 20px;
             margin-left: 20px;
             font-weight: normal;
             color:#474747;
+            box-sizing: border-box;
          
         }
-     
-
+    }
+    .istitle-box{
+        border-bottom: 1px solid #eee;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1)
     }
     .attributeMaintenance {
         height: 50px;

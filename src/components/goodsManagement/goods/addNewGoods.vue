@@ -11,12 +11,12 @@
         <div class="top">
             <el-form ref="form" :model="baseForm" label-width="100px" label-position="left">
                 <el-form-item label="商品名称:">
-                    <el-input type="text" v-model="baseForm.goodsName" size="small" placeholder="填写商品名称"></el-input>
+                    <el-input type="text" v-model="baseForm.goodsName" size="small" placeholder="请填写商品名称" clearable></el-input>
                 </el-form-item> 
                 <el-form-item label="商品编码:">
-                    <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder="不填将自动生成"></el-input>
+                    <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder= '请填写商品编码' clearable></el-input>
                 </el-form-item> 
-                <el-form-item label="选择品牌:">
+                <el-form-item label="品牌名称:">
                      <el-select v-model="baseForm.brandId" size="small" placeholder="请选择品牌">
                         <el-option
                         v-for="item in brandList"
@@ -26,18 +26,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item> 
-                <el-form-item label="选择类目:">
-                    <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange"></el-cascader>
+                <el-form-item label="类目名称:">
+                    <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange" placeholder="请选择类目"></el-cascader>
                 </el-form-item>
                 <el-form-item label="选择颜色:">
-                    <!-- <el-select v-model="baseForm.colors" size="small" multiple placeholder="请选择颜色（可多选）">
-                        <el-option
-                        v-for="item in colorList"
-                        :key="item.propertyValueId"
-                        :label="item.propertyValue"
-                        :value="item.propertyValueId+ '/' +item.propertyId">
-                        </el-option>
-                    </el-select>  -->
                     <el-select v-model="baseForm.colors" size="small"  multiple placeholder="请选择颜色（可多选）">
                         <el-option-group
                         v-for="group in colorList"
@@ -54,12 +46,6 @@
                 </el-form-item>
                 <el-form-item label="选择尺码:">
                     <el-select v-model="baseForm.sizes" value-key="propertyValueId" size="small" multiple placeholder="请选择尺码（可多选）">
-                        <!-- <el-option
-                        v-for="item in sizeList"
-                        :key="item.propertyValueId"
-                        :label="item.propertyValue"
-                        :value="item.propertyValueId+ '/' +item.propertyId">
-                        </el-option> -->
                         <el-option-group
                         v-for="group in sizeList"
                         :key="group.label"
@@ -74,22 +60,16 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="采购价格:">
-                    <el-input type="text" size="small" v-model="baseForm.purchasePrice" placeholder="请填写采购价格"></el-input>
+                    <el-input type="text" size="small" v-model="baseForm.purchasePrice" placeholder="请填写采购价格" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="吊牌价格:">
-                    <el-input type="text" size="small" v-model="baseForm.tagPrice" placeholder="请填写吊牌价格"></el-input>
+                    <el-input type="text" size="small" v-model="baseForm.tagPrice" placeholder="请填写吊牌价格" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="会员价格:">
-                    <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格"></el-input>
+                    <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="选择材质:">
                      <el-select v-model="baseForm.caizhiId" size="small" placeholder="请选择材质">
-                        <!-- <el-option
-                        v-for="item in caizhiList"
-                        :key="item.propertyValueId"
-                        :label="item.propertyValue"
-                        :value="item.propertyValueId+ '/' +item.propertyId">
-                        </el-option> -->
                         <el-option-group
                         v-for="group in caizhiList"
                         :key="group.label"
@@ -127,12 +107,12 @@
                     </el-form-item>
                 </section>
                 <el-form-item label="上传图片: ">
-                    <upload v-if="addShow" :isClear="addShow" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
+                    <upload v-if="addShow"  :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" :maxLength= "9" :imgsize="imgsize" :uploadtype="uploadtype"></upload>
                 </el-form-item>
             </el-form>
         </div>
         <div class="add-googs-btn">
-            <el-button  size="medium">生成编码</el-button>
+            <!-- <el-button  size="medium">生成编码</el-button> -->
             <el-button type="primary" size="medium" @click="handleAddGoodsSubmit">提交保存</el-button>
         </div>
         </el-dialog>
@@ -256,25 +236,11 @@ import upload from '../../commonComponents/upload'
                     console.log(res.data)
                     res.data.forEach(item => {
                         if(item.propertyName == '颜色') {
-                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                            //     this.colorList= res.data
-                            // })
                             this.getAtttributeValueGroupList(item.propertyId, this.colorList)
-                            // this.$server.goodsControlApi.getAtttributeValueGroupList(item.propertyId).then(res => {
-
-                            // })
                         }else if(item.propertyName == '尺码') {
-                           // this.getAtttributeValueGroupList(item.propertyId)
                             this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
-                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                            //     this.sizeList= res.data
-                            // })
                         }else if(item.propertyName == '材料') {
-                   
                             this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
-                            // this.$server.goodsControlApi.getAttributeVal(item.propertyId, query).then(res => {
-                            //     this.caizhiList= res.data
-                            // })
                         }
                     })
                 }).catch(err => {})
@@ -381,7 +347,6 @@ import upload from '../../commonComponents/upload'
                     }
                     
                     if(this.customerAttribute.length > 0) {
-                        console.log(this.customerAttribute, 'customerAttribute')
                         this.customerAttribute.forEach(item => {
                             if(item.propertyValueId && item.propertyValueId !== '') {
                                 goodsPropertyVo.push({
@@ -390,7 +355,6 @@ import upload from '../../commonComponents/upload'
                                 })
                             }
                         })
-                         console.log(goodsPropertyVo, 'goodsPropertyVo123')
                     }
                     if(this.baseForm.colors.length > 0) {
                        this.baseForm.colors.forEach(item => {
@@ -409,15 +373,12 @@ import upload from '../../commonComponents/upload'
                        }) 
                     }
                     if(this.baseForm.caizhiId !== '') {
-                     
-                            goodsPropertyVo.push({
-                                propertyId: this.baseForm.caizhiId.split('/')[1],
-                                propertyValueIds: [this.baseForm.caizhiId.split('/')[0],]
-                            })
-                  
+                        goodsPropertyVo.push({
+                            propertyId: this.baseForm.caizhiId.split('/')[1],
+                            propertyValueIds: [this.baseForm.caizhiId.split('/')[0],]
+                        })
                     }
-                    console.log(goodsPropertyVo, 'goodsPropertyVo')
-                    let goodsImageVo=[]
+                    let goodsImageVo=[];
                     if(this.imageList.length > 0) {
                         this.imageList.forEach((item, index) => {
                             if(index == 0) {
@@ -433,9 +394,6 @@ import upload from '../../commonComponents/upload'
                             }
                         }) 
                     }
-                    
-
-                    
                     var params= {
                         brandId: this.baseForm.brandId,
                         categoryId: this.baseForm.categoryId[0],
@@ -453,7 +411,6 @@ import upload from '../../commonComponents/upload'
                     }
                     console.log(params, 'params')
                     this.$server.goodsControlApi.addGoodsApi(params).then(res => {
-                        console.log(res, '添加商品')
                         this.imageList= []
                         this.$emit('cancelShow', false)
                         this.$emit('getGoodsList')
@@ -463,8 +420,6 @@ import upload from '../../commonComponents/upload'
                 }catch(error) {this.$paramsError(error)}
 
             },
-     
-
             delImg(idx) {
                 this.imageList.splice(idx, 1)
             },

@@ -125,7 +125,11 @@
                 this.getStockInList()
             },
             /**下载 */
-            handleClickDownload(scope) {},
+            handleClickDownload(scope) {
+                this.$server.stockControlApi.downLoadStockInBystockInId(scope.stockinId).then(res => {
+                    console.log(res)
+                })
+            },
             handlePageChange(page) {
                 this.page= page
             },

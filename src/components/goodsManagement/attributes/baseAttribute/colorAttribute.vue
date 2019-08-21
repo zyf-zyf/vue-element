@@ -44,7 +44,7 @@
         :before-close="handleClose">
             <el-form label-width="100px">
                 <el-form-item label='颜色名称:'>
-                    <el-input size="small" type='text' v-model="form.propertyValue" ></el-input>
+                    <el-input size="small" type='text' v-model="form.propertyValue" placeholder="请输入颜色名称"></el-input>
                     <small>创建多个颜色，请用逗号分隔不同颜色</small>
                 </el-form-item>
                 <el-form-item label="选择类别:" v-if="type == 'add'">
@@ -57,7 +57,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -78,12 +77,9 @@
                 form: {
                     propertyValue: '',
                     propertyGroupId: ''
-               
                 },
                 type: '',
                 category1List: []
-                
-
             }
         },
         mounted() {
@@ -99,7 +95,6 @@
             },
             getGroupListByPropertyId() {
                 try{
-           
                     let query= {
                         content: ''
                     }
@@ -133,7 +128,6 @@
                         }
                         this.$server.goodsControlApi.editAttributeVal(params).then(res => {
                             this.dialogVisible= false
-                          
                             this.getGroupListByPropertyId(this.propertyId)
                         }).catch()
                     }
@@ -153,16 +147,13 @@
                 this.form= scope
             },
             handleDelColorVal(scope) { 
-                
                 try{
-                    
                     this.$confirm('确定删除该颜色？').then(_ => {
                         this.$server.goodsControlApi.delAttributeVal(scope.propertyValueId).then(res => {
                             this.getGroupListByPropertyId()
                         }).catch()
                     }).catch()
                 }catch(error){this.$paramsError(error)}
-            
             }
         }
     }

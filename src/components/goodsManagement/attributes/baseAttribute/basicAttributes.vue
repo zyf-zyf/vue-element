@@ -31,9 +31,6 @@
                 </el-collapse-item>
             </el-collapse>
         </el-card>
-        <!-- <spaceAttribute></spaceAttribute>
-        <colorAttribute></colorAttribute>
-        <materialAttribute></materialAttribute> -->
     </div>
 </template>
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isClear">
+    <div>
         <div class="img-box" v-if="imgArr.length > 0">
             <div class="img" v-for="(item, index) in imgArr" :key="index">
                 <el-avatar shape="square" :size="150" fit="cover" :src="item"></el-avatar>
@@ -38,11 +38,7 @@
     export default {
         props: ['materialImg', 'maxLength', 'uploadtype', 'imgsize', 'isClear'],
         computed: {
-            isCleared() {
-                if(!this.isClear) {
-                    this.imgArr= []
-                }
-            },
+            
         },
         
         data() {

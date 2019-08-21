@@ -26,10 +26,12 @@
                         </el-table-column>
                         <el-table-column
                         prop="gmtCreate"
+                        show-overflow-tooltip
                         label="创建时间">
                         </el-table-column>
                         <el-table-column
                         prop="gmtModified"
+                        show-overflow-tooltip
                         label="修改时间">
                         </el-table-column>
                         <el-table-column

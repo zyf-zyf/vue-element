@@ -4,13 +4,13 @@
             <div class="goods">
                 <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="80px">
                     <el-form-item label="SPU编号">
-                        <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode"></el-input>
+                        <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="SKU编号">
-                        <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode"></el-input>
+                        <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="商品名称">
-                        <el-input size="small" placeholder="商品名称" v-model="formData.goodsName"></el-input>
+                        <el-input size="small" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="品牌名称">
                         <el-select  size="small"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
@@ -35,9 +35,9 @@
 
                     <el-form-item label="采购价格:">
                         <div class="qjbox">
-                            <el-input size="small" v-model="formData.purchasePriceFrom" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.purchasePriceFrom" placeholder="" clearable></el-input>
                             <span> - </span>
-                            <el-input size="small" v-model="formData.purchasePriceTo" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.purchasePriceTo" placeholder="" clearable></el-input>
                         </div>
                     </el-form-item>
                     <el-form-item label="创建日期:">
@@ -53,17 +53,17 @@
                     </el-form-item>
                     <el-form-item label="会员价格:">
                         <div class="qjbox">
-                            <el-input size="small" v-model="formData.memberPriceFrom" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
                             <span> - </span>
-                            <el-input size="small" v-model="formData.memberPriceTo" placeholder=""></el-input>
+                            <el-input size="small" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
                         </div>
                     </el-form-item>
                     <div style="width: 100%;"></div>
-                    <el-form-item label="显示字段:">
+                    <!-- <el-form-item label="显示字段:">
                         <el-checkbox-group v-model="formData.checkList">
                             <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item.propertyName" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
                         </el-checkbox-group>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </div>
             <div class="button-box">
@@ -150,17 +150,17 @@
         </el-card>
   
         <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
-    
+<!--     
         <el-dialog
         title="编辑商品"
         :visible.sync="editShow"
         class='edit-goods-dialog'
         top="2vh"
         :close-on-click-modal="false"	
-        >
+        > -->
             <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
          
-        </el-dialog>
+        <!-- </el-dialog> -->
   
     </div>
 </template>
