@@ -17,7 +17,7 @@
                     <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder= '请填写商品编码' clearable></el-input>
                 </el-form-item> 
                 <el-form-item label="品牌名称:">
-                     <el-select v-model="baseForm.brandId" size="small" placeholder="请选择品牌">
+                     <el-select v-model="baseForm.brandId" size="small" filterable placeholder="请选择品牌">
                         <el-option
                         v-for="item in brandList"
                         :key="item.brandId"
@@ -30,7 +30,7 @@
                     <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange" placeholder="请选择类目"></el-cascader>
                 </el-form-item>
                 <el-form-item label="选择颜色:">
-                    <el-select v-model="baseForm.colors" size="small"  multiple placeholder="请选择颜色（可多选）">
+                    <el-select v-model="baseForm.colors" size="small" filterable  multiple placeholder="请选择颜色（可多选）">
                         <el-option-group
                         v-for="group in colorList"
                         :key="group.label"
@@ -45,7 +45,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择尺码:">
-                    <el-select v-model="baseForm.sizes" value-key="propertyValueId" size="small" multiple placeholder="请选择尺码（可多选）">
+                    <el-select v-model="baseForm.sizes" value-key="propertyValueId" filterable size="small" multiple placeholder="请选择尺码（可多选）">
                         <el-option-group
                         v-for="group in sizeList"
                         :key="group.label"
@@ -69,7 +69,7 @@
                     <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="选择材质:">
-                     <el-select v-model="baseForm.caizhiId" size="small" placeholder="请选择材质">
+                     <el-select v-model="baseForm.caizhiId" size="small" filterable placeholder="请选择材质">
                         <el-option-group
                         v-for="group in caizhiList"
                         :key="group.label"
@@ -96,7 +96,7 @@
                 </el-form-item> 
                 <section v-if="customerAttribute.length >0" > 
                     <el-form-item  :label="item.propertyName" v-for="(item, index) in customerAttribute" :key="index">
-                        <el-select v-if="item.valueList" size="small" v-model='item.propertyValueId' >
+                        <el-select v-if="item.valueList" size="small" v-model='item.propertyValueId' filterable>
                             <el-option
                             v-for="itemo in item.valueList"
                             :key="itemo.propertyValueId"
@@ -256,7 +256,6 @@ import upload from '../../commonComponents/upload'
                 }
             },
             handleCheckedCuctomerAttribute() {
-               // console.log(this.checkList, 'lll')
                 if(this.checkList.length == 0) {
                     this.customerAttribute= []
                 }else{
@@ -322,7 +321,6 @@ import upload from '../../commonComponents/upload'
                     
             },
             handleAddGoodsSubmit() {
-                //this.$emit('cancelShow', false)
                 try {
                     let colors= [],
                         sizes= [];

@@ -1,6 +1,7 @@
 <template>
     <div id="space-attribute">
-        <div class="table-space-search">
+        <div class="table-search">
+             <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
             <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
         </div>
         <div class="table-box">
@@ -80,23 +81,7 @@
                 <el-button size="small" type="primary" @click="handleAddAttributeVal">提交保存</el-button>
             </span>
         </el-dialog>
-        <!-- 添加类别 -->
-        <!-- <el-dialog
-        title="分类编辑"
-        :visible.sync="dialogVisibleCategory"
-        width="40%"
-        :before-close="handleClose">
-            <el-form v-model="categoryForm" label-width="100px" label-position="left">
-                <el-form-item label='类别名称:'>
-                    <el-input size="small" type='text' v-model="categoryForm.groupName" clearable></el-input>
-                
-                </el-form-item> 
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button size="small" @click="dialogVisibleCategory = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="handleAddAttributeGroupVal">提交保存</el-button>
-            </span>
-        </el-dialog> -->
+
     </div>
 </template>
 <script>
@@ -117,7 +102,8 @@ export default {
             dialogVisibleCategory: false, // 类别
             type: '', // 操作类型 add添加、edit编辑
             propertyGroupId: '',
-            propertyValueId: ''
+            propertyValueId: '',
+            searchName: ''
         }
     },
     mounted() {
@@ -135,7 +121,7 @@ export default {
         getAttributeVal() {
             try{
                 let query= {
-                    content: ''
+                    content: this.searchName
                 }
                 this.$server.goodsControlApi.getAttributeVal(this.propertyId, query).then(res => {
                     this.righttableData= res.data

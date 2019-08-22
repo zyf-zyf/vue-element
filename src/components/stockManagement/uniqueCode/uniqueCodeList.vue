@@ -135,14 +135,14 @@
                 //     console.log(res)
                 // })
                 console.log(this.$server, 'server')
-                let params={
-                    fileName: '123',
-                    methods: 'get',
-                    url: 'https://api.dingdian.xin/ddaigo-platform/excel/exportOrderGoods',
-                    query: {"data":{"storeNo":"","startTime":1565712000000,"endTime":1566316799999,"postfix":"xlsx","userId":2}},
-                    loadingText: this.progress
-                }
-                this.$server.excelApi.downLoadExcel(params)
+                // let params={
+                //     fileName: '123',
+                //     methods: 'get',
+                //     url: 'https://api.dingdian.xin/ddaigo-platform/excel/exportOrderGoods',
+                //     query: {"data":{"storeNo":"","startTime":1565712000000,"endTime":1566316799999,"postfix":"xlsx","userId":2}},
+                //     loadingText: this.progress
+                // }
+                // this.$server.excelApi.downLoadExcel(params)
             },
             handlePageChange(page) {
                 this.page= page

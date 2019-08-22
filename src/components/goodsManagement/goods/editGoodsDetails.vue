@@ -23,7 +23,7 @@
                             <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder="请填写商品编码" clearable></el-input>
                         </el-form-item> 
                         <el-form-item label="品牌名称:">
-                            <el-select style="width: 100%" v-model="baseForm.brandId" size="small" placeholder="请选择品牌">
+                            <el-select style="width: 100%" v-model="baseForm.brandId" size="small" placeholder="请选择品牌" filterable>
                                 <el-option
                                 v-for="item in brandList"
                                 :key="item.brandId"
@@ -36,7 +36,7 @@
                             <el-cascader style="width: 100%" size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange" placeholder="请选择类目"></el-cascader>
                         </el-form-item>
                         <el-form-item label="选择颜色:">
-                            <el-select style="width: 100%" v-model="baseForm.colors" size="small"  multiple placeholder="请选择颜色（可多选）">
+                            <el-select style="width: 100%" v-model="baseForm.colors" size="small" filterable  multiple placeholder="请选择颜色（可多选）">
                                 <el-option-group
                                 v-for="group in colorList"
                                 :key="group.label"
@@ -52,7 +52,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="选择尺码:">
-                            <el-select style="width: 100%" v-model="baseForm.sizes" size="small" multiple placeholder="请选择尺码（可多选）">
+                            <el-select style="width: 100%" v-model="baseForm.sizes" filterable size="small" multiple placeholder="请选择尺码（可多选）">
                                 <el-option-group
                                 v-for="group in sizeList"
                                 :key="group.label"
@@ -76,7 +76,7 @@
                             <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                         </el-form-item>
                         <el-form-item label="选择材质:">
-                            <el-select style="width: 100%" v-model="baseForm.caizhiId" size="small" placeholder="请选择材质">
+                            <el-select style="width: 100%" v-model="baseForm.caizhiId" filterable size="small" placeholder="请选择材质">
                                 <el-option-group
                                 v-for="group in caizhiList"
                                 :key="group.label"
@@ -102,7 +102,7 @@
                         </el-form-item> 
                         <section v-if="customerAttribute.length >0" > 
                             <el-form-item  :label="item.propertyName" v-for="(item, index) in customerAttribute" :key="index + 'zs'">
-                                <el-select style="width: 100%" v-if="item.valueList" size="small" v-model='item.propertyValueId' >
+                                <el-select style="width: 100%" v-if="item.valueList" filterable size="small" v-model='item.propertyValueId' >
                                     <el-option
                                     v-for="itemo in item.valueList"
                                     :key="itemo.propertyValueId"
@@ -190,30 +190,45 @@ import upload from '../../commonComponents/upload'
                 sizeId: '',
                 caizhiId: '',
                 newCustomerList: [],
-                isReady: false
+                isReady: false, 
+                isStart: false
             }
         },
+        created() {
+            // this.getCategoryList()
+        },
         mounted() {
-            this.getCustomPropertyList()
-            this.getBrandList()
-            this.getCategoryList(),
-            this.getBasicAttribute()
+            Promise.all([ this.getBrandList(), this.getCategoryList(), this.getCustomPropertyList(),this.getBasicAttribute()]).then(() => {
+                this.getGoodsDetailByGoodsId()
+            })
+            // this.getBrandList()
+            // this.getCategoryList()
+            // this.getCustomPropertyList()
+            // this.getBasicAttribute()
+            
+           
         },
         methods: {
 
             /**获取商品属性分组列表 */
-            getAtttributeValueGroupList(id, obj) {
+            async getAtttributeValueGroupList(id, obj) {
+                console.log('开始获取分组')
                 let query= {
                     content: ''
                 }
-                this.$server.goodsControlApi.getAtttributeValueGroupList(id, query).then(async res => {
+                
+                await this.$server.goodsControlApi.getAtttributeValueGroupList(id, query).then(res => {
+                    console.log('获取分组')
                     res.data.forEach(item => {
                        obj.push({
                            label: item[0].groupName ? item[0].groupName : '无分组',
                            child: item
                        })
                     })
+                    this.isStart= true
                 })
+                console.log('获取分组结束')
+              
             },
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
@@ -225,6 +240,7 @@ import upload from '../../commonComponents/upload'
             getGoodsDetailByGoodsId() {
                 this.isReady= false
                 this.$server.goodsControlApi.detailGoodsApi(this.goodsId).then( res => {
+                    console.log('获取详情')
                     this.baseForm.spuCode= res.data.spuCode
                     this.baseForm.goodsName= res.data.goodsName
                     this.baseForm.goodsCode= res.data.goodsCode
@@ -248,11 +264,8 @@ import upload from '../../commonComponents/upload'
                         this.imageList= []
                     }
                     if(res.data.goodsSpecValues.length > 0) {
-                        console.log("if------1")
                         res.data.goodsSpecValues.forEach(  (item, index) => {
-                            console.log(item , index , this.colorId, this.sizeId, this.caizhiId,'-----')
                             if(item.propertyId == this.colorId) {
-                                  console.log("if------2",index)
                                 if(item.valueIds.indexOf(',') == -1) {
                                     this.baseForm.colors.push(item.valueIds + ',' + item.propertyId)
                                    
@@ -263,7 +276,6 @@ import upload from '../../commonComponents/upload'
                                 }
 
                             }else if(item.propertyId == this.sizeId) {
-                                  console.log("if------2",index)
                                 if(item.valueIds.indexOf(',') == -1) {
                                     this.baseForm.sizes.push(item.valueIds + ',' + item.propertyId)
                                 }else{
@@ -271,12 +283,10 @@ import upload from '../../commonComponents/upload'
                                         this.baseForm.sizes.push(itemo+ ',' + item.propertyId)
                                     })
                                 }
+                                this.isReady= true
                             }else if(item.propertyId == this.caizhiId) {
-                                console.log("if------2",index)
                                 this.baseForm.caizhiId =  (item.valueIds + ',' + item.propertyId)
                             }
-                            this.isReady
-                            console.log("ifed------3",index)
                             let arr= []
                             /**循环查询匹配自定义属性 */
                             for(var i=0; i < this.customerAttributeList.length; i++) {
@@ -304,7 +314,7 @@ import upload from '../../commonComponents/upload'
                             }
                         })
                     }
-                    console.log("isReady---------------")
+                  
                     this.isReady= true
 
                 }).catch()
@@ -326,32 +336,41 @@ import upload from '../../commonComponents/upload'
                 }
             },
             /**获取商品类目 */
-            getCategoryList() {
-                this.$server.goodsControlApi.getCategoryList().then(async res => {
-                    this.categoryList=await res.data
+            async getCategoryList() {
+                console.log('获取类目')
+                await this.$server.goodsControlApi.getCategoryList().then( res => {
+                    this.categoryList= res.data
                 }).catch()
+                console.log('类目结束')
             },
             /**获取商品属性值 */
             async getBasicAttribute() {
-                await this.$server.goodsControlApi.getBasicAttribute().then( res => {
-                    console.log(res.data)
-                     res.data.forEach(item => {
-                        if(item.propertyName == '颜色') {
-                            this.colorId= item.propertyId
+                console.log('获取基础属性')
+                await this.$server.goodsControlApi.getBasicAttribute().then(res => {
+                    res.data.forEach( item => {
 
+                        if(item.propertyName == '颜色') {
+                            console.log('颜色')
+                            this.colorId= item.propertyId
                             this.getAtttributeValueGroupList(item.propertyId, this.colorList)
+                       
                         }else if(item.propertyName == '尺码') {
+                            console.log('尺码')
                             this.sizeId= item.propertyId
-             
                             this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
+                         
                         }else if(item.propertyName == '材料') {
+                            console.log('材料')
                             this.caizhiId= item.propertyId
-          
                             this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
                         }
+                        console.log('结束')
                     })
+             
                 }).catch(err => {})
-                this.getGoodsDetailByGoodsId()
+                   
+                    console.log('基础属性')
+                
             },
             /**获取商品自定义属性 */
             getCustomPropertyList() {
@@ -437,6 +456,7 @@ import upload from '../../commonComponents/upload'
             handleChange(value) {
                 console.log(value);
             },
+            
             /**编辑商品提交 */
             handleSubmitEditGoods() {
                 try {

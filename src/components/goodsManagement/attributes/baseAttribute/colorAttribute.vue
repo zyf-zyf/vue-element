@@ -96,7 +96,7 @@
             getGroupListByPropertyId() {
                 try{
                     let query= {
-                        content: ''
+                        content: this.searchName
                     }
                     this.$server.goodsControlApi.getAttributeVal(this.propertyId, query).then(res => {
                         this.tableData= res.data

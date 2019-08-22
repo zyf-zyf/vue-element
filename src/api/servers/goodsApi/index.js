@@ -173,7 +173,7 @@ const goodsControlApi = {
     /**
         商品类目管理
      */
-    getCategoryList: async (params) => {
+    getCategoryList: async () => {
         let data= await httpRequest.get(getCategoryList)
         return data;
     },
