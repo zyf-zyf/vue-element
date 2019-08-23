@@ -122,11 +122,12 @@
                 <el-table-column prop="categoryName2" label="二级类目" width="120" ></el-table-column>
                 <el-table-column prop="categoryName3" label="三级类目" width="120" ></el-table-column>
                 <el-table-column prop="goodsName" label="商品名称" width="150" show-overflow-tooltip ></el-table-column>
-                <el-table-column v-for="(item,index) in bascAttributeList" :key="index+ 'j'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="150" show-overflow-tooltip> 
-                </el-table-column>
-                <el-table-column prop="purchasePrice" label="采购价" width="100" ></el-table-column>
-                <el-table-column prop="tagPrice" label="吊牌价" width="100" ></el-table-column>
-                <el-table-column prop="memberPrice" label="会员价" width="100" ></el-table-column>
+                <!-- <el-table-column v-for="(item,index) in bascAttributeList" :key="index+ 'j'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="150" show-overflow-tooltip> 
+                </el-table-column> -->
+                <el-table-column prop="specName" label="规格" width="120" ></el-table-column>
+                <el-table-column prop="purchasePrice" label="采购价" width="120" ></el-table-column>
+                <el-table-column prop="tagPrice" label="吊牌价" width="120" ></el-table-column>
+                <el-table-column prop="memberPrice" label="会员价" width="120" ></el-table-column>
                 <!-- 自定义属性 -->
                 <el-table-column v-for="(item,index) in formData.checkList" :key="index+ 'z'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="120" show-overflow-tooltip> 
                 </el-table-column>
@@ -298,10 +299,7 @@ export default {
                 this.$server.goodsControlApi.getGoodsList( query,params).then(res => { 
                     res.data.forEach(item => {
                         if(item.propertiesValue.length > 0) {
-                            console.log(item, 'item')
-                            console.log(item.propertiesValue, 'propertiesValue')
                             item.propertiesValue.forEach(itemChild => {
-                                console.log(itemChild, '123')
                                 /**自定义属性 */
                                 for(let i=0; i < this.CustomerCateGoryList.length; i++) {
                                     if(itemChild.propertyId ==this.CustomerCateGoryList[i]. propertyId) {
@@ -309,14 +307,6 @@ export default {
                                         item['shuxing'+itemChild.propertyId]= itemChild.propertyValues
                                     }
                                 }
-                                /**基础属性 */
-                                for(let i=0; i < this.bascAttributeList.length; i++) {
-                                    if(itemChild.propertyId ==this.bascAttributeList[i]. propertyId) {
-                                        let prop= 'shuxing'+itemChild.propertyId
-                                        item['shuxing'+itemChild.propertyId]= itemChild.propertyValues
-                                    }
-                                }
-
                             })
                         }
                     })

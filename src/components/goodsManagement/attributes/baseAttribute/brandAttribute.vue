@@ -19,7 +19,7 @@
                     <template slot-scope="scope">
                         <el-image
                         style="width: 50px; height: 50px"
-                        :src="scope.row.logoUrl"
+                        :src="scope.row.logoUrl ? scope.row.logoUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'"
                         fit="fill"></el-image>
                     </template>
                         
@@ -30,6 +30,7 @@
                 </el-table-column>
                 <el-table-column
                 prop="brandDesc"
+                show-overflow-tooltip
                 label="描述">
                 </el-table-column>
                 <el-table-column

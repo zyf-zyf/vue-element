@@ -472,7 +472,8 @@ import upload from '../../commonComponents/upload'
                         brandId: this.baseForm.brandId,
                         categoryId: this.baseForm.categoryId[2],
                         colorIds: colors,
-                        sizeIds: sizes
+                        sizeIds: sizes,
+                        spuCode: ''+this.baseForm.spuCode
                     }
                     
                     if(this.customerAttribute.length > 0) {
@@ -526,7 +527,6 @@ import upload from '../../commonComponents/upload'
                     }
                     
                     var params= {
-                        spuCode: ''+this.baseForm.spuCode,
                         brandId: this.baseForm.brandId,
                         categoryId: this.baseForm.categoryId[0],
                         categoryId2: this.baseForm.categoryId[1],
