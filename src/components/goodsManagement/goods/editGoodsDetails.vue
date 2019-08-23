@@ -191,7 +191,8 @@ import upload from '../../commonComponents/upload'
                 caizhiId: '',
                 newCustomerList: [],
                 isReady: false, 
-                isStart: false
+                isStart: false,
+                searchName: ''
             }
         },
         created() {
@@ -201,15 +202,8 @@ import upload from '../../commonComponents/upload'
             Promise.all([ this.getBrandList(), this.getCategoryList(), this.getCustomPropertyList(),this.getBasicAttribute()]).then(() => {
                 this.getGoodsDetailByGoodsId()
             })
-            // this.getBrandList()
-            // this.getCategoryList()
-            // this.getCustomPropertyList()
-            // this.getBasicAttribute()
-            
-           
         },
         methods: {
-
             /**获取商品属性分组列表 */
             async getAtttributeValueGroupList(id, obj) {
                 console.log('开始获取分组')
@@ -324,7 +318,8 @@ import upload from '../../commonComponents/upload'
                 try {
                     let query= {
                         page: this.page,
-                        size: this.size
+                        size: this.size,
+                        keyword: this.searchName
                     }
                     this.$server.goodsControlApi.getBrandList(query).then(async res => {
                         this.brandList= await res.data
@@ -605,7 +600,7 @@ import upload from '../../commonComponents/upload'
             position: absolute;
             top: -90px;
             bottom: -60px;
-            left: 675px;
+            left: 700px;
         }
         .edit-goods-right {
             width: 367px;

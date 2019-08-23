@@ -1,7 +1,7 @@
 import httpRequest from '../../commonJs/http'
 /**
  * 商品管理 */
-const getGoodsList= 'product/api/goods/list' // 获取商品列表
+const getGoodsList= 'product/api/goods/list/v2' // 获取商品列表
 const goodsItemApi= 'product/api/goods' //
 
 

@@ -7,6 +7,7 @@ const getQiniuToken= '/product/api/qiniu/token/img' /**上传图片获取七牛t
 const uploadApi= {
     imagesList: [],
     async uploadImgToQiniu(filetext, type) {
+        console.log('123')
         var that= this
         if(type == 'less') {
             this.imagesList= []
@@ -31,6 +32,7 @@ const uploadApi= {
                 console.log(err)
             })
         })
+        console.log(this.imagesList, 'imagelist')
         return  this.imagesList;
     }
 }

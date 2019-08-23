@@ -2,5 +2,5 @@
 module.exports = {
   NODE_ENV: '"production"',
   ENV_CONFIG: '"prod"',
-  BASE_API: '"https://api.dingdian.xin/youbao/"'
+  BASE_API: '"https://api.dingdian.xin/youbao"'
 }

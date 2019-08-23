@@ -59,11 +59,11 @@
                         </div>
                     </el-form-item>
                     <div style="width: 100%;"></div>
-                    <!-- <el-form-item label="显示字段:">
+                    <el-form-item label="显示字段:">
                         <el-checkbox-group v-model="formData.checkList">
-                            <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item.propertyName" @change="(checked) => handleCheckChange(checked,index)"></el-checkbox>
+                            <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item" @change="(checked) => handleCheckChange(checked,index)">{{item.propertyName}}</el-checkbox>
                         </el-checkbox-group>
-                    </el-form-item> -->
+                    </el-form-item>
                 </el-form>
             </div>
             <div class="button-box">
@@ -108,7 +108,7 @@
                 <el-table-column type="selection" width="55" fixed></el-table-column>
                 <el-table-column label="商品图"  fixed>
                     <template slot-scope="scope">
-                         <el-image style="width: 40px; height: 40px;" :src="scope.row.imageUrl" fit="cover"></el-image>
+                        <el-image style="width: 40px; height: 40px;" :src="scope.row.imageUrl ? scope.row.imageUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'" fit="cover"></el-image>
                     </template>
                 </el-table-column>
                 <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
@@ -122,11 +122,14 @@
                 <el-table-column prop="categoryName2" label="二级类目" width="120" ></el-table-column>
                 <el-table-column prop="categoryName3" label="三级类目" width="120" ></el-table-column>
                 <el-table-column prop="goodsName" label="商品名称" width="150" show-overflow-tooltip ></el-table-column>
-                <el-table-column prop="goodsColor" label="颜色" width="100" ></el-table-column>
-                <el-table-column prop="goodsSize" label="尺码" width="100" ></el-table-column>
+                <el-table-column v-for="(item,index) in bascAttributeList" :key="index+ 'j'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="150" show-overflow-tooltip> 
+                </el-table-column>
                 <el-table-column prop="purchasePrice" label="采购价" width="100" ></el-table-column>
                 <el-table-column prop="tagPrice" label="吊牌价" width="100" ></el-table-column>
                 <el-table-column prop="memberPrice" label="会员价" width="100" ></el-table-column>
+                <!-- 自定义属性 -->
+                <el-table-column v-for="(item,index) in formData.checkList" :key="index+ 'z'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="120" show-overflow-tooltip> 
+                </el-table-column>
                 <el-table-column prop="isLocked" label="状态" width="100" >
                     <template slot-scope="scope">
                         <el-tag :type="scope.row.isLocked ===1 ? 'success' : 'danger'">
@@ -150,33 +153,19 @@
         </el-card>
   
         <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
-<!--     
-        <el-dialog
-        title="编辑商品"
-        :visible.sync="editShow"
-        class='edit-goods-dialog'
-        top="2vh"
-        :close-on-click-modal="false"	
-        > -->
-            <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
-         
-        <!-- </el-dialog> -->
-  
+        <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
     </div>
 </template>
 <script>
 import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
 import editGoodsDetails from './editGoodsDetails'
-import goodsBarcodesGroup from './goodsBarcodesGroup'
 
 export default {
     components: {
         page,
         addNewGoods,
-        editGoodsDetails,
-        goodsBarcodesGroup,
-  
+        editGoodsDetails
     },
     data() {
         return {
@@ -209,14 +198,17 @@ export default {
             select2: '',
             addShow: false,
             editShow: false,
-            deleteGoodsIds: []
+            deleteGoodsIds: [],
+            bascAttributeList: [],
+            totalList: []
         }
     },
     mounted() {
         this.getCustomPropertyList()
-        this.getGoodsList()
         this.getBrandList()
         this.getTopCategoryList()
+        this.getBasicAttribute()
+        this.getGoodsList()
     },
 
    
@@ -226,7 +218,8 @@ export default {
             try {
                 let query= {
                     page: this.page,
-                    size: this.size
+                    size: this.size,
+                    keyword: ''
                 }
                 this.$server.goodsControlApi.getBrandList(query).then(res => {
                     this.brandList= res.data
@@ -271,8 +264,15 @@ export default {
                 this.$paramsError(error.message)
             }
         },
+        /**获取商品基础属性 */
+        getBasicAttribute() {
+            this.$server.goodsControlApi.getBasicAttribute().then(res => {
+                this.bascAttributeList= res.data
+            }).catch(err => {})
+        },
         // 获取商品数据
         getGoodsList() {
+           
             try {
                 
                 let params= {
@@ -295,7 +295,31 @@ export default {
                     page: this.page,
                     size: this.size
                 }
-                this.$server.goodsControlApi.getGoodsList( query,params).then(res => {
+                this.$server.goodsControlApi.getGoodsList( query,params).then(res => { 
+                    res.data.forEach(item => {
+                        if(item.propertiesValue.length > 0) {
+                            console.log(item, 'item')
+                            console.log(item.propertiesValue, 'propertiesValue')
+                            item.propertiesValue.forEach(itemChild => {
+                                console.log(itemChild, '123')
+                                /**自定义属性 */
+                                for(let i=0; i < this.CustomerCateGoryList.length; i++) {
+                                    if(itemChild.propertyId ==this.CustomerCateGoryList[i]. propertyId) {
+                                        let prop= 'shuxing'+itemChild.propertyId
+                                        item['shuxing'+itemChild.propertyId]= itemChild.propertyValues
+                                    }
+                                }
+                                /**基础属性 */
+                                for(let i=0; i < this.bascAttributeList.length; i++) {
+                                    if(itemChild.propertyId ==this.bascAttributeList[i]. propertyId) {
+                                        let prop= 'shuxing'+itemChild.propertyId
+                                        item['shuxing'+itemChild.propertyId]= itemChild.propertyValues
+                                    }
+                                }
+
+                            })
+                        }
+                    })
                     this.tableData= res.data
                     this.total= res.total
                 }).catch()
@@ -410,7 +434,7 @@ export default {
         /**商品编辑按钮 */
         editGoods(scope) {
             this.editShow= true
-            this.goodsId= scope.gid
+            this.goodsId= scope.goodsId
         },
         /** */
     }

@@ -3,7 +3,7 @@
         
           
             <div class="table-search">
-                <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;"></el-input>
+                <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch"></el-input>
                 <el-button size="small" type="primary"  @click="handleAddBrand" icon="el-icon-plus">添加品牌</el-button>
             </div>
             <el-table :data="tableData" stripe style="width: 100%">
@@ -68,7 +68,7 @@
                     <el-input type="textarea" :rows="4" v-model="form.brandDesc" placeholder="请填写品牌描述"></el-input>
                 </el-form-item>
                 <el-form-item label="上传LOGO:">
-                    <upload :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" maxLength= "1" uploadtype="less" ></upload>
+                    <upload v-if="dialogVisible" :materialImg="imageList" @handleDelImg="delImg" @changeMaterialImg="changeMaterialImg" maxLength= "1" uploadtype="less" ></upload>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -111,12 +111,16 @@
             }
         },
         methods: {
+            handleChangeSearch() {
+                this.getBrandList()
+            },
             /** 获取品牌列表 */
             getBrandList() {
                 try {
                     let query= {
                         page: this.page,
-                        size: this.size
+                        size: this.size,
+                        keyword: this.searchName
                     }
                     this.$server.goodsControlApi.getBrandList(query).then(res => {
                         this.total= res.total

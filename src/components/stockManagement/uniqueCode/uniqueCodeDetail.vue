@@ -71,7 +71,13 @@
                 }).catch(_ => {});
             },
             /**下载 */
-            handleClcikDownLoad() {}
+            handleClcikDownLoad() {
+                let obj= {
+                    url: process.env.BASE_API + '/stock/api/stockin/order/' + this.stockinId + '/excel',
+                    name: '入库单'+ this.stockinId
+                }
+                this.$server.excelApi.downLoadExcel(obj)
+            }
         }
     }
 </script>

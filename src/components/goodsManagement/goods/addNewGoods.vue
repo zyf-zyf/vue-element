@@ -175,7 +175,8 @@ import upload from '../../commonComponents/upload'
                 imgsize: '2M', // 上传图片限制大小
                 options: [],
                 isShow: true,
-                isClear: false
+                isClear: false,
+                searchName: ''
             }
         },
         
@@ -211,7 +212,8 @@ import upload from '../../commonComponents/upload'
                 try {
                     let query= {
                         page: this.page,
-                        size: this.size
+                        size: this.size,
+                        keyword: this.searchName
                     }
                     this.$server.goodsControlApi.getBrandList(query).then(res => {
                         this.brandList= res.data

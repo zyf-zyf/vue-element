@@ -15,9 +15,9 @@ const stockControlApi= {
         let data= await httpRequest.get(stockInDetailApi+ params+ '/details')
         return data;
     },
-    downLoadStockInBystockInId: async (params) => {
-        let data= await httpRequest.get(stockInDetailApi + params+ '/excel')
-        return data;
-    }
+    // downLoadStockInBystockInId: async (params) => {
+    //     let data= await httpRequest.get(stockInDetailApi + params+ '/excel')
+    //     return data;
+    // }
 }
 export default stockControlApi;

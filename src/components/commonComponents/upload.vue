@@ -54,15 +54,19 @@
             handleDelImg(idx) {
                 this.$emit('handleDelImg', idx)
             },
-            upload(e) {  
+           async upload(e) {  
                 if(this.uploadtype == 'less') {
+                    console.log('less')
                     var file= e.target.files[0]
                     if(this.uploadimgsize && this.uploadimgsize !== '') {
                         if(this.limtSize(file)) {
-                            this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                            this.imgArr=await  this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                          
                         }
                     }else{
-                        this.imgArr= this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                        
+                        this.imgArr= await this.$server.uploadApi.uploadImgToQiniu(file, this.uploadType)
+                            
                         
                     }
                 }else{

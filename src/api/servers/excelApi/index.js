@@ -9,6 +9,8 @@ const downLoadExcelApi= {
     downLoadExcel: (obj) =>{
         console.log(obj, 'obj')
         let progress= 0
+        let url= obj.url
+        let fileName= obj.name
         let instance = axios.create({ 
             responseType: 'blob', //返回数据的格式，可选值为arraybuffer,blob,document,json,text,stream，默认值为json
             // onDownloadProgress: function (progressEvent) {
@@ -21,11 +23,11 @@ const downLoadExcelApi= {
        // instance.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
         const loading = Loading.service({
             lock: true,
-            text: '123',
-            spinner: '',
+            text: '数据下载中...',
+            spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
         });
-        instance.post(obj.url, obj.query).then(res=>{
+        instance.get(url).then(res=>{
             if(res.data.size <=0 ) {
                Message({
                     message: '没有符合条件的数据，以供下载！！！！！',
@@ -36,13 +38,13 @@ const downLoadExcelApi= {
             } else {
                 var blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'}); //application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8这里表示xlsx类型　
                 if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(blob, obj.fileName +'.xlsx');
+                    window.navigator.msSaveOrOpenBlob(blob, fileName +'.xlsx');
              
                 } else {
                     var downloadElement = document.createElement('a');
                 　　 var href = window.URL.createObjectURL(blob); //创建下载的链接
                 　　 downloadElement.href = href;
-                    downloadElement.download= obj.fileName ; //下载后文件名application/ms-excel
+                    downloadElement.download= fileName ; //下载后文件名application/ms-excel
 
                 　　 document.body.appendChild(downloadElement);
                 　　 downloadElement.click(); //点击下载
