@@ -9,16 +9,16 @@
                 <el-button size="small" type="primary" icon="el-icon-download" @click="handleClcikDownLoad">下载</el-button>
             </div>
             <el-table :data="tableData" style="width:100%">
+                <el-table-column type="index" width="80"></el-table-column>
                 <el-table-column prop="brandName"  label="品牌"></el-table-column>
                 <el-table-column prop="goodsName"  label="商品名称"></el-table-column>
                 <el-table-column prop="specName" label="规格"></el-table-column>
                 <el-table-column prop="goodsPrice" label="吊牌价"></el-table-column>
                 <el-table-column prop="barCode" label="商品条码" show-overflow-tooltip></el-table-column>
-                <!-- <el-table-column prop="productCode" label="产品编码"></el-table-column> -->
                 <el-table-column prop="skuCode" label="SKU编码" show-overflow-tooltip></el-table-column>
-                <el-table-column prop='goodsQty' label="商品数量" width="100"></el-table-column>
+                <el-table-column prop='goodsQty' label="商品数量" width="80"></el-table-column>
             </el-table>
-            <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
+            <!-- <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page> -->
         </el-dialog>
     </div>
 </template>
@@ -28,7 +28,7 @@
         components: {
             page
         },
-        props: ['isShow', 'stockinId'],
+        props: ['isShow', 'stockinId', 'stockinOrderId'],
         computed: {
             dialogVisible: {
                 get() {
@@ -74,7 +74,7 @@
             handleClcikDownLoad() {
                 let obj= {
                     url: process.env.BASE_API + '/stock/api/stockin/order/' + this.stockinId + '/excel',
-                    name: '入库单'+ this.stockinId
+                    name: '入库单'+ this.stockinOrderId
                 }
                 this.$server.excelApi.downLoadExcel(obj)
             }

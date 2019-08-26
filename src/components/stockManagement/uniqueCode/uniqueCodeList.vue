@@ -63,7 +63,7 @@
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
-        <uniqueCodeDetail v-if="isShow" :stockinId="stockinId" :isShow="isShow" @cancelShow="cancelShow"></uniqueCodeDetail>
+        <uniqueCodeDetail v-if="isShow" :stockinId="stockinId" :stockinOrderId="stockinOrderId" :isShow="isShow" @cancelShow="cancelShow"></uniqueCodeDetail>
     </div>
 </template>
 <script>
@@ -91,6 +91,7 @@
                     time: []
                 },
                 stockinId: '',
+                stockinOrderId: '',
                 isShow: false
             }
         },
@@ -121,6 +122,7 @@
             /**查看 */
             handleClickCheck(scope) {
                 this.stockinId= scope.stockinId
+                this.stockinOrderId= scope.stockinOrderId
                 this.isShow= true
             },
             /**重置 */
@@ -133,11 +135,9 @@
             handleClickDownload(scope) {
                 let obj= {
                     url: process.env.BASE_API + '/stock/api/stockin/order/' + scope.stockinId + '/excel',
-                    name: '入库单'+ scope.stockinId
+                    name: '入库单'+ scope.stockinOrderId
                 }
                 this.$server.excelApi.downLoadExcel(obj)
-                
-               
             },
             handlePageChange(page) {
                 this.page= page

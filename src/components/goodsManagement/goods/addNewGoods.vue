@@ -184,13 +184,13 @@ import upload from '../../commonComponents/upload'
         },
         mounted() {
    
-            Promise.all([this.getBasicAttribute(), this.getCustomPropertyList(), this.getBrandList() ]).then(res => {
-                this.getCategoryList()
-            })
-            // this.getBasicAttribute()
-            // this.getCustomPropertyList()
-            // this.getBrandList()
-            //this.getCategoryList()
+            // Promise.all([this.getBasicAttribute(), this.getCustomPropertyList(), this.getBrandList() ]).then(res => {
+            //     this.getCategoryList()
+            // })
+            this.getBasicAttribute()
+            this.getCustomPropertyList()
+            this.getBrandList()
+            this.getCategoryList()
         },
         methods: {
             /**获取商品属性分组列表 */

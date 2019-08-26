@@ -195,9 +195,6 @@ import upload from '../../commonComponents/upload'
                 searchName: ''
             }
         },
-        created() {
-            // this.getCategoryList()
-        },
         mounted() {
             Promise.all([ this.getBrandList(), this.getCategoryList(), this.getCustomPropertyList(),this.getBasicAttribute()]).then(() => {
                 this.getGoodsDetailByGoodsId()
