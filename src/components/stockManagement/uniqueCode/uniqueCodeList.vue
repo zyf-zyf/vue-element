@@ -141,9 +141,11 @@
             },
             handlePageChange(page) {
                 this.page= page
+                this.getStockInList()
             },
             handleSizeChange(size) {
                 this.size= size
+                this.getStockInList()
             },
             cancelShow(title) {
                 this.isShow= title

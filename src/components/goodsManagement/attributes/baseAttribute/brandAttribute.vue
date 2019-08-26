@@ -1,58 +1,56 @@
 <template>
     <div>
-        
-          
-            <div class="table-search">
-                <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch"></el-input>
-                <el-button size="small" type="primary"  @click="handleAddBrand" icon="el-icon-plus">添加品牌</el-button>
-            </div>
-            <el-table :data="tableData" stripe style="width: 100%">
-                <el-table-column
-                prop="brandId"
-                label="ID"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="logoUrl"
-                label="LOGO"
-                >
-                    <template slot-scope="scope">
-                        <el-image
-                        style="width: 50px; height: 50px"
-                        :src="scope.row.logoUrl ? scope.row.logoUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'"
-                        fit="fill"></el-image>
-                    </template>
-                        
-                </el-table-column>
-                <el-table-column
-                prop="brandName"
-                label="品牌">
-                </el-table-column>
-                <el-table-column
-                prop="brandDesc"
-                show-overflow-tooltip
-                label="描述">
-                </el-table-column>
-                <el-table-column
-                prop="gmtCreate"
-                show-overflow-tooltip
-                label="创建时间">
-                </el-table-column>
-                <el-table-column
-                label="操作"
-                width="80"
-                >
-                    <template slot-scope="scope">
-                        <span @click="handleEdit(scope.row)">
-                            <el-icon class="el-icon-edit" ></el-icon>
-                        </span>
-                        <span @click="handleDel(scope.row)">
-                            <el-icon class="el-icon-delete"></el-icon>
-                        </span>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
+        <div class="table-search">
+            <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" clearable @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch"></el-input>
+            <el-button size="small" type="primary"  @click="handleAddBrand" icon="el-icon-plus">添加品牌</el-button>
+        </div>
+        <el-table :data="tableData" stripe style="width: 100%">
+            <el-table-column
+            prop="brandId"
+            label="ID"
+            >
+            </el-table-column>
+            <el-table-column
+            prop="logoUrl"
+            label="LOGO"
+            >
+                <template slot-scope="scope">
+                    <el-image
+                    style="width: 50px; height: 50px"
+                    :src="scope.row.logoUrl ? scope.row.logoUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'"
+                    fit="fill"></el-image>
+                </template>
+                    
+            </el-table-column>
+            <el-table-column
+            prop="brandName"
+            label="品牌">
+            </el-table-column>
+            <el-table-column
+            prop="brandDesc"
+            show-overflow-tooltip
+            label="描述">
+            </el-table-column>
+            <el-table-column
+            prop="gmtCreate"
+            show-overflow-tooltip
+            label="创建时间">
+            </el-table-column>
+            <el-table-column
+            label="操作"
+            width="80"
+            >
+                <template slot-scope="scope">
+                    <span @click="handleEdit(scope.row)">
+                        <el-icon class="el-icon-edit" ></el-icon>
+                    </span>
+                    <span @click="handleDel(scope.row)">
+                        <el-icon class="el-icon-delete"></el-icon>
+                    </span>
+                </template>
+            </el-table-column>
+        </el-table>
+        <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
      
         <!-- 添加品牌属性 -->
         <el-dialog

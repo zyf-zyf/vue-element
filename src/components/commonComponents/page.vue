@@ -7,7 +7,7 @@
                 @size-change="handleSizeChange(initSize)"
                 @current-change="handlePageChange(initpage)"
                 :current-page.sync="initpage"
-                :page-sizes="[10, 50, 100]"
+                :page-sizes="[10, 30, 50]"
                 :page-size.sync="initSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">

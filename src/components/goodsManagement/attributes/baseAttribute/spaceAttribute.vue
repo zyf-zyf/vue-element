@@ -1,7 +1,7 @@
 <template>
     <div id="space-attribute">
         <div class="table-search">
-             <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch"></el-input>
+             <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch" clearable></el-input>
             <el-button size="small" type="primary" icon="el-icon-plus" @click="handleClickCreateSpace">添加尺码</el-button>
         </div>
         <div class="table-box">
