@@ -318,7 +318,7 @@ import upload from '../../commonComponents/upload'
                 try {
                     let query= {
                         page: this.page,
-                        size: this.size,
+                        size: 10000,
                         keyword: this.searchName
                     }
                     this.$server.goodsControlApi.getBrandList(query).then(async res => {

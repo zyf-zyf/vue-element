@@ -2,7 +2,7 @@
     <div class="top-bar">
         <el-header style="text-align: right; font-size: 16px; height: 50px;">
             <div class="left-icon" @click="handleClickFold">
-                <i :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
+                <i style="color: #ff7068" :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
             </div>
            
             <div class="right-icon">

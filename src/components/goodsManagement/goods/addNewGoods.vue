@@ -27,13 +27,13 @@
                     </el-select>
                 </el-form-item> 
                 <el-form-item label="类目名称:">
-                    <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange" placeholder="请选择类目"></el-cascader>
+                    <el-cascader size="small" v-model="baseForm.categoryId" :options="categoryList" :props='pro' @change="handleChange"  placeholder="请选择类目"></el-cascader>
                 </el-form-item>
                 <el-form-item label="选择颜色:">
                     <el-select v-model="baseForm.colors" size="small" filterable  multiple placeholder="请选择颜色（可多选）">
                         <el-option-group
                         v-for="group in colorList"
-                        :key="group.label"
+                        :key="group.label+ new Date().getTime()"
                         :label="group.label">
                         <el-option
                             v-for="item in group.child"
@@ -48,7 +48,7 @@
                     <el-select v-model="baseForm.sizes" value-key="propertyValueId" filterable size="small" multiple placeholder="请选择尺码（可多选）">
                         <el-option-group
                         v-for="group in sizeList"
-                        :key="group.label"
+                        :key="group.label+ new Date().getTime()"
                         :label="group.label">
                             <el-option
                                 v-for="item in group.child"
@@ -69,10 +69,10 @@
                     <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="选择材质:">
-                     <el-select v-model="baseForm.caizhiId" size="small" filterable placeholder="请选择材质">
+                     <el-select v-model="baseForm.caizhiId" size="small" filterable placeholder="请选择材质" >
                         <el-option-group
                         v-for="group in caizhiList"
-                        :key="group.label"
+                        :key="group.label+ new Date().getTime()"
                         :label="group.label">
                             <el-option
                                 v-for="item in group.child"
@@ -176,15 +176,21 @@ import upload from '../../commonComponents/upload'
                 options: [],
                 isShow: true,
                 isClear: false,
-                searchName: ''
+                searchName: '',
+                colorsId: '',
+                sizeId: '',
+                caizhiId: ''
             }
         },
-        
         mounted() {
-            this.getBrandList()
-            this.getCategoryList()
-            this.getBasicAttribute(),
-            this.getCustomPropertyList()
+   
+            Promise.all([this.getBasicAttribute(), this.getCustomPropertyList(), this.getBrandList() ]).then(res => {
+                this.getCategoryList()
+            })
+            // this.getBasicAttribute()
+            // this.getCustomPropertyList()
+            // this.getBrandList()
+            //this.getCategoryList()
         },
         methods: {
             /**获取商品属性分组列表 */
@@ -208,11 +214,11 @@ import upload from '../../commonComponents/upload'
                 }).catch(_ => {});
             },
             /**获取商品品牌属性 */
-            getBrandList() {
+            async getBrandList() {
                 try {
                     let query= {
                         page: this.page,
-                        size: this.size,
+                        size: 10000,
                         keyword: this.searchName
                     }
                     this.$server.goodsControlApi.getBrandList(query).then(res => {
@@ -231,15 +237,18 @@ import upload from '../../commonComponents/upload'
                 }).catch()
             },
             /**获取商品属性值 */
-            getBasicAttribute() {
-                this.$server.goodsControlApi.getBasicAttribute().then(res => {
+           async getBasicAttribute() {
+               await this.$server.goodsControlApi.getBasicAttribute().then(res => {
                     console.log(res.data)
                     res.data.forEach(item => {
                         if(item.propertyName == '颜色') {
-                            this.getAtttributeValueGroupList(item.propertyId, this.colorList)
+                            this.colorsId= item.propertyId
+                            this.getAtttributeValueGroupList(this.colorsId, this.colorList)
                         }else if(item.propertyName == '尺码') {
-                            this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
+                            this.sizeId= item.propertyId
+                            this.getAtttributeValueGroupList(this.sizeId, this.sizeList)
                         }else if(item.propertyName == '材料') {
+                            this.caizhiId= item.propertyId
                             this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
                         }
                     })

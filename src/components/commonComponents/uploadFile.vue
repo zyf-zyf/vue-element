@@ -64,7 +64,7 @@
             handleBeforeUpload(file) {
 
             },
-            /**自定义上传 */
+            /**自定义文件上传 */
             handleCustomUpload(params) {
                 console.log(params)
                 /**formdata */
