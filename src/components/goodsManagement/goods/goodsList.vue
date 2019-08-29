@@ -75,7 +75,7 @@
                             <el-tooltip class="item" effect="dark" placement="top">
                                 <span slot="content">
                                     上传前下载
-                                    <a href="" style='color: red' download="模版文件">模版</a>
+                                    <a href='static/goodsTemplate.xlsx' style='color: red' download="goodsTemplate.xlsx">模版</a>
                                 </span>
                                 <i class="el-icon-warning-outline waring" style="color: red"></i>
                             </el-tooltip>
@@ -83,7 +83,7 @@
                         
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command= 'input'>导入Excel</el-dropdown-item>
-                            <el-dropdown-item command= 'out'>导出Excel</el-dropdown-item>
+                            <el-dropdown-item command= 'out' >导出Excel</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <el-dropdown trigger="click" @command="handleCommandStatus">
@@ -199,7 +199,8 @@ export default {
             editShow: false,
             deleteGoodsIds: [],
             bascAttributeList: [],
-            totalList: []
+            totalList: [],
+            skuCodeList: []
         }
     },
     mounted() {
@@ -349,14 +350,19 @@ export default {
         },
         /**批量选择 */
         handleSelectionChange(val) {
-            let arr= []
+            let arr= [],
+                skuArr= [];
             console.log(val)
             val.forEach(item => {
-                if(arr.indexOf(item.gid) == -1) {
-                    arr.push(item.gid)
+                if(arr.indexOf(item.goodsId) == -1) {
+                    arr.push(item.goodsId)
+                }
+                if(arr.indexOf(item.skuCode) == -1) {
+                    skuArr.push(item.skuCode)
                 }
             })
             this.deleteGoodsIds= arr
+            this.skuCodeList= skuArr
         },
         /**批量删除商品 */
         handleGoodsById() {
@@ -370,7 +376,16 @@ export default {
         /**商品批量启用/停用操作 */
 
         // 批量上传/下载
-        handleCommandExcel() {},
+        handleCommandExcel(val) {
+            if(val== 'out') {
+                let obj= {
+                    url: process.env.BASE_API + '/product/api/goods/export',
+                    name: '商品数据' + this.formate(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss'),
+                    params: this.skuCodeList
+                }
+                this.$server.excelApi.downLoadExcelPost(obj)
+            }
+        },
         // 批量停用/启用
         handleCommandStatus(val) {
             if(this.deleteGoodsIds.length > 0) {
@@ -424,7 +439,8 @@ export default {
             this.editShow= true
             this.goodsId= scope.goodsId
         },
-        /** */
+        /**商品数据批量导出 */
+                
     }
 }
 </script>
