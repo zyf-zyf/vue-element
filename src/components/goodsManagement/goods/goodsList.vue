@@ -99,10 +99,8 @@
                 </div>
                 <div class="btn-right">
                     <el-button size="small" type="success" @click="handleClickSearch">查 询</el-button>
-                    <el-button size="small" @click="handleReset">重 置</el-button>
-                   
+                    <el-button size="small" class="last-btn" @click="handleReset">重 置</el-button>
                 </div>
-                
             </div>
             <el-table :data="tableData"  highlight-current-row :cell-style="cellStyle" :header-cell-style="cellStyle" @selection-change="handleSelectionChange"> 
                 <el-table-column type="selection" width="55" fixed></el-table-column>
@@ -135,7 +133,6 @@
                             {{scope.row.isLocked === 1 ? '启用' : '停用'}}
                         </el-tag>
                     </template>
-                    
                 </el-table-column>
                 <el-table-column label="创建时间" width="150" show-overflow-tooltip >
                     <template slot-scope="scope">
@@ -150,8 +147,9 @@
             </el-table>
             <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-card>
-  
+        <!-- 添加商品组件 -->
         <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
+        <!-- 编辑商品组件 -->
         <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
     </div>
 </template>
@@ -168,7 +166,6 @@ export default {
     },
     data() {
         return {
-       
             page: 1,
             size: 10,
             total: null,
@@ -193,8 +190,6 @@ export default {
             category2List: [],
             category3List: [],
             brandList: [],
-            select1: '',
-            select2: '',
             addShow: false,
             editShow: false,
             deleteGoodsIds: [],
@@ -210,8 +205,6 @@ export default {
         this.getBasicAttribute()
         this.getGoodsList()
     },
-
-   
     methods: {
         /**获取商品品牌属性 */
         getBrandList() {
@@ -236,19 +229,21 @@ export default {
                 this.category1List= res.data
             })
         },
+        /**获取第一级类目 */
         handleChangeValTop() {
             this.$server.goodsControlApi.getNextCategoryList(this.formData.categoryId1.split(',')[1]).then(res => {
                 this.category2List= res.data
             }).catch()
         },
+        /**获取下级类目 */
         handleChangeValNext() {
             this.$server.goodsControlApi.getNextCategoryList(this.formData.categoryId2.split(',')[1]).then(res => {
                 this.category3List= res.data
             }).catch()
         },
-
+        /**关闭弹框 */
         cancelShow(title) {
-            console.log(title ,'title')
+         
             this.addShow= title
             this.editShow= title
         },
@@ -272,9 +267,7 @@ export default {
         },
         // 获取商品数据
         getGoodsList() {
-           
             try {
-                
                 let params= {
                     brandId: this.formData.brandId !== '' ? +this.formData.brandId  :  '',
                     categoryId1: this.formData.categoryId1.split(',')[0] !== '' ? +this.formData.categoryId1.split(',')[0] : '',
@@ -288,8 +281,7 @@ export default {
                     purchasePriceFrom: this.formData.purchasePriceFrom !== '' ?  +this.formData.purchasePriceFrom : '',
                     purchasePriceTo: this.formData.purchasePriceTo !== '' ?  +this.formData.purchasePriceTo : '',
                     skuCode: this.formData.skuCode,
-                    spuCode: this.formData.spuCode,
-                    
+                    spuCode: this.formData.spuCode, 
                 }
                 let query= {
                     page: this.page,
@@ -313,11 +305,8 @@ export default {
                     this.total= res.total
                 }).catch()
             }catch(error) {
-
                 this.$paramsError(error.message)
             }
-           
-      
         },
         /**查询按钮 */
         handleClickSearch() {
@@ -383,14 +372,17 @@ export default {
                     name: '商品数据' + this.formate(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss'),
                     params: this.skuCodeList
                 }
-                this.$server.excelApi.downLoadExcelPost(obj)
+                if(this.skuCodeList.length > 0) {
+                    this.$server.excelApi.downLoadExcelPost(obj)
+                }else{
+                    this.$confirm('请选择要下载的商品')
+                }
             }
         },
         // 批量停用/启用
         handleCommandStatus(val) {
             if(this.deleteGoodsIds.length > 0) {
                 if(val =='input') {
-    
                     this.$confirm('确定启用选中商品？').then(_ => {
                         let isLocked = 1
                         this.$server.goodsControlApi.changeGoodsStatisApi(isLocked, this.deleteGoodsIds).then(res => {
@@ -415,8 +407,7 @@ export default {
         },
   
         // 重置按钮
-        handleReset() {
-            
+        handleReset() {  
             this.formData = {
                 spuCode: '',
                 skuCode: '',
@@ -438,9 +429,7 @@ export default {
         editGoods(scope) {
             this.editShow= true
             this.goodsId= scope.goodsId
-        },
-        /**商品数据批量导出 */
-                
+        }          
     }
 }
 </script>
@@ -481,6 +470,9 @@ export default {
        
         .el-button, .el-select {
             margin-right: 10px;
+        }
+        .last-btn {
+            margin-right: 0;
         }
         
     }

@@ -80,7 +80,6 @@
 <script>
     import upload from '../../../commonComponents/upload'
     import page from '../../../commonComponents/page'
- 
     export default {
         components: {
             upload,
@@ -106,7 +105,6 @@
                 total: null,
                 type: '', /**区分编辑、新增 */
                 brandId: ''
-
             }
         },
         methods: {
@@ -236,12 +234,7 @@
                 }catch(err) {
                     this.$paramsError(err.message)
                 }
-                
             },
         }
     }
 </script>
-
-<style lang="less" scoped>
-    
-</style>

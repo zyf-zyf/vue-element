@@ -107,7 +107,6 @@ export default {
         }
     },
     mounted() {
-        //this.getGroupListByPropertyId(this.propertyId)
         this.getAttributeVal()
         this.getTopCategoryList()
     },
@@ -192,8 +191,7 @@ export default {
                 this.dialogVisible= false
                 this.dialogVisibleCategory= false
             }).catch(_ => {});
-        },
-       
+        }
     }
 }
 </script>

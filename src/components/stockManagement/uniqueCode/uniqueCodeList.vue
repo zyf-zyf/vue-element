@@ -22,7 +22,6 @@
                         <el-button size="small" type="primary" icon="el-icon-refresh" @click="handleClickReset">重置</el-button>
                     </el-form-item>
                 </el-form>
-   
             </div>
             <el-table :data="tableData" style="width:100%">
                 <el-table-column prop="stockinOrderId" label="入库单号" show-overflow-tooltip></el-table-column>
@@ -48,7 +47,6 @@
                 
                 <el-table-column  label="操作" width="80">
                     <template slot-scope="scope">
-                       
                         <el-dropdown size="small" type="text" trigger="click" placement="bottom-start">
                             <span class="el-dropdown-link" style="font-size: 12px">
                                 操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -154,7 +152,7 @@
     }
 </script>
 <style lang="less" scoped>
-     .demo-form-inline {
+    .demo-form-inline {
         display: flex;
         justify-content: space-between;
         .el-input__inner {

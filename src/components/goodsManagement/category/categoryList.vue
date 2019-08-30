@@ -126,35 +126,32 @@ export default {
         },
         /* 配置*/
          getCategoryList() {
-                const levelEnd = this.form.level;
-                const allLevelLen = this.allLevel.length;
-                let tableData = this.tableData;
-                let categoryList = JSON.parse(JSON.stringify(tableData));
-                
-                function getFormatList(list){
-                        //三级及以上
-                        for(let i = 0 ; i< list.length; i++){
-                            if(list[i]['children'] && (list[i]["categoryLevel"] < (levelEnd-1) && list[i]["categoryLevel"] < allLevelLen)){
-                                getFormatList(list[i]['children']);
-                            }else{
-                                delete list[i]['children'];
-                            }
+            const levelEnd = this.form.level;
+            const allLevelLen = this.allLevel.length;
+            let tableData = this.tableData;
+            let categoryList = JSON.parse(JSON.stringify(tableData));
+            
+            function getFormatList(list){
+                    //三级及以上
+                    for(let i = 0 ; i< list.length; i++){
+                        if(list[i]['children'] && (list[i]["categoryLevel"] < (levelEnd-1) && list[i]["categoryLevel"] < allLevelLen)){
+                            getFormatList(list[i]['children']);
+                        }else{
+                            delete list[i]['children'];
                         }
-                    console.log("getFormatList-------------",list);
-                    return list;
-                }
-                this.categoryList = getFormatList(categoryList);
+                    }
+                return list;
+            }
+            this.categoryList = getFormatList(categoryList);
             
         },
         /*  修改类目 */
         handleEdit(data) {
-            console.log("handleEdit-------",data);
-
             let  form = {
                 categoryName: data.categoryName,
                 parentCode: data.parentCode,
-                id:data.categoryId,
-                level:data.categoryLevel
+                id: data.categoryId,
+                level: data.categoryLevel
             }
             this.form = form;
             if(data.categoryLevel > 1){
@@ -166,20 +163,20 @@ export default {
         handleDel(data) {
             let id = data.categoryId
             this.$confirm('此操作将永久删除该类目, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                    }).then(() => {
-                        this.$server.goodsControlApi.delCategory(id).then(res=>{
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-                            this.getTableData();
-                        })
-                    }).catch(() => {
-                           
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$server.goodsControlApi.delCategory(id).then(res=>{
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
                     });
+                    this.getTableData();
+                })
+            }).catch(() => {
+                    
+            });
         },
         //新增类目
         handleAdd(){
@@ -230,31 +227,24 @@ export default {
                     })
             }else{
                 let regex = /\，/ig;
-                
-                console.log("regex.test-----",regex.test(params['categoryName']))
                 params['categoryName'] = params['categoryName'].replace(/\，/ig,',');
-                console.log("params----------",params)
-                
-                 this.$server.goodsControlApi.addCategory(params).then(res => {
+                this.$server.goodsControlApi.addCategory(params).then(res => {
                     this.$message({
-                            message: '添加成功',
-                            type: 'success'
-                        });
+                        message: '添加成功',
+                        type: 'success'
+                    });
 
-                        this.getTableData();
-                        this.dialogVisible = false;
+                    this.getTableData();
+                    this.dialogVisible = false;
 
-                    }).catch(err => {
+                }).catch(err => {
 
-                    })
-            }
-           
-            
+                })
+            } 
         },
         handleClose(){
             this.dialogVisible = false;
-        },
-      
+        }
     }
 }
 </script>

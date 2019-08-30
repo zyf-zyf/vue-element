@@ -167,7 +167,6 @@ import upload from '../../commonComponents/upload'
                     tagPrice: '',
                     goodsDesc: ''
                 },
-              //  goodsId: '',
                 customForm: {},
                 tableData:[],
                 brandList: [],
@@ -203,13 +202,10 @@ import upload from '../../commonComponents/upload'
         methods: {
             /**获取商品属性分组列表 */
             async getAtttributeValueGroupList(id, obj) {
-                console.log('开始获取分组')
                 let query= {
                     content: ''
                 }
-                
                 await this.$server.goodsControlApi.getAtttributeValueGroupList(id, query).then(res => {
-                    console.log('获取分组')
                     res.data.forEach(item => {
                        obj.push({
                            label: item[0].groupName ? item[0].groupName : '无分组',
@@ -218,9 +214,8 @@ import upload from '../../commonComponents/upload'
                     })
                     this.isStart= true
                 })
-                console.log('获取分组结束')
-              
             },
+            /**弹框关闭 */
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
@@ -329,40 +324,26 @@ import upload from '../../commonComponents/upload'
             },
             /**获取商品类目 */
             async getCategoryList() {
-                console.log('获取类目')
                 await this.$server.goodsControlApi.getCategoryList().then( res => {
                     this.categoryList= res.data
                 }).catch()
-                console.log('类目结束')
             },
             /**获取商品属性值 */
             async getBasicAttribute() {
-                console.log('获取基础属性')
                 await this.$server.goodsControlApi.getBasicAttribute().then(res => {
                     res.data.forEach( item => {
-
                         if(item.propertyName == '颜色') {
-                            console.log('颜色')
                             this.colorId= item.propertyId
                             this.getAtttributeValueGroupList(item.propertyId, this.colorList)
-                       
                         }else if(item.propertyName == '尺码') {
-                            console.log('尺码')
                             this.sizeId= item.propertyId
-                            this.getAtttributeValueGroupList(item.propertyId, this.sizeList)
-                         
+                            this.getAtttributeValueGroupList(item.propertyId, this.sizeList) 
                         }else if(item.propertyName == '材料') {
-                            console.log('材料')
                             this.caizhiId= item.propertyId
                             this.getAtttributeValueGroupList(item.propertyId, this.caizhiList)
                         }
-                        console.log('结束')
                     })
-             
                 }).catch(err => {})
-                   
-                    console.log('基础属性')
-                
             },
             /**获取商品自定义属性 */
             getCustomPropertyList() {
@@ -376,13 +357,13 @@ import upload from '../../commonComponents/upload'
                     this.$paramsError(error.message)
                 }
             },
+            /**选择自定义属性 */
             handleCheckedCuctomerAttribute() {
                 if(this.checkList.length == 0) {
                     this.customerAttribute= []
                 }else{
                     var isAdd= false
                     if(this.checkList.length >= this.customerAttribute.length) {
-
                         this.checkList.forEach(async item => {
                             if(this.customerAttribute.length > 0) {
                                 for(var i =0;  i < this.customerAttribute.length; i ++ ) {
@@ -426,18 +407,14 @@ import upload from '../../commonComponents/upload'
                         let isDel= false
                         this.checkList.forEach(item => {
                             for(var i=0; i < this.customerAttribute.length; i++) {
-                                if(JSON.parse(item).propertyId != this.customerAttribute[i].propertyId) {
- 
-                                }else{
+                                if(JSON.parse(item).propertyId == this.customerAttribute[i].propertyId) {
                                     delArr.push(this.customerAttribute[i])
                                 }
                             }
                         })
-                      
                         this.customerAttribute= delArr
                     }
                 }
-             
             },
             delImg(idx) {
                 this.imageList.splice(idx, 1)
@@ -504,7 +481,6 @@ import upload from '../../commonComponents/upload'
                             propertyId: +this.baseForm.caizhiId.split(',')[1],
                             propertyValueIds: [+this.baseForm.caizhiId.split(',')[0],]
                         })
-                  
                     }
                     let goodsImageVo=[]
                     if(this.imageList.length > 0) {

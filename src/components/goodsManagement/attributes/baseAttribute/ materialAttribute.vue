@@ -81,8 +81,6 @@
                 },
                 type: '',
                 category1List: []
-             
-
             }
         },
         mounted() {
@@ -90,6 +88,7 @@
             this.getTopCategoryList()
         },
         methods: {
+            /**条件查询 */
             handleChangeSearch() {
                 this.getGroupListByPropertyId()
             },
@@ -140,11 +139,9 @@
                         }
                         this.$server.goodsControlApi.editAttributeVal(params).then(res => {
                             this.dialogVisible= false
-                          
                             this.getGroupListByPropertyId(this.propertyId)
                         }).catch()
-                    }
-                    
+                    }  
                 }catch(error) {this.$paramsError(error)}
             },
             handleEdit(scope) {
@@ -155,7 +152,6 @@
             },
             handleDel(scope) {
                 try{
-               
                     this.$confirm('确定删除该材料？').then(_ => {
                         this.$server.goodsControlApi.delAttributeVal(scope.propertyValueId).then(res => {
                             this.getGroupListByPropertyId()

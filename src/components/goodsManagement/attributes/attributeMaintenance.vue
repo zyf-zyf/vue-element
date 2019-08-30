@@ -1,13 +1,11 @@
 <template>
     <div id="attribute">
-    
-            <div v-if="activiyName == 'first'">
-                <basicAttribute></basicAttribute>
-            </div>
-            <div v-if="activiyName == 'second'">
-                <customAttribute></customAttribute>
-            </div>
-   
+        <div v-if="activiyName == 'first'">
+            <basicAttribute></basicAttribute>
+        </div>
+        <div v-if="activiyName == 'second'">
+            <customAttribute></customAttribute>
+        </div>
     </div>
 </template>
 <script>

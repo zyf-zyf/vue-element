@@ -183,10 +183,6 @@ import upload from '../../commonComponents/upload'
             }
         },
         mounted() {
-   
-            // Promise.all([this.getBasicAttribute(), this.getCustomPropertyList(), this.getBrandList() ]).then(res => {
-            //     this.getCategoryList()
-            // })
             this.getBasicAttribute()
             this.getCustomPropertyList()
             this.getBrandList()
@@ -207,6 +203,7 @@ import upload from '../../commonComponents/upload'
                     })
                 })
             },
+            /**弹框关闭 */
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {
                     this.$emit('cancelShow', false)
@@ -266,13 +263,13 @@ import upload from '../../commonComponents/upload'
                     this.$paramsError(error.message)
                 }
             },
+            /**选择自定义属性 */
             handleCheckedCuctomerAttribute() {
                 if(this.checkList.length == 0) {
                     this.customerAttribute= []
                 }else{
                     var isAdd= false
                     if(this.checkList.length >= this.customerAttribute.length) {
-
                         this.checkList.forEach(async item => {
                             if(this.customerAttribute.length > 0) {
                                 for(var i =0;  i < this.customerAttribute.length; i ++ ) {
@@ -318,19 +315,16 @@ import upload from '../../commonComponents/upload'
                         this.checkList.forEach(item => {
                             console.log(item, 'item')
                             for(var i=0; i < this.customerAttribute.length; i++) {
-                                if(JSON.parse(item).propertyId != this.customerAttribute[i].propertyId) {
- 
-                                }else{
+                                if(JSON.parse(item).propertyId == this.customerAttribute[i].propertyId) {
                                     delArr.push(this.customerAttribute[i])
                                 }
                             }
                         })
-                      
                         this.customerAttribute= delArr
                     }
-                }
-                    
+                }  
             },
+            /**新建商品 */
             handleAddGoodsSubmit() {
                 try {
                     let colors= [],
@@ -427,9 +421,11 @@ import upload from '../../commonComponents/upload'
                 }catch(error) {this.$paramsError(error)}
 
             },
+            /**删除图片 */
             delImg(idx) {
                 this.imageList.splice(idx, 1)
             },
+            /**上传图片组件 */
             changeMaterialImg(file) {
                 this.imageList= file
             },
@@ -454,7 +450,6 @@ import upload from '../../commonComponents/upload'
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        
         .img {
             width: 30%;
             margin: 1%;
@@ -464,7 +459,6 @@ import upload from '../../commonComponents/upload'
             align-items: center;
             box-sizing: border-box;
             border: 1px solid #eee;;
-            
             img {
                 width: 100%;
             }
@@ -475,7 +469,6 @@ import upload from '../../commonComponents/upload'
                 color: red;
                 font-weight: 800;
                 font-size: 20px;
-
             }
         }
     }

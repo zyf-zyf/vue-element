@@ -24,27 +24,16 @@ const service = axios.create({
     },
 })
 
-// 设置请求头 sessionId
-// service.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
-
-// post请求头 application/json
-// service.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-//  service.defaults.headers['Content-Type'] = 'application/json';
-
 // 请求拦截器
 service.interceptors.request.use(
     config => {
-        // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
-        // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        // const token = store.state.token;
-        // token && (config.headers.Authorization = token);
-       // httpLoadingStr()
+ 
         showLoading();
         return config;
     },
     error => {
         console.log(error, 'error-http')
-        //httpLoadingEnd()
+
         hideLoading();
         return Promise.error(error);
     }
@@ -104,12 +93,12 @@ service.interceptors.response.use(
         let data= res.data
         if(data.code == 200 ||(data.hash && data.key)) {
            // successHandle(data.message) 成功提示暂时关闭
-            //httpLoadingEnd()
+
             hideLoading();
             return Promise.resolve(data)
         }else{
             errorHandle(data.code, data.message)
-            //httpLoadingEnd()
+     
             hideLoading();
             return Promise.reject(data)
         }

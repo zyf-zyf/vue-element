@@ -66,7 +66,6 @@
     </div>
 </template>
 <script>
-
     export default {
         props: ['propertyId'],
         data() {
@@ -134,7 +133,6 @@
                             this.getGroupListByPropertyId(this.propertyId)
                         }).catch()
                     }
-                    
                 }catch(error) {this.$paramsError(error)}
             },
             handleClose() {

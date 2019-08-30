@@ -59,9 +59,11 @@
                     this.tableData= res.data
                 })
             },
+           
             handlePageChange(page) {
                 this.page= page
             },
+             /**每页展示数据条数 */
             handleSizeChange(size) {
                 this.size= size
             },
