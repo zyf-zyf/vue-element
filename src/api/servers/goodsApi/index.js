@@ -3,6 +3,7 @@ import httpRequest from '../../commonJs/http'
  * 商品管理 */
 const getGoodsList= 'product/api/goods/list/v2' // 获取商品列表
 const goodsItemApi= 'product/api/goods' //
+const uploadGoods= 'product/api/goods/import' // 批量上传商品
 
 
 /**
@@ -71,6 +72,12 @@ const goodsControlApi = {
     generatingCommodityCode: async (params) => {
         let data= await httpRequest.post(goodsItemApi + '/code', params)
         return data;
+    },
+    /**批量上传商品 */
+    uploadGoods: async (params) => {
+        let data= await httpRequest.post(uploadGoods, params)
+        return data;
+
     },
  
     /* 商品属性 Api 接口集合*/

@@ -75,7 +75,7 @@
                             <el-tooltip class="item" effect="dark" placement="top">
                                 <span slot="content">
                                     上传前下载
-                                    <a href='static/goodsTemplate.xlsx' style='color: red' download="goodsTemplate.xlsx">模版</a>
+                                    <a href='static/2.0商品管理批量导入模板.xlsx' style='color: red' download="2.0商品管理批量导入模板.xlsx">模版</a>
                                 </span>
                                 <i class="el-icon-warning-outline waring" style="color: red"></i>
                             </el-tooltip>
@@ -151,18 +151,31 @@
         <addNewGoods v-if="addShow" :addShow="addShow" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></addNewGoods>
         <!-- 编辑商品组件 -->
         <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
+        <!-- 批量上传商品 -->
+        <uploadFile v-if="isShowUpload" :title="uploadTitle" :isShowUpload="isShowUpload" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></uploadFile>
     </div>
 </template>
 <script>
 import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
 import editGoodsDetails from './editGoodsDetails'
+import uploadFile from '../../commonComponents/uploadFile'
 
 export default {
     components: {
         page,
         addNewGoods,
-        editGoodsDetails
+        editGoodsDetails,
+        uploadFile
+    },
+    /** 监听商品批量上传 刷新商品列表 */
+    watch: {
+        isShowUpload(val) {
+            if(val == false) {
+                this.getGoodsList()
+            }
+            
+        }
     },
     data() {
         return {
@@ -195,7 +208,9 @@ export default {
             deleteGoodsIds: [],
             bascAttributeList: [],
             totalList: [],
-            skuCodeList: []
+            skuCodeList: [],
+            isShowUpload: false,
+            uploadTitle: '批量导入商品'
         }
     },
     mounted() {
@@ -246,6 +261,7 @@ export default {
          
             this.addShow= title
             this.editShow= title
+            this.isShowUpload= title
         },
         /**获取商品自定义属性 */
         getCustomPropertyList() {
@@ -377,6 +393,8 @@ export default {
                 }else{
                     this.$confirm('请选择要下载的商品')
                 }
+            }else{
+                this.isShowUpload= true
             }
         },
         // 批量停用/启用
