@@ -1,7 +1,7 @@
 <template>
   <div id="app" style="min-width: 1200px">
    
-    <el-container style="height: 100%; border: 1px solid #eee">
+    <el-container v-if="$route.path.search('login')<0 && $route.path.search('register')<0" style="height: 100%; border: 1px solid #eee">
       <leftBar></leftBar>
       <el-container style="flex-direction: column;">
         <topBar></topBar>
@@ -11,28 +11,30 @@
             <div class="routerview">
               <router-view class="fixed"></router-view>
             </div>
-            <div id="footer">
+            <!-- <div id="footer">
               <p class="a-box">
                 <a href="/">条款</a>
                 <a href="/">帮助</a>
                 <a href="/">隐私</a>
               </p>
               <p class="text">copyright 2019叮当科技产品设计部出品</p>
-            </div>
+            </div> -->
           </div>
         </el-main>
    
       </el-container>
     </el-container>
+    <login v-if="$route.path.search('login') > 0"></login> 
   </div>
 </template>
 
 <script>
   import leftBar from './components/commonComponents/leftBar'
   import topBar from './components/commonComponents/topBar'
+  import login from './components/commonComponents/login'
   export default {
     components: {
-      leftBar, topBar
+      leftBar, topBar, login
     },
     computed: {
       

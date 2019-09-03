@@ -6,10 +6,10 @@
             </div>
            
             <div class="right-icon">
-                <i class="el-icon-search"></i>
-                <el-badge :value="200" :max="99" class="item">
+                <!-- <i class="el-icon-search"></i> -->
+                <!-- <el-badge :value="200" :max="99" class="item">
                     <i class="el-icon-bell"></i>
-                </el-badge>
+                </el-badge> -->
                 <el-dropdown trigger='click'>
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">

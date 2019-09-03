@@ -2,10 +2,10 @@
     <div id="category">
         <el-card>
             <div style="margin-bottom: 30px;">
-                <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新建类目</el-button>
+                <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新建模块</el-button>
                 <el-dropdown trigger="click" @command="handleCommand">
                     <el-button plain size="small" >批量上传/下载<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-                    <el-dropdown-menu slot="dropdown" >
+                    <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command= 'input'>导入Excel</el-dropdown-item>
                         <el-dropdown-item command= 'out'>导出Excel</el-dropdown-item>
                     </el-dropdown-menu>
@@ -19,6 +19,7 @@
                 <el-table-column
                 prop="categoryId"
                 label="ID"
+               
                 >
                 </el-table-column>
 
@@ -37,29 +38,30 @@
                 <el-table-column
                 prop="gmtCreate"
                 label="创建时间"
+                width="120"
                 show-overflow-tooltip
                 >
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                 prop="gmtModified"
                 label="修改时间"
+                
                 show-overflow-tooltip
                 >
-                </el-table-column>
+                </el-table-column> -->
                
             </el-table>
         </el-card>
         <el-dialog
-        title="类目编辑"
+        title="模块编辑"
         :visible.sync="dialogVisible"
         width="40%"
         :before-close="handleClose"  v-model="form">
             <el-form label-width="100px">
-                <el-form-item label='类目名称:'>
+                <el-form-item label='模块名称:'>
                     <el-input size="small" type='text' v-model="form.categoryName" ></el-input>
-                    <small>创建多个类目，请用逗号分隔不同类目</small>
                 </el-form-item>
-               <el-form-item label="上级类目:" v-if="form.level > 1">
+               <el-form-item label="上级模块:" v-if="form.level > 1">
                     <el-cascader style="width: 100%" size="small"  v-model="form.parentCode" :options="categoryList" :props="{ checkStrictly: true ,label:'categoryName',value:'categoryCode' }" ></el-cascader>
                 </el-form-item> 
             </el-form>
@@ -76,15 +78,15 @@ export default {
         return {
             allLevel:[
                 {
-                    labelName:'一级目录',
+                    labelName:'一级模块',
                     level:1
                 },
                 {
-                    labelName:'二级目录',
+                    labelName:'二级模块',
                     level:2
                 },
                 {
-                    labelName:'三级目录',
+                    labelName:'三级模块',
                     level:3
                 },
             ],//标志当前等级
@@ -109,18 +111,14 @@ export default {
     },
     methods: {
         handleCommand(val) {
-            if(val == 'out') {
-
-                let obj= {
-                    url: process.env.BASE_API + '/product/api/goods/category/export',
-                    name: '类目列表' + this.formate(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss'),
-                }
-                this.$server.excelApi.downLoadExcel(obj)
-            }else{
-                alert('上传')
-            }
+            val == 'input' ? this.importExcel() : val == 'out' ? this.downLoadExcel() : ''
         },
-        
+        importExcel() {
+            alert('导入Excel')
+        },
+        downLoadExcel() {
+            alert('导出Excel')
+        },
         /**获取商品类目列表 */
         getTableData() {
             let that = this

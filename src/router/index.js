@@ -1,10 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/commonComponents/home'
+import Login from '../components/commonComponents/login'
+/** 商品管理 */
 import GoodsList from '../components/goodsManagement/goods/goodsList'
 import AttributeMaintenance from '../components/goodsManagement/attributes/attributeMaintenance'
 import CategoryList from '../components/goodsManagement/category/categoryList'
+
+/** 库存管理 */
 import UniqueCodeList from '../components/stockManagement/uniqueCode/uniqueCodeList'
+
+/** 系统管理 */
+import ModulesList from '../components/systemManagement/systemModules/modulesList'
+import RolesList from '../components/systemManagement/systemRoles/rolesList'
+import UsersList from '../components/systemManagement/systemUsers/usersList'
+
 
 Vue.use(Router)
 
@@ -16,6 +26,13 @@ export default new Router({
       component: Home,
       meta: {}
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+      meta: {}
+    },
+    /** 商品管理 */
     {
       path: '/goodsManagement/goods/goodsList',
       name: 'goodsList',
@@ -56,6 +73,7 @@ export default new Router({
         name: '类目管理'
       }
     },
+    /** 库存管理 */
     {
       path: '/stockManagement/uniqueCode/uniqueCodeList',
       name: 'uniqueCodeList',
@@ -75,8 +93,38 @@ export default new Router({
           }
         ]
       }
-    }
-    
+    },
+    /**系统管理 */
+    {
+      path: '/systemManagement/systemModules/modulesList',
+      name: 'modulesList',
+      component: ModulesList,
+      meta: {
+        parentName: '系统管理',
+        title: '模块列表',
+        name: '模块管理',
+      }
+    },
+    {
+      path: '/systemManagement/systemRoles/rolesList',
+      name: 'rolesList',
+      component: RolesList,
+      meta: {
+        parentName: '系统管理',
+        title: '角色列表',
+        name: '角色管理',
+      }
+    },
+    {
+      path: '/systemManagement/systemUsers/usersList',
+      name: 'usersList',
+      component: UsersList,
+      meta: {
+        parentName: '系统管理',
+        title: '用户列表',
+        name: '用户管理',
+      }
+    },
 
   ]
 })
