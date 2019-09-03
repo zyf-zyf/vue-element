@@ -24,6 +24,10 @@
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上 传</el-button>
                 <div slot="tip" class="el-upload__tip">一次最多只能上传1个文件，格式为（.xlsx）</div>
             </el-upload>
+            <div class="err-list" v-if="errData.length > 0">
+                <h3>错误商品编码:</h3>
+                <el-tag type="danger" size="small" style="margin: 5px" v-for="(item, index ) in errData" :key="''+index">{{item}}</el-tag>
+            </div>
             
         </el-dialog>
     </div>
@@ -41,7 +45,8 @@
                 limtNum: 1,
                 fileList: [],
                 isUpload: false,
-                isDisabled: false
+                isDisabled: false,
+                errData: []
             }
         },
         methods: {
@@ -92,10 +97,21 @@
                 console.log(_file, 'file')
                 this.$server.goodsControlApi.uploadGoods(formData).then(res => {
                     this.$emit('cancelShow', false)
-                }).catch()
+                }).catch(err => {
+                    console.log(err, 'err')
+                    this.errData= err.data
+                })
                 
             }
 
         }
     }
 </script>
+<style lang="less" scoped>
+    .err-list {
+        margin-top: 10px;
+        box-sizing: border-box;
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+    }
+</style>

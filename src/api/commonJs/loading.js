@@ -3,7 +3,7 @@ import {Loading} from 'element-ui'
 let loadingCount = 0;
 let loading;
 
-const startLoading = () => {
+  const startLoading = () => {
     loading = Loading.service({
       lock: true,
       text: '数据加载中……',
@@ -17,6 +17,7 @@ const startLoading = () => {
   };
   
   export const showLoading = () => {
+    console.log(loadingCount, 'start')
     if (loadingCount === 0) {
       startLoading();
     }
@@ -24,6 +25,7 @@ const startLoading = () => {
   };
   
   export const hideLoading = () => {
+    console.log(loadingCount, 'end')
     if (loadingCount <= 0) {
       return;
     }

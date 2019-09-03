@@ -4,6 +4,7 @@ import axios from 'axios'
 import{Message} from 'element-ui'
 import {showLoading, hideLoading} from './loading'
 
+
 console.log(process.env.BASE_API, 'process.env.BASE_API')
 /** axios 封装 */
 const service = axios.create({
@@ -55,14 +56,14 @@ const successHandle= (msg) => {
 const errorHandle = (code, other) => {
     // 状态码判断
     switch (code) {
-        case '404':
-            Message({
-                message: '请求资源不存在',
-                type: 'error',
-                duration: 2000,
-                showClose: true
-            })
-            break;
+        // case '404':
+        //     Message({
+        //         message: '请求资源不存在',
+        //         type: 'error',
+        //         duration: 2000,
+        //         showClose: true
+        //     })
+        //     break;
         // 500 sessionID 认证错误
         case '500':
             Message({
@@ -93,7 +94,7 @@ service.interceptors.response.use(
         let data= res.data
         if(data.code == 200 ||(data.hash && data.key)) {
            // successHandle(data.message) 成功提示暂时关闭
-
+           // showSuccessMessage(data.message)
             hideLoading();
             return Promise.resolve(data)
         }else{
