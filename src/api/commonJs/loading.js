@@ -17,7 +17,7 @@ let loading;
   };
   
   export const showLoading = () => {
-    console.log(loadingCount, 'start')
+  
     if (loadingCount === 0) {
       startLoading();
     }
@@ -25,7 +25,7 @@ let loading;
   };
   
   export const hideLoading = () => {
-    console.log(loadingCount, 'end')
+ 
     if (loadingCount <= 0) {
       return;
     }

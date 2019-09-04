@@ -74,6 +74,7 @@ export default new Router({
       }
     },
     /** 库存管理 */
+        /**唯一码 */
     {
       path: '/stockManagement/uniqueCode/uniqueCodeList',
       name: 'uniqueCodeList',
@@ -94,6 +95,28 @@ export default new Router({
         ]
       }
     },
+        /**盘点列表 */
+    // {
+    //   path: '/stockManagement/inventory/inventoryList',
+    //   name: 'inventoryList',
+    //   component: InventoryList,
+    //   meta: {
+    //     parentName: '库存管理',
+    //     title: '盘点列表',
+    //     name: '盘点列表',
+    //   }
+    // },
+    //     /**盘点问题 */
+    // {
+    //   path: '/stockManagement/inventory/inventoryProblem',
+    //   name: 'inventoryProblem',
+    //   component: InventoryProblem,
+    //   meta: {
+    //     parentName: '库存管理',
+    //     title: '盘点问题',
+    //     name: '盘点问题',
+    //   }
+    // },
     /**系统管理 */
     {
       path: '/systemManagement/systemModules/modulesList',

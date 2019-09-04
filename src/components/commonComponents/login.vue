@@ -45,23 +45,33 @@
     }
 </script>
 <style lang="less" scoped>
-    #login {  
-        height: 100%;
-        width: 100%;
+    body{
+        position: relative;
+    }
+    #login { 
+         min-height: 700px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0; 
+        // height: 100%;
+        // width: 100%;
         display: flex;
         flex-direction: row;
         .left-bg { 
             flex: 0.671875;
             height: 100%;
-            background: url(../../assets/login/beijing.png);
+            background: url(http://www.doudoufei.vip/beijing.png);
             background-size: 100% 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
             .bg-content {
                 height: 300px;
+                margin-top: 100px;
                 .bg-logo {
-                    margin-bottom: 20px;
+                    margin-bottom: 10px;
                 }
                 h1 {
                     font-size: 50px;
@@ -73,7 +83,7 @@
                 h3 {
                     font-size: 18px;
                     color: #fff;
-                    margin-top: 5px;
+                    //margin-top: 5px;
                     font-weight: 400;
                     letter-spacing: 1.5px;
                 }

@@ -1,7 +1,7 @@
 <template>
-    <div id="rolesList">
+    <div id="inventoryList">
         <el-card>
-            角色列表
+            盘点问题
         </el-card>
     </div>
 </template>

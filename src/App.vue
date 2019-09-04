@@ -29,6 +29,7 @@
 </template>
 
 <script>
+ 
   import leftBar from './components/commonComponents/leftBar'
   import topBar from './components/commonComponents/topBar'
   import login from './components/commonComponents/login'
@@ -37,12 +38,15 @@
       leftBar, topBar, login
     },
     computed: {
-      
+      isddd() {
+       
+      }
     },
     data() {
       return {
         screenWidth: document.body.clientWidth,
-        timer: false
+        timer: false,
+        isLogin: this.$route.path
       }
     },
     watch: {
@@ -55,9 +59,13 @@
               this.$store.dispatch('openMenu', false)
             }
         }
+      },
+      isLogin(val) {
+        console.log(val)
       }
     },
     mounted() {
+      console.log('app', '------------------------------------')
       if(this.screenWidth < 760) {
         this.$store.dispatch('openMenu', true)
       }
