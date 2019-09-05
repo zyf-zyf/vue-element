@@ -83,20 +83,21 @@
                 background: #ff7068;
                 border-radius: 10px;
                 color: #fff;
-               
             }
          
             .el-menu-item {
                 box-sizing: border-box;
                 width: 180px!important;
                 text-align: left;
+                height: 40px;
+                line-height: 40px;
             }
-           
         }
         .el-submenu .el-menu-item{
             min-width: 180px!important;
             
         }
+       
         .el-submenu .is-opened .el-submenu__title {
             box-shadow: 1px 10px 20px 0px 
             rgba(230, 0, 18, 0.15);

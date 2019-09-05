@@ -2,69 +2,112 @@
     <div id="goods">
         <el-card>
             <div class="goods">
-                <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" label-width="80px">
-                    <el-form-item label="SPU编号">
-                        <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="SKU编号">
-                        <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="商品名称">
-                        <el-input size="small" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="品牌名称">
-                        <el-select  size="small"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
-                            <el-option v-for="item in brandList" :key="item.brandId" :label="item.brandName" :value="item.brandId"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="一级类目">
-                        <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeValTop">
-                            <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="二级类目">
-                        <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeValNext">
-                            <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="三级类目">
-                        <el-select  size="small"  v-model="formData.categoryId3" placeholder="选择三级类目" @change="handleChangeVal">
-                            <el-option v-for="item in category3List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
-                        </el-select>
-                    </el-form-item>
-
-                    <el-form-item label="采购价格:">
-                        <div class="qjbox">
-                            <el-input size="small" v-model="formData.purchasePriceFrom" placeholder="" clearable></el-input>
-                            <span> - </span>
-                            <el-input size="small" v-model="formData.purchasePriceTo" placeholder="" clearable></el-input>
-                        </div>
-                    </el-form-item>
-                    <el-form-item label="创建日期:">
-                        <el-date-picker
-                        size="small"
-                        v-model="formData.time"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                       >
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="会员价格:">
-                        <div class="qjbox">
-                            <el-input size="small" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
-                            <span> - </span>
-                            <el-input size="small" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
-                        </div>
-                    </el-form-item>
-                    <div style="width: 100%;"></div>
-                    <el-form-item label="显示字段:">
-                        <el-checkbox-group v-model="formData.checkList">
-                            <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item" @change="(checked) => handleCheckChange(checked,index)">{{item.propertyName}}</el-checkbox>
-                        </el-checkbox-group>
-                    </el-form-item>
-                </el-form>
+                <el-collapse v-model="activeName" accordion>
+                    <el-collapse-item  name="1">
+                        <template slot="title">
+                            <span style="font-size: 14px;margin-right:10px; color:#FF7068; font-weight: normal;">点击设置查询信息</span>
+                            <i class="iconfont icon-xitongshezhi-wei" style='color:#FF7068; font-size: 14px'></i>
+                        </template>
+                        <el-form :inline="true" :model="formData" class="demo-form-inline goos-form" >
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="SPU编号:">
+                                            <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="SKU编号:">
+                                            <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="商品名称:">
+                                            <el-input size="small" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="品牌名称:">
+                                            <el-select  size="small"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
+                                                <el-option v-for="item in brandList" :key="item.brandId" :label="item.brandName" :value="item.brandId"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="一级类目:">
+                                            <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeValTop">
+                                                <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="二级类目:">
+                                            <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeValNext">
+                                                <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="三级类目:">
+                                            <el-select  size="small"  v-model="formData.categoryId3" placeholder="选择三级类目" @change="handleChangeVal">
+                                                <el-option v-for="item in category3List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="采购价格:">
+                                            <div class="qjbox">
+                                                <el-input size="small" v-model="formData.purchasePriceFrom" placeholder="" clearable></el-input>
+                                                <span> - </span>
+                                                <el-input size="small" v-model="formData.purchasePriceTo" placeholder="" clearable></el-input>
+                                            </div>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="创建日期:">
+                                <el-date-picker
+                                size="small"
+                                v-model="formData.time"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                            >
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="会员价格:">
+                                <div class="qjbox">
+                                    <el-input size="small" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
+                                    <span> - </span>
+                                    <el-input size="small" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
+                                </div>
+                            </el-form-item>
+                            <div style="width: 100%;"></div>
+                            <el-form-item label="显示字段:">
+                                <el-checkbox-group v-model="formData.checkList">
+                                    <el-checkbox style="color: #666" v-for="(item, index) in CustomerCateGoryList" :key="index" :label="item" @change="(checked) => handleCheckChange(checked,index)">{{item.propertyName}}</el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
+                        </el-form>
+                    </el-collapse-item>
+                </el-collapse>
             </div>
             <div class="button-box">
                 <div class="btn-left">
@@ -106,7 +149,7 @@
                 <el-table-column type="selection" width="55" fixed></el-table-column>
                 <el-table-column label="商品图"  fixed>
                     <template slot-scope="scope">
-                        <el-image style="width: 40px; height: 40px;" :src="scope.row.imageUrl ? scope.row.imageUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'" fit="cover"></el-image>
+                        <el-image style="width: 30px; height: 30px;" :src="scope.row.imageUrl ? scope.row.imageUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'" fit="cover"></el-image>
                     </template>
                 </el-table-column>
                 <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
@@ -129,7 +172,7 @@
                 </el-table-column>
                 <el-table-column prop="isLocked" label="状态" width="100" >
                     <template slot-scope="scope">
-                        <el-tag :type="scope.row.isLocked ===1 ? 'success' : 'danger'">
+                        <el-tag size="small" :type="scope.row.isLocked ===1 ? 'success' : 'danger'">
                             {{scope.row.isLocked === 1 ? '启用' : '停用'}}
                         </el-tag>
                     </template>
@@ -183,6 +226,7 @@ export default {
             size: 10,
             total: null,
             tableData: [],
+            activeName: '',
             CustomerCateGoryList: [], /**自定义属性 */
             formData: {
                 spuCode: '',
@@ -461,9 +505,6 @@ export default {
             padding-right: 15px !important;
         }
         .qjbox {
-            width: 150%;
-            display: flex;
-            flex-wrap: nowrap;
             span {
                 width: 20px;  
                 text-align: center;
@@ -472,13 +513,13 @@ export default {
                 width: 80px
             }
         }
-        .el-input , .el-select{
-            width: 180px;
+        .el-row {
+            width: 100%;
         }
         .el-form-item {
-            margin-right: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
         }
+      
     }
     
     .button-box,.btn-left, .btn-right {

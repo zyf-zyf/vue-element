@@ -87,7 +87,7 @@
             </el-form>
         </div>
         <div class="bottom" style="margin: 30px 0;">
-            <span style="line-height: 24px; font-size: 18px; color: #303133;">自定义属性</span>
+            <span style="line-height: 24px; font-size: 18px; color: #303133; margin-left: -20px;">自定义属性</span>
             <el-form ref="form" :model="customForm" label-width="80px">
                 <el-form-item label="选择属性:">
                     <el-checkbox-group v-model="checkList"  @change="handleCheckedCuctomerAttribute">

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="min-width: 1200px">
+  <div id="app" style="min-width: 1440px">
    
     <el-container v-if="$route.path.search('login')<0 && $route.path.search('register')<0" style="height: 100%; border: 1px solid #eee">
       <leftBar></leftBar>
@@ -114,7 +114,7 @@
        .routerview {
            min-height: calc(100% - 65px);
            box-sizing: border-box;
-           padding: 20px;
+           padding: 0 20px 20px;
        }
        #footer {
          height: 60px;

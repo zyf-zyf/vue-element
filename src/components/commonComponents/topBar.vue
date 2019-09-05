@@ -27,23 +27,18 @@
                 </el-dropdown> 
             </div>
         </el-header>
-        <!-- <el-card> -->
-            <div :class="!$route.meta.tabList ? 'istitle-box' : 'title-box'" v-if="$route.meta.title">
-                <el-breadcrumb separator="/" style="line-height: 38px; margin-left: 20px">
-                    
-                    <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
-                    <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
-                </el-breadcrumb>
-                <h2 class="title" >{{$route.meta.title}}</h2>
-            </div>
-            <div class="attributeMaintenance" v-if="$route.meta.tabList && $route.meta.tabList.length> 0 "> 
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
-                </el-tabs>
-            </div>
-        <!-- </el-card> -->
- 
-     
+        <div :class="!$route.meta.tabList ? 'istitle-box' : 'title-box'" v-if="$route.meta.title">
+            <el-breadcrumb separator=">" style="line-height: 20px; margin-left: 20px">
+                <el-breadcrumb-item>{{$route.meta.parentName}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{$route.meta.name}}</el-breadcrumb-item>
+            </el-breadcrumb>
+            <h2 class="title" >{{$route.meta.title}}</h2>
+        </div>
+        <div class="attributeMaintenance" v-if="$route.meta.tabList && $route.meta.tabList.length> 0 "> 
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
+            </el-tabs>
+        </div>
     </div>
 </template>
 <script>
@@ -72,7 +67,6 @@
                 }else if(this.$route.name == 'uniqueCodeList'){
                     this.$store.dispatch('isActiviteUniqueCode',this.activeName)
                 }
-               
             }
         },
 
@@ -121,9 +115,9 @@
         }
     }
     .title-box, .istitle-box {
-        height: 68px;
+       // height: 48px;
         .title {
-            font-size: 20px;
+            font-size: 16px;
             margin-left: 20px;
             font-weight: normal;
             color:#474747;
@@ -136,10 +130,10 @@
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.1)
     }
     .attributeMaintenance {
-        height: 50px;
+        height: 40px;
         box-sizing: border-box;
-        padding-top:10px;
-        padding-left: 30px;
+        //padding-top:10px;
+        padding-left: 20px;
         .isactivite {
             color: #e60012;
             border-bottom: 1px solid #e60012;
@@ -150,6 +144,9 @@
     }
     .el-dropdown-menu {
         min-width: 80px;
+    }
+    .el-breadcrumb {
+        font-size: 12px;
     }
 
     @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/

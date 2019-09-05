@@ -47,11 +47,11 @@ const Menu=[
         icon: 'iconfont icon-xitongshezhi-wei',
         path: '/systemManagement',
         children: [
-            {
-                id: '1-3-1',
-                title: '模块管理',
-                path: '/systemManagement/systemModules/modulesList'
-            },
+            // {
+            //     id: '1-3-1',
+            //     title: '模块管理',
+            //     path: '/systemManagement/systemModules/modulesList'
+            // },
             {
                 id: '1-3-2',
                 title: '角色管理',
