@@ -4,7 +4,7 @@
             <el-collapse v-model="activeNames" @change="handleChange(item,index)" accordion>
                 <el-collapse-item :name=index>
                     <template slot="title">
-                        <h3>{{item.propertyName}}</h3>
+                        <span>{{item.propertyName}}</span>
                     </template>
                     <div style="padding-top: 10px">
 
@@ -33,6 +33,9 @@
                         prop="gmtModified"
                         show-overflow-tooltip
                         label="修改时间">
+                            <template slot-scope="scope">
+                                {{ scope.row.gmtModified ? scope.row.gmtModified : '----'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                         label="操作"

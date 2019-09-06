@@ -1,7 +1,7 @@
 <template>
     <div id="category">
         <el-card>
-            <div style="margin-bottom: 30px;">
+            <div style="margin-bottom: 10px;">
                 <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新建类目</el-button>
                 <el-dropdown trigger="click" @command="handleCommand">
                     <el-button plain size="small" >批量上传/下载<i class="el-icon-arrow-down el-icon--right"></i></el-button>
@@ -45,6 +45,9 @@
                 label="修改时间"
                 show-overflow-tooltip
                 >
+                    <template slot-scope="scope">
+                        {{ scope.row.gmtModified ? formate(scope.row.gmtModified, 'yyyy/MM/dd hh:mm:ss') : '----'}}
+                    </template>
                 </el-table-column>
                
             </el-table>

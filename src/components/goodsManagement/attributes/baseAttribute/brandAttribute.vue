@@ -24,6 +24,7 @@
             </el-table-column>
             <el-table-column
             prop="brandName"
+            show-overflow-tooltip
             label="品牌">
             </el-table-column>
             <el-table-column

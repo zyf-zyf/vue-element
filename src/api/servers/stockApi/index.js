@@ -7,17 +7,15 @@ const stockInDetailApi= 'stock/api/stockin/order/'
 
 
 const stockControlApi= {
+    /**入库单列表 */
     getStockInList: async (params) => {
         let data= await httpRequest.get(stockInListApi, {params})
         return data;
     },
-    getStockInDeatil: async (params) => {
-        let data= await httpRequest.get(stockInDetailApi+ params+ '/details')
+    /**入库单详情 */
+    getStockInDeatil: async (id, params) => {
+        let data= await httpRequest.get(stockInDetailApi+ id+ '/details',{params})
         return data;
     },
-    // downLoadStockInBystockInId: async (params) => {
-    //     let data= await httpRequest.get(stockInDetailApi + params+ '/excel')
-    //     return data;
-    // }
 }
 export default stockControlApi;

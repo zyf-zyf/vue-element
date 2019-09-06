@@ -55,11 +55,10 @@
 //@import url(../../style/leftBar.less);
     .logo {
         width: 100%;
-        height: 50px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-       
     }
     
     .el-aside {

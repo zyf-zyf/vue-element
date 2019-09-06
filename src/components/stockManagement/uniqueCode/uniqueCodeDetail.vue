@@ -9,9 +9,9 @@
                 <el-button size="small" type="primary" icon="el-icon-download" @click="handleClcikDownLoad">下载</el-button>
             </div>
             <el-table :data="tableData" style="width:100%">
-                <el-table-column type="index" width="80"></el-table-column>
-                <el-table-column prop="brandName"  label="品牌"></el-table-column>
-                <el-table-column prop="goodsName"  label="商品名称"></el-table-column>
+                <el-table-column type="index" width="60"></el-table-column>
+                <el-table-column prop="brandName"  label="品牌" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="goodsName"  label="商品名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="specName" label="规格"></el-table-column>
                 <el-table-column prop="goodsPrice" label="吊牌价"></el-table-column>
                 <el-table-column prop="barCode" label="商品条码" show-overflow-tooltip></el-table-column>
@@ -53,7 +53,11 @@
         methods: {
             /**获取入库单详情 */
             getStockInDetail() {
-                this.$server.stockControlApi.getStockInDeatil(this.stockinId).then(async res => {
+                let params= {
+                    page: this.page,
+                    size: this.size
+                }
+                this.$server.stockControlApi.getStockInDeatil(this.stockinId).then(res => {
                     console.log(res, 'res')
                     this.total= res.total
                     this.tableData= res.data
@@ -62,10 +66,12 @@
            
             handlePageChange(page) {
                 this.page= page
+                this.getStockInDetail()
             },
              /**每页展示数据条数 */
             handleSizeChange(size) {
                 this.size= size
+                this.getStockInDetail()
             },
             handleClose(done) {
                 this.$confirm('确认关闭？').then(_ => {

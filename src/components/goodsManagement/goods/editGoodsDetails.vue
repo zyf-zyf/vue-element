@@ -75,6 +75,9 @@
                         <el-form-item label="会员价格:">
                             <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                         </el-form-item>
+                        <el-form-item label="折扣价格:">
+                            <el-input type="text" size="small" v-model="baseForm.discountPrice" placeholder="请填写折扣价格" clearable></el-input>
+                        </el-form-item>
                         <el-form-item label="选择材质:">
                             <el-select style="width: 100%" v-model="baseForm.caizhiId" filterable size="small" placeholder="请选择材质">
                                 <el-option-group
@@ -165,7 +168,8 @@ import upload from '../../commonComponents/upload'
                     purchasePrice: '',
                     memberPrice: '',
                     tagPrice: '',
-                    goodsDesc: ''
+                    goodsDesc: '',
+                    discountPrice: ''
                 },
                 customForm: {},
                 tableData:[],
@@ -241,6 +245,7 @@ import upload from '../../commonComponents/upload'
                     this.goodsId= res.data.goodsId
                     this.tableData= res.data.goodsSkus
                     this.goodsSpecValues= res.data.goodsSpecValues
+                    this.baseForm.discountPrice= res.data.discountPrice
 
                     if(res.data.goodsImages.length > 0) {
                         res.data.goodsImages.forEach( (item, index) => {
@@ -512,7 +517,8 @@ import upload from '../../commonComponents/upload'
                         tagPrice: +this.baseForm.tagPrice,
                         goodsCodeVo: goodsCodeVo,
                         goodsPropertyVo: goodsPropertyVo,
-                        goodsImageVo: goodsImageVo
+                        goodsImageVo: goodsImageVo,
+                        discountPrice: + this.baseForm.discountPrice
                     }
                     console.log(params, 'params')
                     this.$server.goodsControlApi.editGoodsApi(this.goodsId, params).then(res => {

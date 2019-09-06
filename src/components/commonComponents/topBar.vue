@@ -1,6 +1,6 @@
 <template>
     <div class="top-bar">
-        <el-header style="text-align: right; font-size: 16px; height: 50px;">
+        <el-header style="text-align: right; font-size: 16px; height: 40px;">
             <div class="left-icon" @click="handleClickFold">
                 <i style="color: #ff7068" :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
             </div>
@@ -80,7 +80,7 @@
     .el-header {
         background-color: #474747;
         color: #333;
-        line-height: 50px;
+        line-height: 40px;
         box-sizing: border-box;
         border-bottom: 1px solid #eee;
         display: flex;
@@ -117,7 +117,7 @@
     .title-box, .istitle-box {
        // height: 48px;
         .title {
-            font-size: 16px;
+            font-size: 14px;
             margin-left: 20px;
             font-weight: normal;
             color:#474747;

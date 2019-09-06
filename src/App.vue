@@ -114,7 +114,7 @@
        .routerview {
            min-height: calc(100% - 65px);
            box-sizing: border-box;
-           padding: 0 20px 20px;
+           padding: 0 10px 10px;
        }
        #footer {
          height: 60px;

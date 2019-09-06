@@ -39,7 +39,11 @@
                     <el-table-column prop="propertyValue" label="尺码名称"></el-table-column>
                     <el-table-column prop="groupName" label="分组"></el-table-column>
                     <el-table-column prop="gmtCreate" label="创建时间" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="gmtModified" label="修改时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="gmtModified" label="修改时间" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                            {{ scope.row.gmtModified ? scope.row.gmtModified : '----'}}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="80">
                         <template slot-scope="scope">
                             <span @click="handleEditAttributeValBtn(scope.row)">

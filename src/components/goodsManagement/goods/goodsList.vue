@@ -1,7 +1,7 @@
 <template>
     <div id="goods">
         <el-card>
-            <div class="goods">
+            <div class="goods" id="goods_list">
                 <el-collapse v-model="activeName" accordion>
                     <el-collapse-item  name="1">
                         <template slot="title">
@@ -13,28 +13,28 @@
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="SPU编号:">
-                                            <el-input size="small" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
+                                            <el-input size="mini" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="SKU编号:">
-                                            <el-input size="small" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
+                                            <el-input size="mini" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="商品名称:">
-                                            <el-input size="small" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
+                                            <el-input size="mini" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="品牌名称:">
-                                            <el-select  size="small"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
+                                            <el-select  size="mini"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
                                                 <el-option v-for="item in brandList" :key="item.brandId" :label="item.brandName" :value="item.brandId"></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -45,7 +45,7 @@
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="一级类目:">
-                                            <el-select  size="small"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeValTop">
+                                            <el-select  size="mini"  v-model="formData.categoryId1" placeholder="选择一级类目" @change="handleChangeValTop">
                                                 <el-option v-for="item in category1List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -54,7 +54,7 @@
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="二级类目:">
-                                            <el-select  size="small"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeValNext">
+                                            <el-select  size="mini"  v-model="formData.categoryId2" placeholder="选择二级类目" @change="handleChangeValNext">
                                                 <el-option v-for="item in category2List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId+','+item.categoryCode"></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -63,7 +63,7 @@
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="三级类目:">
-                                            <el-select  size="small"  v-model="formData.categoryId3" placeholder="选择三级类目" @change="handleChangeVal">
+                                            <el-select  size="mini"  v-model="formData.categoryId3" placeholder="选择三级类目" @change="handleChangeVal">
                                                 <el-option v-for="item in category3List" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId"></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -73,9 +73,9 @@
                                     <div class="grid-content">
                                         <el-form-item label="采购价格:">
                                             <div class="qjbox">
-                                                <el-input size="small" v-model="formData.purchasePriceFrom" placeholder="" clearable></el-input>
+                                                <el-input size="mini" v-model="formData.purchasePriceFrom" placeholder="" clearable></el-input>
                                                 <span> - </span>
-                                                <el-input size="small" v-model="formData.purchasePriceTo" placeholder="" clearable></el-input>
+                                                <el-input size="mini" v-model="formData.purchasePriceTo" placeholder="" clearable></el-input>
                                             </div>
                                         </el-form-item>
                                     </div>
@@ -83,20 +83,20 @@
                             </el-row>
                             <el-form-item label="创建日期:">
                                 <el-date-picker
-                                size="small"
+                                size="mini"
                                 v-model="formData.time"
                                 type="daterange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
-                            >
+                                >
                                 </el-date-picker>
                             </el-form-item>
                             <el-form-item label="会员价格:">
                                 <div class="qjbox">
-                                    <el-input size="small" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
+                                    <el-input size="mini" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
                                     <span> - </span>
-                                    <el-input size="small" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
+                                    <el-input size="mini" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
                                 </div>
                             </el-form-item>
                             <div style="width: 100%;"></div>
@@ -123,7 +123,6 @@
                                 <i class="el-icon-warning-outline waring" style="color: red"></i>
                             </el-tooltip>
                         </el-button>
-                        
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command= 'input'>导入Excel</el-dropdown-item>
                             <el-dropdown-item command= 'out' >导出Excel</el-dropdown-item>
@@ -167,6 +166,7 @@
                 <el-table-column prop="purchasePrice" label="采购价" width="120" ></el-table-column>
                 <el-table-column prop="tagPrice" label="吊牌价" width="120" ></el-table-column>
                 <el-table-column prop="memberPrice" label="会员价" width="120" ></el-table-column>
+                <el-table-column prop="discountPrice" label="折扣价" width="120" ></el-table-column>
                 <!-- 自定义属性 -->
                 <el-table-column v-for="(item,index) in formData.checkList" :key="index+ 'z'" :label="item.propertyName" :prop='"shuxing" +item.propertyId' width="120" show-overflow-tooltip> 
                 </el-table-column>
@@ -510,7 +510,7 @@ export default {
                 text-align: center;
             }
             .el-input {
-                width: 80px
+                width: 70px
             }
         }
         .el-row {

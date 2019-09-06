@@ -22,6 +22,9 @@
              <el-table-column
             prop="gmtModified"
             label="修改时间">
+                <template slot-scope="scope">
+                    {{ scope.row.gmtModified ? scope.row.gmtModified : '----'}}
+                </template>
             </el-table-column>
             <el-table-column
             label="操作" width="80">

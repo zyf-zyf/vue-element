@@ -68,6 +68,9 @@
                 <el-form-item label="会员价格:">
                     <el-input type="text" size="small" v-model="baseForm.memberPrice" placeholder="请填写会员价格" clearable></el-input>
                 </el-form-item>
+                <el-form-item label="折扣价格:">
+                    <el-input type="text" size="small" v-model="baseForm.discountPrice" placeholder="请填写折扣价格" clearable></el-input>
+                </el-form-item>
                 <el-form-item label="选择材质:">
                      <el-select v-model="baseForm.caizhiId" size="small" filterable placeholder="请选择材质" >
                         <el-option-group
@@ -151,7 +154,8 @@ import upload from '../../commonComponents/upload'
                     caizhiId: [],
                     purchasePrice: '',
                     memberPrice: '',
-                    tagPrice: ''
+                    tagPrice: '',
+                    discountPrice: '', // 9-6新加活动价
                 },
                 pro: {
                     value: 'categoryId',
@@ -357,6 +361,7 @@ import upload from '../../commonComponents/upload'
                             }
                         })
                     }
+                    /**商品颜色 */
                     if(this.baseForm.colors.length > 0) {
                        this.baseForm.colors.forEach(item => {
                             goodsPropertyVo.push({
@@ -365,6 +370,7 @@ import upload from '../../commonComponents/upload'
                             })
                        }) 
                     }
+                    /**商品尺码 */
                     if(this.baseForm.sizes.length > 0) {
                        this.baseForm.sizes.forEach(item => {
                             goodsPropertyVo.push({
@@ -373,6 +379,7 @@ import upload from '../../commonComponents/upload'
                             })
                        }) 
                     }
+                    /**商品材质 */
                     if(this.baseForm.caizhiId !== '') {
                         goodsPropertyVo.push({
                             propertyId: this.baseForm.caizhiId.split('/')[1],
@@ -406,6 +413,7 @@ import upload from '../../commonComponents/upload'
                         goodsCode: this.baseForm.goodsCode,
                         purchasePrice: +this.baseForm.purchasePrice,
                         tagPrice: +this.baseForm.tagPrice,
+                        discountPrice: + this.baseForm.discountPrice,
                         goodsCodeVo: goodsCodeVo,
                         goodsPropertyVo: goodsPropertyVo,
                         goodsImageVo: goodsImageVo

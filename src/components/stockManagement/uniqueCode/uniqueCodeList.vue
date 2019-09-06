@@ -2,7 +2,7 @@
     <div id="unique-list">
         <div v-if="activiyName == 'first'">
             <el-card>
-                <div style="margin: 10px 0;">
+                <div>
                     <el-form v-model="form" label-width="80px" label-position="left" class="demo-form-inline" inline>
                         <el-form-item label="入库单号">
                             <el-input style="min-width: 200px;" size="small" clearable v-model="form.stockinOrderId" placeholder="请输入出库单号"></el-input>
