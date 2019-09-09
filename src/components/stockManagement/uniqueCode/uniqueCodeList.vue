@@ -34,10 +34,13 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="supplierId" label="供应商"></el-table-column>
+                    <el-table-column prop="gmtArrived" label="到货时间"></el-table-column>
+                    <el-table-column prop="gmtCreate" label="创建时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="gmtStockin" label="入库时间"></el-table-column>
+                    <el-table-column prop="gmtCompleted" label="完成时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="totalSku" label="SKU数量"></el-table-column>
-                    <el-table-column prop="totalGoods" label="入库数量"></el-table-column>
-                    <el-table-column prop="warehouseId" label="仓库名称"></el-table-column>
+                    <el-table-column prop="totalGoods" label="商品数量"></el-table-column>
+                    <el-table-column prop="warehouseId" label="仓库ID"></el-table-column>
                     <el-table-column label="入库单状态">
                         <template slot-scope="scope">
                             <el-tag size="small" :type="scope.row.isCompleted == 1 ? 'success' : 'danger'">

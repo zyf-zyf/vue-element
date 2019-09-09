@@ -2,9 +2,14 @@
     <div>
         <div class="img-box" v-if="imgArr.length > 0">
             <div class="img" v-for="(item, index) in imgArr" :key="index">
-                <el-avatar shape="square" :size="150" fit="cover" :src="item"></el-avatar>
+                <el-image
+                style="width: 150px; height: 150px;"
+                :src="item"
+                :preview-src-list="imgArr"
+                fit="cover"></el-image>
                 <i class="el-icon-close" @click="handleDelImg(index)"></i>
-            </div>   
+            </div> 
+            
         </div>
         <template v-if="imgArr.length < maxlength && uploadType== 'more'">
             <div class="upload-box">
@@ -107,6 +112,10 @@
             changeMaterialImg () {
                 console.log(this.imgArr, 'imgArr')
                 this.$emit('changeMaterialImg', this.imgArr)
+            },
+            /** 查看商品大图*/
+            handleBigImg(item) {
+               // alert(item)
             }
 
         }
@@ -164,8 +173,25 @@ span {
             position: absolute;
             top: 0; 
             right: 0;
-            color: red;
+            font-size: 18px;
+            font-weight: 500;
+            color: #FF7068;
             cursor: pointer;
+        }
+        i:hover {
+            transform: scale(1.2);
+            color:blue;
+            font-weight: 900;
+
+        }
+        .eee-block {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            background:rgba(255, 255, 255, 0.7)
         }
     }
 }

@@ -122,12 +122,12 @@
             font-weight: normal;
             color:#474747;
             box-sizing: border-box;
-         
+           
         }
     }
     .istitle-box{
         border-bottom: 1px solid #eee;
-        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1)
+       
     }
     .attributeMaintenance {
         height: 40px;
@@ -161,6 +161,9 @@
         100%{
             transform: scale(1);
         }
+    }
+    .top-bar {
+        box-shadow:inset 0px -1px 3px 1px rgba(173, 14, 14, 0.1)
     }
 
 </style>

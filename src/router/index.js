@@ -81,42 +81,21 @@ export default new Router({
       component: UniqueCodeList,
       meta: {
         parentName: '库存管理',
-        title: '唯一码管理',
-        name: '唯一码管理',
-        tabList: [
-          {
-            id: 'first',
-            label: '入库单'
-          },
-          {
-            id: 'second',
-            label: '采购单'
-          }
-        ]
+        title: '入库单列表',
+        name: '入库管理',
+        // tabList: [
+        //   {
+        //     id: 'first',
+        //     label: '入库单'
+        //   },
+        //   {
+        //     id: 'second',
+        //     label: '采购单'
+        //   }
+        // ]
       }
     },
-        /**盘点列表 */
-    // {
-    //   path: '/stockManagement/inventory/inventoryList',
-    //   name: 'inventoryList',
-    //   component: InventoryList,
-    //   meta: {
-    //     parentName: '库存管理',
-    //     title: '盘点列表',
-    //     name: '盘点列表',
-    //   }
-    // },
-    //     /**盘点问题 */
-    // {
-    //   path: '/stockManagement/inventory/inventoryProblem',
-    //   name: 'inventoryProblem',
-    //   component: InventoryProblem,
-    //   meta: {
-    //     parentName: '库存管理',
-    //     title: '盘点问题',
-    //     name: '盘点问题',
-    //   }
-    // },
+
     /**系统管理 */
     {
       path: '/systemManagement/systemModules/modulesList',

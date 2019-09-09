@@ -1,7 +1,7 @@
 <template>
   <div id="app" style="min-width: 1440px">
    
-    <el-container v-if="$route.path.search('login')<0 && $route.path.search('register')<0" style="height: 100%; border: 1px solid #eee">
+    <el-container v-if="$route.path.search('login')<0 && $route.path.search('register')<0" style="height: 100%; ">
       <leftBar></leftBar>
       <el-container style="flex-direction: column;">
         <topBar></topBar>

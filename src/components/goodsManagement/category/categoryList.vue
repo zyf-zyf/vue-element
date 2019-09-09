@@ -24,13 +24,17 @@
 
                 <el-table-column :label="item.labelName" v-for="(item,index) in allLevel" v-bind:key="index">
                     <template slot-scope="scope" v-if="scope.row.categoryLevel == item.level">
-                       <span >{{scope.row.categoryName}}</span>
-                        <span @click="handleEdit(scope.row)">
-                            <el-icon class="el-icon-edit" ></el-icon>
-                        </span>
-                        <span @click="handleDel(scope.row)">
-                            <el-icon class="el-icon-delete"></el-icon>
-                        </span>
+                        <div style="display: flex; width: 100%">
+                            <span style=" flex: 3">{{scope.row.categoryName}}</span>
+                            <div style="flex: 5">
+                                <span @click="handleEdit(scope.row)">
+                                    <el-icon class="el-icon-edit" ></el-icon>
+                                </span>
+                                <span @click="handleDel(scope.row)">
+                                    <el-icon class="el-icon-delete"></el-icon>
+                                </span>
+                            </div>
+                        </div>
                     </template>
                 </el-table-column>
 
@@ -45,9 +49,6 @@
                 label="修改时间"
                 show-overflow-tooltip
                 >
-                    <template slot-scope="scope">
-                        {{ scope.row.gmtModified ? formate(scope.row.gmtModified, 'yyyy/MM/dd hh:mm:ss') : '----'}}
-                    </template>
                 </el-table-column>
                
             </el-table>
