@@ -26,11 +26,22 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <div class="grid-content">
-                                        <el-form-item label="商品名称:">
-                                            <el-input size="mini" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
+                                        <el-form-item label="商品款号:">
+                                            <el-input size="mini" placeholder="商品款号" v-model="formData.goodsCode" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <div class="grid-content">
+                                            <el-form-item label="商品名称:">
+                                                <el-input size="mini" placeholder="商品名称" v-model="formData.goodsName" clearable></el-input>
+                                            </el-form-item>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="品牌名称:">
@@ -40,8 +51,6 @@
                                         </el-form-item>
                                     </div>
                                 </el-col>
-                            </el-row>
-                            <el-row :gutter="20">
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="一级类目:">
@@ -68,7 +77,9 @@
                                             </el-select>
                                         </el-form-item>
                                     </div>
-                                </el-col>
+                                </el-col>  
+                            </el-row>
+                            <el-row :gutter="20">
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="采购价格:">
@@ -80,25 +91,34 @@
                                         </el-form-item>
                                     </div>
                                 </el-col>
+                                <el-col :span="6">
+                                    <div class="grid-content">
+                                        <el-form-item label="会员价格:">
+                                            <div class="qjbox">
+                                                <el-input size="mini" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
+                                                <span> - </span>
+                                                <el-input size="mini" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
+                                            </div>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div class="grid-content">
+                                        <el-form-item label="创建日期:">
+                                            <el-date-picker
+                                            size="mini"
+                                            v-model="formData.time"
+                                            type="daterange"
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            >
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </div>
+                                </el-col>
+                                
                             </el-row>
-                            <el-form-item label="创建日期:">
-                                <el-date-picker
-                                size="mini"
-                                v-model="formData.time"
-                                type="daterange"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                >
-                                </el-date-picker>
-                            </el-form-item>
-                            <el-form-item label="会员价格:">
-                                <div class="qjbox">
-                                    <el-input size="mini" v-model="formData.memberPriceFrom" placeholder="" clearable></el-input>
-                                    <span> - </span>
-                                    <el-input size="mini" v-model="formData.memberPriceTo" placeholder="" clearable></el-input>
-                                </div>
-                            </el-form-item>
                             <div style="width: 100%;"></div>
                             <el-form-item label="显示字段:">
                                 <el-checkbox-group v-model="formData.checkList">
@@ -162,6 +182,7 @@
                 <el-table-column prop="categoryName2" label="二级类目" width="100" ></el-table-column>
                 <el-table-column prop="categoryName3" label="三级类目" width="100" ></el-table-column>
                 <el-table-column prop="goodsName" label="商品名称" width="150" show-overflow-tooltip ></el-table-column>
+                <el-table-column prop="goodsCode" label="商品款号" width="150" show-overflow-tooltip ></el-table-column>
                 <el-table-column prop="specName" label="规格" width="120" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="purchasePrice" label="采购价" width="100" ></el-table-column>
                 <el-table-column prop="tagPrice" label="吊牌价" width="100" ></el-table-column>
@@ -235,7 +256,8 @@ export default {
                 memberPriceFrom: '',
                 memberPriceTo: '',
                 time: '',
-                checkList: []
+                checkList: [],
+                goodsCode: '' // 款号
             },
             category1List: [],
             category2List: [],
@@ -336,6 +358,7 @@ export default {
                     purchasePriceTo: this.formData.purchasePriceTo !== '' ?  +this.formData.purchasePriceTo : '',
                     skuCode: this.formData.skuCode,
                     spuCode: this.formData.spuCode, 
+                    goodsCode: this.formData.goodsCode
                 }
                 let query= {
                     page: this.page,

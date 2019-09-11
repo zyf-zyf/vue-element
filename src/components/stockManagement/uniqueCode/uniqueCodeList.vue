@@ -4,12 +4,12 @@
             <el-card>
                 <div>
                     <el-form v-model="form" label-width="80px" label-position="left" class="demo-form-inline" inline>
-                        <el-form-item label="入库单号">
-                            <el-input style="min-width: 200px;" size="small" clearable v-model="form.stockinOrderId" placeholder="请输入出库单号"></el-input>
+                        <el-form-item label="入库单号:">
+                            <el-input style="min-width: 200px;" size="mini" clearable v-model="form.stockinOrderId" placeholder="请输入出库单号"></el-input>
                         </el-form-item>
-                        <el-form-item label='创建时间'>
+                        <el-form-item label='创建时间:'>
                             <el-date-picker
-                            size="small"
+                            size="mini"
                             v-model="form.time"
                             type="daterange"
                             range-separator="至"
@@ -65,7 +65,9 @@
                 </el-table>
                 <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
             </el-card>
-            <uniqueCodeDetail v-if="isShow" :stockinId="stockinId" :stockinOrderId="stockinOrderId" :isShow="isShow" @cancelShow="cancelShow"></uniqueCodeDetail>
+            <uniqueCodeDetail v-if="isShow" :stockinId="stockinId" :stockinOrderId="stockinOrderId" :isShow="isShow" @cancelShow="cancelShow">
+                
+            </uniqueCodeDetail>
         </div>
     </div>
 </template>

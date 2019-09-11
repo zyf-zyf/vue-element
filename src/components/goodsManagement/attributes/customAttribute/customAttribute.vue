@@ -212,9 +212,7 @@
             },
             /**属性值编辑 */
             handleEdit(item,scope, id) {
-                console.log(item, 'item')
-                this.title= scope.groupName
-                console.log(this.title)
+                this.title= scope.propertyValue
                 this.isShow= true
                 this.type= 'itemValue'
                 this.valueTitle= item.propertyValue

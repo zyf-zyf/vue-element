@@ -16,8 +16,8 @@
                 <el-table-column prop="goodsPrice" label="吊牌价" width="90"></el-table-column>
                 <el-table-column prop="spuCode" label="SPU编码" width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="skuCode" label="SKU编码" width="140" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="goodsCode" label="商品编码" width="120" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="barCode" label="商品条码" width="140" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="goodsCode" label="商品款号" width="120" show-overflow-tooltip></el-table-column>
+                <!-- <el-table-column prop="barCode" label="商品条码" width="140" show-overflow-tooltip></el-table-column> -->
                 <el-table-column prop='goodsQty' label="数量" width="60"></el-table-column>
             </el-table>
             <!-- <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page> -->
