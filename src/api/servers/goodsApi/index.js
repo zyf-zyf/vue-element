@@ -12,6 +12,7 @@ const uploadGoods= 'product/api/goods/import' // 批量上传商品
 /**基础属性列表 */
 /**品牌属性 */
 const getBrandList= '/product/api/goods/brands' /**品牌列表 */
+const getBrandListByKeywords= '/product/api/goods/brand' /**品牌列表 */
 const addBrandApi= 'product/api/goods/brand' /**品牌添加、编辑、查询、删除 */
 
 /**基础属性列表 */
@@ -85,6 +86,12 @@ const goodsControlApi = {
     /**品牌列表 */
     getBrandList: async (params) => {
         let data= await httpRequest.get(getBrandList,{params})
+        return data;
+    },
+    /**模糊查询品牌列表 */
+    getBrandListByKeywords: async (params) => {
+        console.log(params, 'params')
+        let data= await httpRequest.get(getBrandListByKeywords, {params})
         return data;
     },
     /** 添加品牌 */

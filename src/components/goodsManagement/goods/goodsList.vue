@@ -12,15 +12,15 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <div class="grid-content">
-                                        <el-form-item label="SPU编号:">
-                                            <el-input size="mini" placeholder="商品SPU编号" v-model="formData.spuCode" clearable></el-input>
+                                        <el-form-item label="SPU编码:">
+                                            <el-input size="mini" placeholder="商品SPU编码" v-model="formData.spuCode" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
                                 <el-col :span="6">
                                     <div class="grid-content">
-                                        <el-form-item label="SKU编号:">
-                                            <el-input size="mini" placeholder="商品SKU编号" v-model="formData.skuCode" clearable></el-input>
+                                        <el-form-item label="SKU编码:">
+                                            <el-input size="mini" placeholder="商品SKU编码" v-model="formData.skuCode" clearable></el-input>
                                         </el-form-item>
                                     </div>
                                 </el-col>
@@ -45,8 +45,13 @@
                                 <el-col :span="6">
                                     <div class="grid-content">
                                         <el-form-item label="品牌名称:">
-                                            <el-select  size="mini"  v-model="formData.brandId" placeholder="请选择品牌" @change="handleChangeVal">
-                                                <el-option v-for="item in brandList" :key="item.brandId" :label="item.brandName" :value="item.brandId"></el-option>
+                                            <el-select size="mini" clearable v-model="formData.brandId" filterable remote reserve-keyword placeholder="请输入关键词模糊查询" :remote-method="remoteMethod" :loading="loading">
+                                                <el-option
+                                                v-for="item in brandList"
+                                                :key="item.brandId"
+                                                :label="item.brandName"
+                                                :value="item.brandId">
+                                                </el-option>
                                             </el-select>
                                         </el-form-item>
                                     </div>
@@ -117,7 +122,6 @@
                                         </el-form-item>
                                     </div>
                                 </el-col>
-                                
                             </el-row>
                             <div style="width: 100%;"></div>
                             <el-form-item label="显示字段:">
@@ -171,12 +175,12 @@
                         <el-image style="width: 30px; height: 30px;" :src="scope.row.imageUrl ? scope.row.imageUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'" fit="cover"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column label="SPU编号" width="120"  show-overflow-tooltip fixed>
+                <el-table-column label="SPU编码" width="120"  show-overflow-tooltip fixed>
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click="editGoods(scope.row)">{{scope.row.spuCode}}</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="skuCode" label="SKU编号" width="150" show-overflow-tooltip fixed></el-table-column>
+                <el-table-column prop="skuCode" label="SKU编码" width="150" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="brandName" label="品牌" width="100" show-overflow-tooltip fixed></el-table-column>
                 <el-table-column prop="categoryName1" label="一级类目" width="100" ></el-table-column>
                 <el-table-column prop="categoryName2" label="二级类目" width="100" ></el-table-column>
@@ -259,6 +263,8 @@ export default {
                 checkList: [],
                 goodsCode: '' // 款号
             },
+            loading: false,
+            keywords: '',
             category1List: [],
             category2List: [],
             category3List: [],
@@ -281,16 +287,24 @@ export default {
         this.getGoodsList()
     },
     methods: {
+        remoteMethod(query) {
+            if (query !== '') {
+                this.loading = true;
+                this.getBrandList(query)
+                
+            } else {
+                this.brandList = [];
+            }
+        },
         /**获取商品品牌属性 */
-        getBrandList() {
+        getBrandList(keywords) {
             try {
                 let query= {
-                    page: this.page,
-                    size: 10000,
-                    keyword: ''
+                    keyword: keywords || ''
                 }
-                this.$server.goodsControlApi.getBrandList(query).then(res => {
+                this.$server.goodsControlApi.getBrandListByKeywords(query).then(res => {
                     this.brandList= res.data
+                    this.loading= false
                 }).catch(err => {
                     console.log(err)
                 })
@@ -318,7 +332,6 @@ export default {
         },
         /**关闭弹框 */
         cancelShow(title) {
-         
             this.addShow= title
             this.editShow= title
             this.isShowUpload= title
@@ -500,7 +513,8 @@ export default {
                 memberPriceFrom: '',
                 memberPriceTo: '',
                 time: '',
-                checkList: []
+                checkList: [],
+                goodsCode: ''
             },
             this.getGoodsList()
         },

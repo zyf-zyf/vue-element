@@ -19,11 +19,11 @@
                         <el-form-item label="SPU编码:">
                             <el-input type="text" disabled v-model="baseForm.spuCode" size="small" placeholder="不填将自动生成" clearable></el-input>
                         </el-form-item> 
-                        <el-form-item label="商品编码:">
-                            <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder="请填写商品编码" clearable></el-input>
+                        <el-form-item label="商品款号:">
+                            <el-input type="text" v-model="baseForm.goodsCode" size="small" placeholder="请填写商品款号" clearable></el-input>
                         </el-form-item> 
                         <el-form-item label="品牌名称:">
-                            <el-select style="width: 100%" v-model="baseForm.brandId" size="small" placeholder="请选择品牌" filterable>
+                            <el-select size="small" style="width: 100%" v-model="baseForm.brandId" clearable  filterable remote reserve-keyword placeholder="请输入关键词模糊查询" :remote-method="remoteMethod" :loading="loading">
                                 <el-option
                                 v-for="item in brandList"
                                 :key="item.brandId"
@@ -128,7 +128,7 @@
             <div class="edit-goods-right">
                 <el-button size="small" @click="handleCreateGoodsCode">生成编码</el-button>
                 <el-table :data="tableData">
-                    <el-table-column prop="skuCode" label="SKU编号" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="skuCode" label="SKU编码" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="specName" label="规格" width="120" show-overflow-tooltip></el-table-column>  
                 </el-table>
             </div>
@@ -173,6 +173,7 @@ import upload from '../../commonComponents/upload'
                 },
                 customForm: {},
                 tableData:[],
+                loading: false,
                 brandList: [],
                 categoryList: [],
                 pro: {
@@ -204,6 +205,16 @@ import upload from '../../commonComponents/upload'
             })
         },
         methods: {
+            /**品牌模糊查询 */
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    this.getBrandList(query)
+                    
+                } else {
+                    this.brandList = [];
+                }
+            },
             /**获取商品属性分组列表 */
             async getAtttributeValueGroupList(id, obj) {
                 let query= {
@@ -311,15 +322,14 @@ import upload from '../../commonComponents/upload'
                 }).catch()
             },
             /**获取商品品牌属性 */
-            getBrandList() {
+            getBrandList(keywords) {
                 try {
                     let query= {
-                        page: this.page,
-                        size: 10000,
-                        keyword: this.searchName
+                        keyword: keywords || ''
                     }
-                    this.$server.goodsControlApi.getBrandList(query).then(async res => {
-                        this.brandList= await res.data
+                    this.$server.goodsControlApi.getBrandListByKeywords(query).then(res => {
+                        this.brandList= res.data
+                        this.loading= false
                     }).catch(err => {
                         console.log(err)
                     })

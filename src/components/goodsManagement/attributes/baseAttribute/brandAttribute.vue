@@ -174,6 +174,7 @@
             },
             /**更换图片 */
             changeMaterialImg(val) {
+                console.log(val, '品牌')
                 this.imageList= val
             },
             /**删除图片 */
@@ -193,11 +194,14 @@
                 this.type= 'edit'
                 this.brandId= scope.brandId
                 this.dialogVisible= true
+                this.imageList= []
                 /**获取品牌信息 */
                 try{
                     this.$server.goodsControlApi.detailBrandApi(scope.brandId).then(res => {
                         this.form= res.data
-                        this.imageList.push(res.data.logoUrl)
+                        if(res.data.logoUrl) {
+                            this.imageList.push(res.data.logoUrl)
+                        }
                     }).catch()
                 }catch(error) {this.$paramsError(error)}
             },
