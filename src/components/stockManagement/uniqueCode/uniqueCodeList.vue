@@ -15,7 +15,7 @@
                             range-separator="至"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
-                        >
+                            >
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
@@ -33,7 +33,7 @@
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="supplierId" label="供应商"></el-table-column>
+                    <!-- <el-table-column prop="supplierId" label="供应商"></el-table-column> -->
                     <el-table-column prop="gmtArrived" label="到货时间"></el-table-column>
                     <el-table-column prop="gmtCreate" label="创建时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="gmtStockin" label="入库时间"></el-table-column>
@@ -48,7 +48,6 @@
                             </el-tag>
                         </template>
                     </el-table-column>
-                    
                     <el-table-column  label="操作" width="80">
                         <template slot-scope="scope">
                             <el-dropdown size="small" type="text" trigger="click" placement="bottom-start">
@@ -173,4 +172,5 @@
 
         }
     }
+
 </style>

@@ -77,6 +77,10 @@
             padding: 0 5px !important; 
         }
     }
+    .el-range-separator {
+        line-height: 26px;
+    }
+
 }
 #unique-dialog {
     .el-dialog {
@@ -116,5 +120,35 @@
     }
     .el-input--prefix .el-input__inner {
         padding-left: 100px !important;
+    }
+}
+.layout-top {
+    margin: 10px 0 20px 0;
+    box-sizing: border-box;
+    .layout-right{
+        display: flex;  
+        justify-content: flex-end;
+    }
+
+}
+#modules-list, #category {
+
+    .el-icon-arrow-right:before {
+        content: "\e791";
+    }
+}
+// 角色编辑权限弹框
+#editPowers {
+    .el-dialog {
+        min-width: 1000px;
+        .el-dialog__body {
+            padding: 20px;
+        }
+    }
+}
+// 角色列表
+#roleList {
+    .el-dialog__body {
+        padding: 20px;
     }
 }

@@ -4,25 +4,17 @@
             <div class="left-icon" @click="handleClickFold">
                 <i style="color: #ff7068" :class="!isOpenMenu ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
             </div>
-           
             <div class="right-icon">
-                <!-- <i class="el-icon-search"></i> -->
-                <!-- <el-badge :value="200" :max="99" class="item">
-                    <i class="el-icon-bell"></i>
-                </el-badge> -->
                 <el-dropdown trigger='click'>
                     <div class="userInfo el-dropdown-link">
                         <div class="userInfo el-dropdown-link"  style="width: 20px; height: 20px;margin-right: 10px">
-                        <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                  
+                            <el-avatar style="width: 20px; height: 20px;" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                         </div>
                         <span>叮当科技</span>
                     </div>
-                    
-                    <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>查看</el-dropdown-item>
-                    <el-dropdown-item>新增</el-dropdown-item>
-                    <el-dropdown-item>删除</el-dropdown-item>
+                    <el-dropdown-menu slot="dropdown" >
+                        <el-dropdown-item command="a" @click.native="handleLogout" >退出登录</el-dropdown-item>
+                        <el-dropdown-item command="a" @click.native="dialogVisible= true" >修改密码</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown> 
             </div>
@@ -39,6 +31,28 @@
                 <el-tab-pane v-for="item in $route.meta.tabList" :label="item.label" :name="item.id" :key="item.id"></el-tab-pane>  
             </el-tabs>
         </div>
+        <!-- 用户修改密码 -->
+        <el-dialog
+        title="修改密码"
+        :visible.sync="dialogVisible"
+        width="40%"
+        :before-close="handleClose"  v-model="form">
+            <el-form label-width="100px">
+                <el-form-item label='用户账号:'>
+                    <el-input size="small" type='text' v-model="form.userAccount" ></el-input>
+                </el-form-item>
+                <el-form-item label="初始密码:">
+                    <el-input size="small" type='password' v-model="form.passWord" ></el-input>
+                </el-form-item> 
+                <el-form-item class="password" label="设置密码:">
+                    <el-input size="small" type='password' v-model="form.newPassWord" ></el-input>
+                </el-form-item> 
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="handleSubmit">提交保存</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -51,8 +65,15 @@
 
         data() {
             return {
+                userInfo: JSON.parse(sessionStorage.getItem('userInfo')),
                 isOpenMenu: this.$store.state.isOpen || false,
-                activeName: 'first'
+                activeName: 'first',
+                dialogVisible: false,
+                form: {
+                    userAccount: JSON.parse(sessionStorage.getItem('userInfo')).userAccount || '' ,
+                    passWord: JSON.parse(sessionStorage.getItem('userInfo')).passWord || '' ,
+                    newPassWord: ''
+                }
             }
         },
 
@@ -67,6 +88,19 @@
                 }else if(this.$route.name == 'uniqueCodeList'){
                     this.$store.dispatch('isActiviteUniqueCode',this.activeName)
                 }
+            },
+            handleLogout() {
+                sessionStorage.clear()
+                this.$router.push({name: 'login'})
+            },
+             /**弹框关闭 */
+            handleClose(done) {
+                this.$confirm('确认关闭？').then(_ => {
+                    this.dialogVisible= false
+                }).catch(_ => {});
+            },
+            handleSubmit() {
+                this.dialogVisible= false
             }
         },
 
@@ -115,14 +149,12 @@
         }
     }
     .title-box, .istitle-box {
-       // height: 48px;
         .title {
             font-size: 14px;
             margin-left: 20px;
             font-weight: normal;
             color:#474747;
-            box-sizing: border-box;
-           
+            box-sizing: border-box;  
         }
     }
     .istitle-box{
@@ -148,7 +180,9 @@
     .el-breadcrumb {
         font-size: 12px;
     }
-
+    .top-bar {
+        box-shadow:inset 0px -1px 3px 1px rgba(173, 14, 14, 0.1)
+    }
     @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
         0%{
             transform: scale(1);  /*开始为原始大小*/
@@ -162,8 +196,5 @@
             transform: scale(1);
         }
     }
-    .top-bar {
-        box-shadow:inset 0px -1px 3px 1px rgba(173, 14, 14, 0.1)
-    }
-
+  
 </style>

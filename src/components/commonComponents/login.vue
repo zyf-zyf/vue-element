@@ -25,8 +25,16 @@
                 checked: false,
                 yonghuming: 'iconfont icon-yonghuming',
                 mima: 'iconfont icon-mima',
-                userAccount: '',
-                passWord: ''
+                userAccount: 'admin123456',
+                passWord: 'admin123456'
+            }
+        },
+        mounted() {
+            if(this.userAccount !== '') {
+                this.handleChangeuserAccount()
+            }
+            if(this.passWord !== '') {
+                this.handleChangePassword()
             }
         },
         methods: {
@@ -37,6 +45,14 @@
                 this.mima= 'iconfont icon-mima-'
             },
             handleClickLogin() {
+                if(this.userAccount !== '' && this.passWord !== '') {
+                    this.$store.dispatch('isLogin', true)
+                    let userInfo= {
+                        userAccount: this.userAccount,
+                        passWord: this.passWord
+                    }
+                    sessionStorage.setItem('userInfo',JSON.stringify(userInfo))
+                }
                 this.$router.push({
                     name: 'home'
                 })

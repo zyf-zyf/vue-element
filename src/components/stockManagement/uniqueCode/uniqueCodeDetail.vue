@@ -8,7 +8,7 @@
             <div style="display: flex; justify-content: flex-end; margin: 10px 0;">
                 <el-button size="small" type="primary" icon="el-icon-download" @click="handleClcikDownLoad">下载</el-button>
             </div>
-            <el-table :data="tableData" style="width:100%">
+            <el-table :data="tableData" style="width:100%"  max-height='400px'>
                 <el-table-column type="index" width="60"></el-table-column>
                 <el-table-column prop="brandName"  label="品牌"  show-overflow-tooltip></el-table-column>
                 <el-table-column prop="goodsName"  label="商品名称" show-overflow-tooltip></el-table-column>
@@ -17,7 +17,6 @@
                 <el-table-column prop="spuCode" label="SPU编码" width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="skuCode" label="SKU编码" width="140" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="goodsCode" label="商品款号" width="120" show-overflow-tooltip></el-table-column>
-                <!-- <el-table-column prop="barCode" label="商品条码" width="140" show-overflow-tooltip></el-table-column> -->
                 <el-table-column prop='goodsQty' label="数量" width="60"></el-table-column>
             </el-table>
             <!-- <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page> -->

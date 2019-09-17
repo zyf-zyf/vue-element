@@ -1,5 +1,5 @@
 <template>
-    <div id="category">
+    <div id="modules-list">
         <el-card>
             <div style="margin-bottom: 30px;">
                 <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新建模块</el-button>
@@ -14,27 +14,40 @@
             <el-table
                 :data="tableData"
                 style="width: 100%;margin-bottom: 20px;"
-                row-key="categoryId"
+                row-key="moduleId"
                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
                 <el-table-column
-                prop="categoryId"
+                prop="moduleId"
                 label="ID"
-               
+                width="150"
                 >
                 </el-table-column>
-
-                <el-table-column :label="item.labelName" v-for="(item,index) in allLevel" v-bind:key="index">
-                    <template slot-scope="scope" v-if="scope.row.categoryLevel == item.level">
-                       <span >{{scope.row.categoryName}}</span>
+                <el-table-column :label="item.labelName" v-for="(item,index) in allLevel" v-bind:key="index" width="180">
+                    <template slot-scope="scope" v-if="scope.row.moduleLevel == item.level">
+                       <span >{{scope.row.moduleName}}</span>
+                        <span v-if="scope.row.moduleLevel != 3" @click="handleEdit(scope.row)">
+                            <el-icon class="el-icon-plus" ></el-icon>
+                        </span>
                         <span @click="handleEdit(scope.row)">
                             <el-icon class="el-icon-edit" ></el-icon>
                         </span>
-                        <span @click="handleDel(scope.row)">
+                        <span v-if="scope.row.moduleLevel !== 1" @click="handleDel(scope.row)">
                             <el-icon class="el-icon-delete"></el-icon>
                         </span>
                     </template>
                 </el-table-column>
-
+                <el-table-column
+                prop="moduleUrl"
+                label="菜单地址"
+                show-overflow-tooltip
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.moduleUrl" @click="handleDel(scope.row)">
+                            <el-icon class="el-icon-edit"></el-icon>
+                        </span>
+                        {{scope.row.moduleUrl}}
+                    </template>
+                </el-table-column>
                 <el-table-column
                 prop="gmtCreate"
                 label="创建时间"
@@ -42,22 +55,14 @@
                 show-overflow-tooltip
                 >
                 </el-table-column>
-                <!-- <el-table-column
-                prop="gmtModified"
-                label="修改时间"
-                
-                show-overflow-tooltip
-                >
-                </el-table-column> -->
-               
             </el-table>
         </el-card>
         <el-dialog
         title="模块编辑"
         :visible.sync="dialogVisible"
         width="40%"
-        :before-close="handleClose"  v-model="form">
-            <el-form label-width="100px">
+        :before-close="handleClose"  >
+            <el-form label-width="100px" v-model="form">
                 <el-form-item label='模块名称:'>
                     <el-input size="small" type='text' v-model="form.categoryName" ></el-input>
                 </el-form-item>
@@ -73,20 +78,24 @@
     </div>
 </template>
 <script>
+import Modules from '../../../api/json/modules'
 export default {
+    created() {
+        this.tableData= Modules
+    },
     data() {
         return {
             allLevel:[
                 {
-                    labelName:'一级模块',
+                    labelName:'一级菜单',
                     level:1
                 },
                 {
-                    labelName:'二级模块',
+                    labelName:'二级菜单',
                     level:2
                 },
                 {
-                    labelName:'三级模块',
+                    labelName:'三级菜单',
                     level:3
                 },
             ],//标志当前等级
@@ -107,7 +116,7 @@ export default {
         }
     },
     mounted() {
-        this.getTableData()
+        //this.getTableData()
     },
     methods: {
         handleCommand(val) {

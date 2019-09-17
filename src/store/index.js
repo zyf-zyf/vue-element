@@ -9,6 +9,7 @@ const state= {
     isactiviteUniqueCode: 'first',
     imageArr: [],
     progress: 0,
+    isLogin: false
 }
 const mutations= {
     OPEN_MENU:(state, data) => {
@@ -26,6 +27,10 @@ const mutations= {
     // excel下载进度
     CHANGE_PROGRESS: (state, data) => {
         state.progress= data
+    },
+    //登录
+    IS_LOGIN: (state, data) => {
+        state.isLogin= data
     }
 }
 const actions= {
@@ -49,6 +54,9 @@ const actions= {
     },
     changeProgress({commit}, data) {
         commit('CHANGE_PROGRESS', data)
+    },
+    isLogin({commit}, data) {
+        commit('IS_LOGIN', data)
     }
 }
 export default new Vuex.Store({

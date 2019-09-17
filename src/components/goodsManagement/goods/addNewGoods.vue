@@ -128,7 +128,7 @@ import upload from '../../commonComponents/upload'
             upload
         },
         computed: {
-             dialogVisible: {
+            dialogVisible: {
                 get() {
                     return this.addShow
                 },
