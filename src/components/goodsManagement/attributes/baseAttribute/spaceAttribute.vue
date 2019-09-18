@@ -33,7 +33,9 @@
             <div class="right">
                 <el-table
                 :data="righttableData"
+                max-height="400"
                 style="width: 100%">
+                    <el-table-column type="index"></el-table-column>
                     <el-table-column prop="propertyValueId" label="ID"></el-table-column>
                     <el-table-column prop="valueCode" label="编码"></el-table-column>
                     <el-table-column prop="propertyValue" label="尺码名称"></el-table-column>

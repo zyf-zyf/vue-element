@@ -13,6 +13,7 @@
             </div>
             <el-table
                 :data="tableData"
+                :indent= 'indent'
                 style="width: 100%;margin-bottom: 20px;"
                 row-key="categoryId"
                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
@@ -78,6 +79,7 @@
 export default {
     data() {
         return {
+            indent: 32,
             allLevel:[
                 {
                     labelName:'一级目录',

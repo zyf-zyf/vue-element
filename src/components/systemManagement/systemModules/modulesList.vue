@@ -1,31 +1,22 @@
 <template>
     <div id="modules-list">
         <el-card>
-            <div style="margin-bottom: 30px;">
-                <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd()">新建模块</el-button>
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <el-button plain size="small" >批量上传/下载<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command= 'input'>导入Excel</el-dropdown-item>
-                        <el-dropdown-item command= 'out'>导出Excel</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div>
             <el-table
                 :data="tableData"
                 style="width: 100%;margin-bottom: 20px;"
                 row-key="moduleId"
+                :indent= 'indent'
                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
                 <el-table-column
                 prop="moduleId"
                 label="ID"
-                width="150"
+                width="180"
                 >
                 </el-table-column>
                 <el-table-column :label="item.labelName" v-for="(item,index) in allLevel" v-bind:key="index" width="180">
                     <template slot-scope="scope" v-if="scope.row.moduleLevel == item.level">
                        <span >{{scope.row.moduleName}}</span>
-                        <span v-if="scope.row.moduleLevel != 3" @click="handleEdit(scope.row)">
+                        <span v-if="scope.row.moduleLevel != 3" @click="handleCreateModule(scope.row)">
                             <el-icon class="el-icon-plus" ></el-icon>
                         </span>
                         <span @click="handleEdit(scope.row)">
@@ -40,13 +31,7 @@
                 prop="moduleUrl"
                 label="菜单地址"
                 show-overflow-tooltip
-                >
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.moduleUrl" @click="handleDel(scope.row)">
-                            <el-icon class="el-icon-edit"></el-icon>
-                        </span>
-                        {{scope.row.moduleUrl}}
-                    </template>
+                >  
                 </el-table-column>
                 <el-table-column
                 prop="gmtCreate"
@@ -63,12 +48,19 @@
         width="40%"
         :before-close="handleClose"  >
             <el-form label-width="100px" v-model="form">
-                <el-form-item label='模块名称:'>
-                    <el-input size="small" type='text' v-model="form.categoryName" ></el-input>
+                <el-form-item label='上级模块:' v-if="type == 'add'">
+                    <el-input disabled size="small" type='text' v-model="form.parentModule" class="red"></el-input>
                 </el-form-item>
-               <el-form-item label="上级模块:" v-if="form.level > 1">
-                    <el-cascader style="width: 100%" size="small"  v-model="form.parentCode" :options="categoryList" :props="{ checkStrictly: true ,label:'categoryName',value:'categoryCode' }" ></el-cascader>
-                </el-form-item> 
+                <el-form-item label='模块名称:'>
+                    <el-input size="small" type='text' v-model="form.moduleName" ></el-input>
+                </el-form-item>
+                <el-form-item label='模块编码:'>
+                    <el-input size="small" type='text' v-model="form.moduleCode" ></el-input>
+                </el-form-item>
+                <el-form-item label='模块路径:' v-if="form.moduleLevel ==2 && type == 'add' || form.moduleLevel ==3">
+                    <el-input size="small" type='text' v-model="form.moduleUrl" ></el-input>
+                </el-form-item>
+               
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -85,6 +77,7 @@ export default {
     },
     data() {
         return {
+            indent: 32,
             allLevel:[
                 {
                     labelName:'一级菜单',
@@ -102,159 +95,55 @@ export default {
             tableData: [],
             dialogVisible: false,
             form: {
-                categoryName: '',
-                parentCode: '',
-                id:'',
-                level:1,
+                parentModuleId: '',
+                parentModule: '',
+                moduleName: '',
+                moduleCode: '',
+                moduleUrl: '',
+                moduleLevel: ''
             },
-
-            categoryList: [],
-            props: {
-                lazy: true,
-                lazyLoad:this.getCategoryList
-            }
+            type: 'add'
         }
     },
     mounted() {
-        //this.getTableData()
+      
     },
     methods: {
-        handleCommand(val) {
-            val == 'input' ? this.importExcel() : val == 'out' ? this.downLoadExcel() : ''
-        },
-        importExcel() {
-            alert('导入Excel')
-        },
-        downLoadExcel() {
-            alert('导出Excel')
-        },
-        /**获取商品类目列表 */
-        getTableData() {
-            let that = this
-            this.$server.goodsControlApi.getCategoryList().then(res => {
-                that.tableData= res.data
-            }).catch(err => {})
-        },
-        /* 配置*/
-         getCategoryList() {
-            const levelEnd = this.form.level;
-            const allLevelLen = this.allLevel.length;
-            let tableData = this.tableData;
-            let categoryList = JSON.parse(JSON.stringify(tableData));
-            
-            function getFormatList(list){
-                    //三级及以上
-                    for(let i = 0 ; i< list.length; i++){
-                        if(list[i]['children'] && (list[i]["categoryLevel"] < (levelEnd-1) && list[i]["categoryLevel"] < allLevelLen)){
-                            getFormatList(list[i]['children']);
-                        }else{
-                            delete list[i]['children'];
-                        }
-                    }
-                return list;
-            }
-            this.categoryList = getFormatList(categoryList);
-            
-        },
-        /*  修改类目 */
+        /*  修改模块 */
         handleEdit(data) {
-            let  form = {
-                categoryName: data.categoryName,
-                parentCode: data.parentCode,
-                id: data.categoryId,
-                level: data.categoryLevel
-            }
-            this.form = form;
-            if(data.categoryLevel > 1){
-                this.getCategoryList();
-            }
-            this.dialogVisible = true;
+            this.type= 'edit'
+            this.form= data
+             this.dialogVisible = true;
         },
-        /** 删除类目 */
+        /** 删除模块 */
         handleDel(data) {
-            let id = data.categoryId
-            this.$confirm('此操作将永久删除该类目, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$server.goodsControlApi.delCategory(id).then(res=>{
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
-                    this.getTableData();
-                })
-            }).catch(() => {
-                    
-            });
+            this.$confirm('此操作不可恢复！确定删除？').then(_ => {
+                alert('删除操作')
+            }).catch()
         },
-        //新增类目
-        handleAdd(){
-              let  form = {
-                categoryName: '',
-                parentCode: '',
-                id:'',
-                level:this.allLevel.length
-            }
-            this.form = form;
-            this.getCategoryList();
+        //新增模块
+        handleCreateModule(scope){
+            this.type= 'add'
+            this.form.parentModule= scope.moduleName
+            this.form.parentModuleId= scope.moduleId
+            this.form.moduleLevel= scope.moduleLevel
+            this.isParentModuleShow= true
             this.dialogVisible = true;
         },
-        //提交类目
+        //新建模块
         handleSubmit() {
-            let form = this.form;
-            let that = this;
-            let  id = form.id;
-            let params = {
-                "categoryName": form.categoryName,
-            }
-
-            if(form.parentCode && form.parentCode != ''){
-                params["parentCode"]= typeof(form.parentCode) == 'object' ? form.parentCode.pop() :form.parentCode;
-            }
-
-            if(params['categoryName'] == ''){
-                 this.$message({
-                    message: '请填写类目名称',
-                    type: 'warning'
-                });
-                return false;
-            }
-
-
-            if(id && id != ''){
-                this.$server.goodsControlApi.editCategory(id,params).then(res => {
-                    this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-
-                        this.getTableData();
-                        this.dialogVisible = false;
-
-                    }).catch(err => {
-
-                    })
-            }else{
-                let regex = /\，/ig;
-                params['categoryName'] = params['categoryName'].replace(/\，/ig,',');
-                this.$server.goodsControlApi.addCategory(params).then(res => {
-                    this.$message({
-                        message: '添加成功',
-                        type: 'success'
-                    });
-
-                    this.getTableData();
-                    this.dialogVisible = false;
-
-                }).catch(err => {
-
-                })
-            } 
+           
         },
         handleClose(){
             this.dialogVisible = false;
+            this.form = {
+                parentModuleId: '',
+                parentModule: '',
+                moduleName: '',
+                moduleCode: '',
+                moduleUrl: '',
+                moduleLevel: ''
+            }
         }
     }
 }

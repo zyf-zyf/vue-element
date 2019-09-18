@@ -4,7 +4,11 @@
             <el-input v-model="searchName" type="text" size="small" placeholder="请输入查询条件" suffix-icon="el-icon-search" style="width: 300px;" @keyup.enter.native="handleChangeSearch" @input="handleChangeSearch" clearable></el-input>
             <el-button size="small" type="primary"  @click="addColorBtn" icon="el-icon-plus">添加颜色</el-button>
         </div>
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table :data="tableData" stripe style="width: 100%" max-height="400">
+            <el-table-column
+            type="index"
+            >
+            </el-table-column>
             <el-table-column
             prop="propertyValueId"
             label="ID"

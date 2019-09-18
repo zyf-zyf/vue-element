@@ -10,9 +10,11 @@
         :before-close="handleClose"
         >
             <el-table
+                :indent= 'indent'
                 :data="tableData"
                 style="margin-bottom: 20px;"
                 row-key="moduleId"
+                max-height="400"
                 @selection-change="handleSelectionChange"
                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
                 <el-table-column
@@ -22,7 +24,6 @@
                 <el-table-column
                 prop="moduleId"
                 label="ID"
-                width="120"
                 >
                 </el-table-column>
                 <el-table-column :label="item.labelName" v-for="(item,index) in allLevel" v-bind:key="index" width="150">
@@ -53,6 +54,7 @@
         },
         data() {
             return {
+                indent: 32,
                 multipleSelection: [],
                 tableData: [],
                 allLevel:[

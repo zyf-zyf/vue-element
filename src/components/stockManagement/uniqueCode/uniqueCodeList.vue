@@ -5,7 +5,7 @@
                 <div>
                     <el-form v-model="form" label-width="80px" label-position="left" class="demo-form-inline" inline>
                         <el-form-item label="入库单号:">
-                            <el-input style="min-width: 200px;" size="mini" clearable v-model="form.stockinOrderId" placeholder="请输入出库单号"></el-input>
+                            <el-input style="min-width: 200px;" size="mini" clearable v-model="form.stockinOrderId" placeholder="请输入出库单号" @keyup.enter.native="handleClcikSearch"></el-input>
                         </el-form-item>
                         <el-form-item label='创建时间:'>
                             <el-date-picker

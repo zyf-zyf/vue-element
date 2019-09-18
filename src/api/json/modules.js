@@ -11,6 +11,7 @@ const Modules= [
         moduleUrl: null,
         children: [
             {
+                parentId: 1,
                 moduleId: 101,
                 moduleCode: 'goodsManagement',
                 moduleLevel: 2,
@@ -22,6 +23,7 @@ const Modules= [
                 moduleUrl: null,
                 children: [
                     {
+                        parentId: 101,
                         moduleId: 10101,
                         moduleCode: 'goodsList',
                         moduleUrl: '/goodsManagement/goods/goodsList',
@@ -33,6 +35,7 @@ const Modules= [
                         isLocked: 1, 
                     },
                     {
+                        parentId: 101,
                         moduleId: 10102,
                         moduleCode: 'categoryList',
                         moduleUrl: '/goodsManagement/category/categoryList',
@@ -44,6 +47,7 @@ const Modules= [
                         isLocked: 1, 
                     },
                     {
+                        parentId: 101,
                         moduleId: 10103,
                         moduleCode: 'attributeMaintenance',
                         moduleUrl: '/goodsManagement/attributes/attributeMaintenance',
@@ -57,6 +61,7 @@ const Modules= [
                 ]
             },
             {
+                parentId: 1,
                 moduleId: 102,
                 moduleCode: 'stockManagement',
                 moduleLevel: 2,
@@ -67,6 +72,7 @@ const Modules= [
                 isLocked: 1,
                 children: [
                     {
+                        parentId: 102,
                         moduleId: 10201,
                         moduleCode: 'uniqueCodeList',
                         moduleUrl: '/stockManagement/uniqueCode/uniqueCodeList',
@@ -80,6 +86,7 @@ const Modules= [
                 ]
             },
             {
+                parentId: 1,
                 moduleId: 103,
                 moduleCode: 'systemManagement',
                 moduleLevel: 2,
@@ -90,6 +97,7 @@ const Modules= [
                 isLocked: 1,
                 children: [
                     {
+                        parentId: 103,
                         moduleId: 10301,
                         moduleCode: 'modulesList',
                         moduleUrl: '/systemManagement/systemModules/modulesList',
@@ -101,6 +109,7 @@ const Modules= [
                         isLocked: 1, 
                     },
                     {
+                        parentId: 103,
                         moduleId: 10302,
                         moduleCode: 'rolesList',
                         moduleUrl: '/systemManagement/systemRoles/rolesList',
@@ -112,6 +121,7 @@ const Modules= [
                         isLocked: 1, 
                     },
                     {
+                        parentId: 103,
                         moduleId: 10304,
                         moduleCode: 'usersList',
                         moduleUrl: '/systemManagement/systemUsers/usersList',
@@ -138,6 +148,7 @@ const Modules= [
         moduleUrl: null,
         children: [
             {
+                parentId: 2,
                 moduleId: 201,
                 moduleCode: 'boss',
                 moduleLevel: 1,
