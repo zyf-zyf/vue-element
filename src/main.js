@@ -5,7 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import server from './api/servers/index.js'
-import md5 from 'md5'
+// import md5 from 'md5'
 import paramsError from './api/commonJs/paramsError'
 
 import promise from 'es6-promise';
@@ -20,9 +20,9 @@ Vue.config.productionTip = false
 Vue.prototype.$server= server
 Vue.prototype.$paramsError= paramsError
 // md5
-Vue.prototype.$md5= md5
+// Vue.prototype.$md5= md5
 console.log(store, 'store')
-
+// console.log(md5('123456'))
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
