@@ -172,7 +172,14 @@
                 <el-table-column type="selection" width="55" fixed></el-table-column>
                 <el-table-column label="商品图"  fixed>
                     <template slot-scope="scope">
-                        <el-image style="width: 30px; height: 30px;" :src="scope.row.imageUrl ? scope.row.imageUrl  : 'https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@'" fit="cover"></el-image>
+                        <el-image :preview-src-list=" scope.row.goodsImages " style="width: 30px; height: 30px;"
+                         :src="scope.row.imageUrl" fit="cover">
+                            <div slot="error" class="image-slot">
+                                <el-image style="width: 30px; height: 30px;"
+                                    src="https://goods.dingdian.xin/FsmpgGd0uQDg7jqpM88K33qyPDU6?imageMogr2/thumbnail/300000@" fit="cover">
+                                </el-image>
+                            </div>
+                        </el-image>
                     </template>
                 </el-table-column>
                 <el-table-column label="SPU编码" width="120"  show-overflow-tooltip fixed>
@@ -215,6 +222,8 @@
         <editGoodsDetails v-if='editShow' :editShow="editShow" :goodsId="goodsId" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></editGoodsDetails>
         <!-- 批量上传商品 -->
         <uploadFile v-if="isShowUpload" :title="uploadTitle" :isShowUpload="isShowUpload" @cancelShow="cancelShow" @getGoodsList="getGoodsList"></uploadFile>
+        <!-- 查看大图 -->
+        <bigImgs :imageList="bigImgList" :isdialogVisible="isShowBigImg" @cancelShow='cancelShow'></bigImgs>
     </div>
 </template>
 <script>
@@ -222,13 +231,15 @@ import page from '../../commonComponents/page'
 import addNewGoods from './addNewGoods'
 import editGoodsDetails from './editGoodsDetails'
 import uploadFile from '../../commonComponents/uploadFile'
+import bigImgs from '../../commonComponents/bigImgs'
 
 export default {
     components: {
         page,
         addNewGoods,
         editGoodsDetails,
-        uploadFile
+        uploadFile,
+        bigImgs
     },
     /** 监听商品批量上传 刷新商品列表 */
     watch: {
@@ -276,7 +287,9 @@ export default {
             totalList: [],
             skuCodeList: [],
             isShowUpload: false,
-            uploadTitle: '批量导入商品'
+            uploadTitle: '批量导入商品',
+            bigImgList: [],
+            isShowBigImg: false
         }
     },
     mounted() {
@@ -335,6 +348,7 @@ export default {
             this.addShow= title
             this.editShow= title
             this.isShowUpload= title
+            this.isShowBigImg= title
         },
         /**获取商品自定义属性 */
         getCustomPropertyList() {
@@ -522,7 +536,16 @@ export default {
         editGoods(scope) {
             this.editShow= true
             this.goodsId= scope.goodsId
-        }          
+        },
+        // handleShowBigImg(scope) {
+        //     this.bigImgList= []
+        //     if(scope.imageUrl != null) {
+        //         this.bigImgList.push(scope.imageUrl)
+        //       //  this.isShowBigImg= true
+        //     }else{
+        //         this.$confirm('此商品暂无图片')
+        //     }
+        // }          
     }
 }
 </script>

@@ -20,8 +20,8 @@
             :on-exceed="handleExceed"
             ref="upload"
             :file-list="fileList">
-                <el-button slot="trigger" size="small" type="primary" :disabled="isDisabled">选择文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上 传</el-button>
+                <el-button slot="trigger" size="small"  :disabled="isDisabled">选择文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="primary" @click="submitUpload">提交上传</el-button>
                 <div slot="tip" class="el-upload__tip">一次最多只能上传1个文件，格式为（.xlsx）</div>
             </el-upload>
             <div class="err-list" v-if="errData.length > 0">
