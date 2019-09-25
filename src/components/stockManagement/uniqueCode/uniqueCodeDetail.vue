@@ -4,6 +4,7 @@
         title="入库单详情"
         :visible.sync="dialogVisible"
         id="unique-dialog"
+        top="12vh"
         :before-close="handleClose">
             <div style="display: flex; justify-content: flex-end; margin: 10px 0;">
                 <el-button size="small" type="primary" icon="el-icon-download" @click="handleClcikDownLoad">下载</el-button>
@@ -19,7 +20,7 @@
                 <el-table-column prop="goodsCode" label="商品款号" width="120" show-overflow-tooltip></el-table-column>
                 <el-table-column prop='goodsQty' label="数量" width="60"></el-table-column>
             </el-table>
-            <!-- <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page> -->
+            <page :total="total" :page="page" :size="size" @handlepagechange="handlePageChange" @handleSizeChange="handleSizeChange"></page>
         </el-dialog>
     </div>
 </template>

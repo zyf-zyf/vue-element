@@ -9,15 +9,17 @@ const downLoadExcelApi= {
     downLoadExcel: (obj) =>{
         let url= obj.url
         let fileName= obj.name
+        var progress;
         let instance = axios.create({ 
             responseType: 'blob', //返回数据的格式，可选值为arraybuffer,blob,document,json,text,stream，默认值为json
             onDownloadProgress: function (progressEvent) {
             // 对原生进度事件的处理         
-               // progress = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
+                progress = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
                 console.log(progressEvent, 'progressEvent')
                // store.dispatch('changeProgress', progress)
             },
         })
+        console.log(progress, 'progress')
        // instance.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
         const loading = Loading.service({
             lock: true,
@@ -64,7 +66,7 @@ const downLoadExcelApi= {
     /**post请求下载 */
      downLoadExcelPost: (obj) =>{
         console.log(obj, 'post')
-       // let progressLoad= 0
+        let progressLoad= 0
         let url= obj.url
         let fileName= obj.name
         let params= obj.params
@@ -73,15 +75,15 @@ const downLoadExcelApi= {
             onDownloadProgress: function (progressEvent) {
                 //对原生进度事件的处理        
                  console.log(progressEvent, 'progressEvent') 
-                // progressLoad = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
-                // console.log(progressLoad, 'progressLoad')
+                 progressLoad = +((progressEvent.loaded/progressEvent.total)*100).toFixed(1)
+                 console.log(progressLoad, 'progressLoad')
                 // store.dispatch('changeProgress', progressLoad)
             },
         })
        // instance.defaults.headers.common['sessionId'] = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjJ9._ZUB9LlikWZknaetvmOq3-aQYKyyMY_zedd80JRYiUU';
         const loadingPost = Loading.service({
             lock: true,
-            text: '数据下载中...',
+            text: progressLoad,
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
         });

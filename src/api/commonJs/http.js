@@ -20,7 +20,7 @@ const service = axios.create({
         // Do whatever you want with the native progress event
     },
     onDownloadProgress: function (progressEvent) { // `onDownloadProgress` 允许为下载处理进度事件
-       // console.log(progressEvent, 'progressEvent')
+        //console.log(progressEvent, 'progressEvent')
         // 对原生进度事件的处理
     },
 })
